@@ -1,0 +1,13 @@
+{
+  "common": {
+    "appName": "Twinbloc Starter",
+    "editHint": "Modifiez src/app/index.tsx pour personnaliser.",
+    "languageSwitch": "Changer de langue"
+  },
+  "counter": {
+    "label": "Compteur : {{count}}",
+    "increment": "+",
+    "decrement": "-",
+    "reset": "Réinitialiser"
+  }
+}

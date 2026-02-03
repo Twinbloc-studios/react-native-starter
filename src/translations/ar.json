@@ -1,0 +1,13 @@
+{
+  "common": {
+    "appName": "مشروع توينبلوك",
+    "editHint": "حرّر src/app/index.tsx للتخصيص.",
+    "languageSwitch": "تغيير اللغة"
+  },
+  "counter": {
+    "label": "العدد: {{count}}",
+    "increment": "+",
+    "decrement": "-",
+    "reset": "إعادة ضبط"
+  }
+}

@@ -1,0 +1,29 @@
+# Add 'documentation' label to any changes within 'docs' folder or any .md file
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+        - '**/*.md'
+        - 'docs/**'
+
+# Add 'source' label to any changes within 'src' folder
+source:
+  - changed-files:
+      - any-glob-to-any-file:
+        - 'src/**'
+
+# Add 'tests' label to any changes to test files
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+        - '**/*.test.ts'
+        - '**/*.test.tsx'
+        - '**/__tests__/**'
+
+# Add 'config' label to any changes to config files
+config:
+  - changed-files:
+      - any-glob-to-any-file:
+        - '*.config.js'
+        - '*.json'
+        - '.github/**'
+        - '.vscode/**'

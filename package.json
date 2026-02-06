@@ -20,6 +20,7 @@
     "web": "expo start --web",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
+    "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "install-maestro": "curl -Ls \"https://get.maestro.mobile.dev\" | bash",

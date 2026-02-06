@@ -1,10 +1,6 @@
-import { jest } from "@jest/globals";
 import "@testing-library/jest-native/extend-expect";
 
-jest.mock("nativewind", () => ({
-  cssInterop: jest.fn(),
-  useColorScheme: () => ({ colorScheme: "light" }),
-}));
+import { jest } from "@jest/globals";
 
 jest.mock("@expo/vector-icons", () => {
   const React = require("react");
@@ -46,9 +42,18 @@ jest.mock("@lodev09/react-native-true-sheet", () => {
 jest.mock("@shopify/flash-list", () => {
   const React = require("react");
   const { View } = require("react-native");
-  const FlashList = ({ data = [], renderItem, ListEmptyComponent, ...props }) => {
+  const FlashList = ({
+    data = [],
+    renderItem,
+    ListEmptyComponent,
+    ...props
+  }) => {
     if (!data.length) {
-      return <View {...props}>{ListEmptyComponent ? <ListEmptyComponent /> : null}</View>;
+      return (
+        <View {...props}>
+          {ListEmptyComponent ? <ListEmptyComponent /> : null}
+        </View>
+      );
     }
     return (
       <View {...props}>
@@ -75,7 +80,9 @@ jest.mock("expo-image", () => {
 jest.mock("react-native-avoid-softinput", () => {
   const React = require("react");
   const { View } = require("react-native");
-  const AvoidSoftInputView = (props) => <View {...props}>{props.children}</View>;
+  const AvoidSoftInputView = (props) => (
+    <View {...props}>{props.children}</View>
+  );
   AvoidSoftInputView.displayName = "AvoidSoftInputView";
   return { AvoidSoftInputView };
 });

@@ -2,21 +2,19 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
-    "skipLibCheck": true,
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@/assets/*": ["./assets/*"],
-      "@env": ["./src/lib/env.ts"],
-      "expo-asset": ["./src/types/expo-asset"]
+      "@/assets/*": ["assets/*"],
+      "@/*": ["src/*"],
+      "@env": ["src/lib/env.ts"]
     }
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.d.ts",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts",
-    "uniwind-types.d.ts"
-  ],
-  "exclude": ["node_modules", "app-example", "dist", "web-build"]
+  "include": ["**/*.ts", "**/*.tsx", ".maestro/**/*.js", ".maestro/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js",
+    "app-example"
+  ]
 }

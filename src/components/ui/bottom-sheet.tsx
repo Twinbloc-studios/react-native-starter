@@ -3,12 +3,19 @@ import {
   TrueSheet,
   type TrueSheetProps,
 } from "@lodev09/react-native-true-sheet";
-import { useColorScheme } from "nativewind";
 import * as React from "react";
-import { Pressable, View } from "react-native";
+import {
+  Pressable as RNPressable,
+  useColorScheme,
+  View as RNView,
+} from "react-native";
+import { withUniwind } from "uniwind";
 
 import { colors } from "..";
 import { Text } from "./text";
+
+const View = withUniwind(RNView);
+const Pressable = withUniwind(RNPressable);
 
 export interface BottomSheetProps extends TrueSheetProps {
   title?: string;
@@ -60,7 +67,7 @@ export const useBottomSheet = () => {
 
 export const BottomSheet = React.forwardRef<TrueSheet, BottomSheetProps>(
   ({ title, style, children, ...props }, ref) => {
-    const { colorScheme } = useColorScheme();
+    const colorScheme = useColorScheme();
     const isDark = colorScheme === "dark";
     const innerRef = React.useRef<TrueSheet>(null);
     React.useImperativeHandle(ref, () => innerRef.current as TrueSheet);
@@ -115,7 +122,7 @@ const BottomSheetHeader = React.memo(
 BottomSheetHeader.displayName = "BottomSheetHeader";
 
 const CloseButton = ({ close }: { close: () => void }) => {
-  const { colorScheme } = useColorScheme();
+  const colorScheme = useColorScheme();
   return (
     <Pressable
       onPress={close}

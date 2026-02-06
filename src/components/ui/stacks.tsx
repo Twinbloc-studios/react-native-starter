@@ -1,6 +1,9 @@
 import React from "react";
-import { View, type ViewProps } from "react-native";
+import { View as RNView, type ViewProps } from "react-native";
 import { twMerge } from "tailwind-merge";
+import { withUniwind } from "uniwind";
+
+const View = withUniwind(RNView);
 
 export interface StackProps extends ViewProps {
   className?: string;

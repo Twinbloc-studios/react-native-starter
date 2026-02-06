@@ -1,6 +1,7 @@
-import { MotiView } from "moti";
+import { MotiView as NMotiView } from "moti";
 import React from "react";
 import Svg, { Path } from "react-native-svg";
+import { withUniwind } from "uniwind";
 
 import { colors } from "../utilities";
 import {
@@ -10,6 +11,8 @@ import {
   type RootProps,
   SIZE,
 } from "./toggle-shared";
+
+const MotiView = withUniwind(NMotiView);
 
 export const CheckboxIcon = ({ checked = false }: IconProps) => {
   const color = checked ? colors.primaryColor : colors.charcoal[400];

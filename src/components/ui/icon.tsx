@@ -1,6 +1,6 @@
 import { type ImageSource } from "expo-image";
-import { cssInterop } from "nativewind";
 import * as React from "react";
+import { withUniwind } from "uniwind";
 
 import { SafeFastImage } from "./safe-fast-image";
 
@@ -16,7 +16,7 @@ type Props = {
  * <Icon icon={require("@/assets/icon.png")} size={32} className="text-white" />
  * <Icon icon={require("@/assets/logo.svg")} size={32} />
  */
-export const Icon = ({
+const IconBase = ({
   icon,
   size = 24,
   color = "white",
@@ -34,4 +34,4 @@ export const Icon = ({
   );
 };
 
-cssInterop(Icon, { className: "style" });
+export const Icon = withUniwind(IconBase);

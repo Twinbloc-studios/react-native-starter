@@ -1,13 +1,14 @@
 import React from "react";
 import { Pressable } from "react-native";
 
-import { Container, Text } from "@/components/ui";
-import { View } from "@/components/ui/view";
+import { Container, HStack, Text, View } from "@/components/ui";
 import { useIsFirstTime } from "@/hooks/general/use-is-first-time";
+// import { useSelectedTheme } from "@/hooks/general/use-selected-theme";
 
 export default function Index() {
   const [_, setIsFirstTime] = useIsFirstTime();
 
+  // const { selectedTheme, setSelectedTheme } = useSelectedTheme();
   const [isVisible, setIsVisible] = React.useState(true);
 
   return (
@@ -23,14 +24,17 @@ export default function Index() {
         </Text>
       </View>
 
-      <>
+      <HStack className="">
         <Pressable
-          onPress={() => setIsVisible((prev) => !prev)}
+          onPress={() => {
+            setIsVisible((prev) => !prev);
+            // setSelectedTheme("system");
+          }}
           accessibilityRole="button"
           accessibilityLabel="Toggle view"
           accessibilityHint="Toggles the visibility of the animated view"
         >
-          <View className="bg-green-500 p-4 dark:bg-black">
+          <View className="bg-accent-300 ios:bg-accent-900 p-4 dark:bg-black">
             <Text>Default View</Text>
           </View>
         </Pressable>
@@ -38,12 +42,12 @@ export default function Index() {
         <View
           animatePresence
           isVisible={isVisible}
-          className="bg-green-900 p-4 dark:bg-black"
-          motionPreset="fadeDown"
+          className="bg-green-900 dark:bg-black"
+          motionPreset="fade"
         >
           <Text>Animated View</Text>
         </View>
-      </>
+      </HStack>
     </Container.Insets>
   );
 }

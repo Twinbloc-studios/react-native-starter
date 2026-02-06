@@ -56,12 +56,12 @@ module.exports = (async () => {
         "max-lines-per-function": ["error", 300],
 
         // --- Tailwind CSS ---
-        "tailwindcss/classnames-order": [
-          "warn",
-          {
-            officialSorting: true,
-          },
-        ],
+        // "tailwindcss/classnames-order": [
+        //   "warn",
+        //   {
+        //     officialSorting: true,
+        //   },
+        // ],
         "tailwindcss/no-custom-classname": "off",
 
         // --- React / React Native ---

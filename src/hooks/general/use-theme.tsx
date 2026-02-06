@@ -3,8 +3,7 @@ import {
   DarkTheme as _DarkTheme,
   DefaultTheme,
 } from "@react-navigation/native";
-import { useColorScheme } from "nativewind";
-import { Appearance } from "react-native";
+import { Appearance, useColorScheme } from "react-native";
 import { useMMKVString } from "react-native-mmkv";
 
 import { colors } from "@/components/utilities/";
@@ -39,7 +38,7 @@ const LightTheme: Theme = {
 };
 
 export function useTheme() {
-  const { colorScheme } = useColorScheme();
+  const colorScheme = useColorScheme();
   const [selectedTheme] = useMMKVString(
     STORAGE_KEY.SELECTED_THEME,
     storageInstance,

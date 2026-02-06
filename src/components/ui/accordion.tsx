@@ -1,11 +1,20 @@
 import React from "react";
-import { Pressable, type StyleProp, View, type ViewStyle } from "react-native";
+import {
+  Pressable as RNPressable,
+  type StyleProp,
+  View as RNView,
+  type ViewStyle,
+} from "react-native";
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { withUniwind } from "uniwind";
+
+const View = withUniwind(RNView);
+const Pressable = withUniwind(RNPressable);
 
 /**
  * Accordion Component

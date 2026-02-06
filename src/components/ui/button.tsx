@@ -1,10 +1,18 @@
 import React from "react";
-import type { PressableProps, View } from "react-native";
-import { ActivityIndicator, Pressable } from "react-native";
+import type { PressableProps } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable as RNPressable,
+  View as RNView,
+} from "react-native";
 import type { VariantProps } from "tailwind-variants";
 import { tv } from "tailwind-variants";
+import { withUniwind } from "uniwind";
 
 import { Text } from "./text";
+
+const View = withUniwind(RNView);
+const Pressable = withUniwind(RNPressable);
 
 const button = tv({
   slots: {
@@ -88,63 +96,67 @@ const button = tv({
 
 type ButtonVariants = VariantProps<typeof button>;
 export interface BProps
-  extends ButtonVariants, Omit<PressableProps, "disabled"> {
+  extends ButtonVariants, Omit<PressableProps, "disabled" | "children"> {
   label?: string;
   loading?: boolean;
   className?: string;
   textClassName?: string;
   indicatorClassName?: string;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
-export const Button = React.forwardRef<View, BProps>(
+export const Button = React.forwardRef<React.ElementRef<typeof View>, BProps>(
   (
     {
-      label: text,
+      label,
       loading = false,
+      className = "",
+      textClassName = "",
+      indicatorClassName = "",
       variant = "default",
       disabled = false,
       size = "default",
-      className = "",
-      indicatorClassName = "",
-      testID,
-      textClassName = "",
+      fullWidth = true,
+      children,
+      leftIcon,
+      rightIcon,
       ...props
     },
     ref,
   ) => {
     const styles = React.useMemo(
-      () => button({ variant, disabled, size }),
-      [variant, disabled, size],
+      () => button({ variant, disabled, fullWidth, size }),
+      [variant, disabled, fullWidth, size],
     );
 
     return (
       <Pressable
+        ref={ref}
         disabled={disabled || loading}
         className={styles.container({ className })}
         {...props}
-        ref={ref}
-        testID={testID}
       >
-        {props.children ? (
-          props.children
+        {leftIcon && <View className="mr-2">{leftIcon}</View>}
+        {loading ? (
+          <ActivityIndicator
+            size="small"
+            className={styles.indicator({ className: indicatorClassName })}
+            testID={
+              props.testID ? `${props.testID}-activity-indicator` : undefined
+            }
+          />
         ) : (
-          <>
-            {loading ? (
-              <ActivityIndicator
-                size="small"
-                className={indicatorClassName || styles.indicator()}
-                testID={testID ? `${testID}-activity-indicator` : undefined}
-              />
-            ) : (
-              <Text
-                testID={testID ? `${testID}-label` : undefined}
-                className={styles.label({ className: textClassName })}
-              >
-                {text}
-              </Text>
-            )}
-          </>
+          <Text
+            testID={props.testID ? `${props.testID}-label` : undefined}
+            className={styles.label({ className: textClassName })}
+          >
+            {label}
+            {children}
+          </Text>
         )}
+        {rightIcon && <View className="ml-2">{rightIcon}</View>}
       </Pressable>
     );
   },

@@ -1,5 +1,8 @@
-import { Image, type ImageProps } from "expo-image";
+import { Image as ExpoImage, type ImageProps } from "expo-image";
 import React, { useState } from "react";
+import { withUniwind } from "uniwind";
+
+const Image = withUniwind(ExpoImage);
 
 const FALLBACK_IMAGE = require("@/assets/images/icon.png");
 
@@ -18,7 +21,10 @@ export const SafeFastImage = (props: SafeFastImageProps) => {
 
   // Check if source is valid
   // FastImage source can be a number (require) or object with uri
-  const isValidSource = source && (typeof source === "number" || (typeof source === "object" && "uri" in source && !!source.uri));
+  const isValidSource =
+    source &&
+    (typeof source === "number" ||
+      (typeof source === "object" && "uri" in source && !!source.uri));
 
   if (!isValidSource || hasError) {
     return (

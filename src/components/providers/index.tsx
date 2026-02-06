@@ -5,12 +5,22 @@ import React from "react";
 import { I18nextProvider } from "react-i18next";
 import { Pressable } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { toast, Toaster } from "sonner-native";
+import { Uniwind } from "uniwind";
 
 import { APIProvider } from "@/api";
 import { useTheme } from "@/hooks/general/use-theme";
 import i18n from "@/lib/i18n";
 import { toastOptions } from "@/lib/utils/toast-config";
+
+function UniwindInsetUpdater() {
+  const insets = useSafeAreaInsets();
+  React.useEffect(() => {
+    Uniwind.updateInsets(insets);
+  }, [insets]);
+  return null;
+}
 
 function Providers({ children }: { children: React.ReactNode }) {
   const theme = useTheme();
@@ -59,6 +69,7 @@ function Providers({ children }: { children: React.ReactNode }) {
     >
       <I18nextProvider i18n={i18n}>
         <ThemeProvider value={theme}>
+          <UniwindInsetUpdater />
           <APIProvider>
             <ReanimatedTrueSheetProvider>
               {children}

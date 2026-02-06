@@ -1,7 +1,10 @@
 import React from "react";
-import { View, type ViewProps } from "react-native";
+import { View as RNView, type ViewProps } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { twMerge } from "tailwind-merge";
+import { withUniwind } from "uniwind";
+
+const View = withUniwind(RNView);
 
 interface ContainerProps extends ViewProps {
   className?: string;

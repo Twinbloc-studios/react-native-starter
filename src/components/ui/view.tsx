@@ -1,10 +1,10 @@
 import { AnimatePresence, View as MotiView } from "moti";
-import { cssInterop } from "nativewind";
 import { type ComponentProps, useMemo } from "react";
 import { View as RNView, type ViewProps } from "react-native";
+import { withUniwind } from "uniwind";
 
-const NativeMotiView = cssInterop(MotiView, { className: "style" });
-const NativeView = cssInterop(RNView, { className: "style" });
+const NativeMotiView = withUniwind(MotiView);
+const NativeView = withUniwind(RNView);
 
 type MotiProps = ComponentProps<typeof MotiView>;
 type PresenceProps = ComponentProps<typeof AnimatePresence>;

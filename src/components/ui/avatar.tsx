@@ -2,11 +2,14 @@ import type { ImageSource } from "expo-image";
 import { Image as ExpoImage } from "expo-image";
 import React from "react";
 import type { ImageStyle, StyleProp, ViewProps } from "react-native";
-import { View } from "react-native";
+import { View as RNView } from "react-native";
 import { twMerge } from "tailwind-merge";
+import { withUniwind } from "uniwind";
 
 import { SafeFastImage, type SafeFastImageProps } from "./safe-fast-image";
 import { Text } from "./text";
+
+const View = withUniwind(RNView);
 
 const FALLBACK_IMAGE = require("@/assets/images/icon.png");
 
@@ -67,7 +70,7 @@ export interface AvatarProps extends ViewProps {
   textClassName?: string;
 }
 
-export const Avatar = React.forwardRef<View, AvatarProps>(
+export const Avatar = React.forwardRef<RNView, AvatarProps>(
   (
     {
       source,

@@ -1,7 +1,10 @@
 import React, { useCallback } from "react";
-import { Pressable, type PressableProps } from "react-native";
+import { Pressable as RNPressable, type PressableProps } from "react-native";
+import { withUniwind } from "uniwind";
 
 import { Text } from "./text";
+
+const Pressable = withUniwind(RNPressable);
 
 export const SIZE = 20;
 
@@ -16,7 +19,14 @@ export type IconProps = {
   checked: boolean;
 };
 
-export const Root = ({ checked = false, children, onChange, disabled, className = "", ...props }: RootProps) => {
+export const Root = ({
+  checked = false,
+  children,
+  onChange,
+  disabled,
+  className = "",
+  ...props
+}: RootProps) => {
   const handleChange = useCallback(() => {
     onChange(!checked);
   }, [onChange, checked]);

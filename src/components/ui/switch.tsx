@@ -1,9 +1,13 @@
 import { MotiView } from "moti";
 import React from "react";
-import { I18nManager, Switch as RNSwitch, View } from "react-native";
+import { I18nManager, Switch as RNSwitch, View as RNView } from "react-native";
+import { withUniwind } from "uniwind";
 
 import { colors, IS_IOS } from "../utilities";
 import { type IconProps, Label, Root, type RootProps } from "./toggle-shared";
+
+const View = withUniwind(RNView);
+const StyledSwitch = withUniwind(RNSwitch);
 
 const WIDTH = 50;
 const HEIGHT = 28;
@@ -31,7 +35,7 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
 
     return (
       <View style={{ width: WIDTH, height: HEIGHT, justifyContent: "center" }}>
-        <RNSwitch
+        <StyledSwitch
           value={isChecked}
           disabled={ctx?.disabled ?? undefined}
           onValueChange={(value) => {
@@ -43,7 +47,7 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
           }}
           ios_backgroundColor={colors.charcoal[400]}
           thumbColor={colors.white}
-          accessibilityLabel={ctx?.accessibilityLabel}
+          accessibilityLabel={ctx?.accessibilityLabel ?? "Switch"}
           accessibilityHint="Double tap to toggle setting"
           accessible={false}
           style={{ transform: [{ scaleX: iosScaleX }, { scaleY: iosScaleY }] }}

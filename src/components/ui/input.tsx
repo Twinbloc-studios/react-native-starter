@@ -7,16 +7,15 @@ import type {
 } from "react-hook-form";
 import { useController } from "react-hook-form";
 import type { TextInputProps } from "react-native";
-import {
-  I18nManager,
-  StyleSheet,
-  TextInput as NTextInput,
-  View,
-} from "react-native";
+import { TextInput as NTextInput, View as RNView } from "react-native";
 import { tv } from "tailwind-variants";
+import { withUniwind } from "uniwind";
 
 import { colors } from "../utilities";
 import { Text } from "./text";
+
+const View = withUniwind(RNView);
+const TextInput = withUniwind(NTextInput);
 
 const inputTv = tv({
   slots: {
@@ -103,34 +102,25 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
           {label}
         </Text>
       )}
-      <View>
-        {leftIcon && (
-          <View className="absolute left-3 top-3 z-10">{leftIcon}</View>
-        )}
-        <NTextInput
+      <View className={styles.input()}>
+        {leftIcon && <View className="mr-2">{leftIcon}</View>}
+        <TextInput
           testID={testID}
           ref={ref}
-          placeholderTextColor={colors.neutral[400]}
-          className={styles.input()}
+          placeholderTextColor={
+            props.placeholderTextColor ?? colors.neutral[400]
+          }
+          className={`flex-1 ${props.editable === false ? "text-neutral-500" : "text-neutral-900"} dark:text-white`}
           onBlur={onBlur}
           onFocus={onFocus}
           {...inputProps}
-          style={StyleSheet.flatten([
-            { writingDirection: I18nManager.isRTL ? "rtl" : "ltr" },
-            { textAlign: I18nManager.isRTL ? "right" : "left" },
-            inputProps.style,
-          ])}
         />
-
-        {rightIcon && (
-          <View className="absolute right-3 top-3 z-10">{rightIcon}</View>
-        )}
+        {rightIcon && <View className="ml-2">{rightIcon}</View>}
       </View>
-
       {error && (
         <Text
           testID={testID ? `${testID}-error` : undefined}
-          className="text-sm text-danger-400 dark:text-danger-600"
+          className="text-sm text-danger-600 dark:text-danger-600"
         >
           {error}
         </Text>

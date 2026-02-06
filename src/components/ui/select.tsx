@@ -7,15 +7,19 @@ import { FlashList } from "@shopify/flash-list";
 import * as React from "react";
 import type { FieldValues } from "react-hook-form";
 import { useController } from "react-hook-form";
-import { View } from "react-native";
-import { Pressable, type PressableProps } from "react-native";
+import { View as RNView } from "react-native";
+import { Pressable as RNPressable, type PressableProps } from "react-native";
 import type { SvgProps } from "react-native-svg";
 import Svg, { Path } from "react-native-svg";
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
+import { withUniwind } from "uniwind";
 
 import { BottomSheet, Input, Text, useBottomSheet } from ".";
 import type { InputControllerType } from "./input";
+
+const View = withUniwind(RNView);
+const Pressable = withUniwind(RNPressable);
 
 const selectTv = tv({
   slots: {

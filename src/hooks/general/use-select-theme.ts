@@ -1,8 +1,9 @@
-import { storageInstance } from "@/lib";
-import { STORAGE_KEY } from "@/store/auth/utils";
 import { colorScheme, useColorScheme } from "nativewind";
 import React from "react";
 import { useMMKVString } from "react-native-mmkv";
+
+import { storageInstance } from "@/lib";
+import { STORAGE_KEY } from "@/store/auth/utils";
 
 export type ColorSchemeType = "light" | "dark" | "system";
 /**
@@ -12,7 +13,10 @@ export type ColorSchemeType = "light" | "dark" | "system";
  */
 export const useSelectedTheme = () => {
   const { setColorScheme } = useColorScheme();
-  const [theme, _setTheme] = useMMKVString(STORAGE_KEY.SELECTED_THEME, storageInstance);
+  const [theme, _setTheme] = useMMKVString(
+    STORAGE_KEY.SELECTED_THEME,
+    storageInstance,
+  );
 
   const setSelectedTheme = React.useCallback(
     (t: ColorSchemeType) => {

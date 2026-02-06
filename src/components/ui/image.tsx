@@ -9,10 +9,22 @@ export type ImgProps = ImageProps & {
 
 cssInterop(IMG, { className: "style" });
 
-export const Image = ({ style, className, placeholder = "L6PZfSi_.AyE_3t7t7R**0o#DgR4", ...props }: ImgProps) => {
-  return <IMG className={className} placeholder={placeholder} style={style} {...props} />;
+export const Image = ({
+  style,
+  className,
+  placeholder = "L6PZfSi_.AyE_3t7t7R**0o#DgR4",
+  ...props
+}: ImgProps) => {
+  return (
+    <IMG
+      className={className}
+      placeholder={placeholder}
+      style={style}
+      {...props}
+    />
+  );
 };
 
 export const preloadImages = (sources: string[]) => {
-  IMG.prefetch(sources);
+  void IMG.prefetch(sources);
 };

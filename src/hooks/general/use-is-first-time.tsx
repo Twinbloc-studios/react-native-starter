@@ -9,7 +9,10 @@ import { STORAGE_KEY } from "@/store/auth/utils";
  * if (isFirstTime) setIsFirstTime(false);
  */
 export const useIsFirstTime = () => {
-  const [isFirstTime, setIsFirstTime] = useMMKVBoolean(STORAGE_KEY.IS_FIRST_TIME, storageInstance);
+  const [isFirstTime, setIsFirstTime] = useMMKVBoolean(
+    STORAGE_KEY.IS_FIRST_TIME,
+    storageInstance,
+  );
   if (isFirstTime === undefined) {
     return [true, setIsFirstTime] as const;
   }

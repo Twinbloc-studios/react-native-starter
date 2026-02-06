@@ -1,8 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
-import { TrueSheet, type TrueSheetProps } from "@lodev09/react-native-true-sheet";
+import {
+  TrueSheet,
+  type TrueSheetProps,
+} from "@lodev09/react-native-true-sheet";
 import { useColorScheme } from "nativewind";
 import * as React from "react";
 import { Pressable, View } from "react-native";
+
 import { colors } from "..";
 import { Text } from "./text";
 
@@ -46,43 +50,45 @@ export interface BottomSheetRef {
 export const useBottomSheet = () => {
   const ref = React.useRef<TrueSheet>(null);
   const present = React.useCallback(() => {
-    ref.current?.present();
+    void ref.current?.present();
   }, []);
   const dismiss = React.useCallback(() => {
-    ref.current?.dismiss();
+    void ref.current?.dismiss();
   }, []);
   return { ref, present, dismiss };
 };
 
-export const BottomSheet = React.forwardRef<TrueSheet, BottomSheetProps>(({ title, style, children, ...props }, ref) => {
-  const { colorScheme } = useColorScheme();
-  const isDark = colorScheme === "dark";
-  const innerRef = React.useRef<TrueSheet>(null);
-  React.useImperativeHandle(ref, () => innerRef.current as TrueSheet);
+export const BottomSheet = React.forwardRef<TrueSheet, BottomSheetProps>(
+  ({ title, style, children, ...props }, ref) => {
+    const { colorScheme } = useColorScheme();
+    const isDark = colorScheme === "dark";
+    const innerRef = React.useRef<TrueSheet>(null);
+    React.useImperativeHandle(ref, () => innerRef.current as TrueSheet);
 
-  // Helper to dismiss
-  const dismiss = React.useCallback(() => {
-    innerRef.current?.dismiss();
-  }, []);
+    // Helper to dismiss
+    const dismiss = React.useCallback(() => {
+      void innerRef.current?.dismiss();
+    }, []);
 
-  return (
-    <TrueSheet
-      ref={innerRef}
-      cornerRadius={24}
-      grabber
-      grabberOptions={{
-        width: 40,
-        height: 4,
-        color: isDark ? "#525252" : "#D1D5DB",
-      }}
-      style={[{ paddingBottom: 20 }, style]}
-      {...props}
-    >
-      {title && <BottomSheetHeader title={title} dismiss={dismiss} />}
-      {children}
-    </TrueSheet>
-  );
-});
+    return (
+      <TrueSheet
+        ref={innerRef}
+        cornerRadius={24}
+        grabber
+        grabberOptions={{
+          width: 40,
+          height: 4,
+          color: isDark ? "#525252" : "#D1D5DB",
+        }}
+        style={[{ paddingBottom: 20 }, style]}
+        {...props}
+      >
+        {title && <BottomSheetHeader title={title} dismiss={dismiss} />}
+        {children}
+      </TrueSheet>
+    );
+  },
+);
 BottomSheet.displayName = "BottomSheet";
 
 /**
@@ -93,15 +99,19 @@ type BottomSheetHeaderProps = {
   dismiss: () => void;
 };
 
-const BottomSheetHeader = React.memo(({ title, dismiss }: BottomSheetHeaderProps) => {
-  return (
-    <View className="flex-row items-center justify-between border-b border-neutral-100 p-4 dark:border-neutral-800">
-      <View className="w-8" />
-      <Text className="text-base font-bold text-neutral-900 dark:text-white">{title}</Text>
-      <CloseButton close={dismiss} />
-    </View>
-  );
-});
+const BottomSheetHeader = React.memo(
+  ({ title, dismiss }: BottomSheetHeaderProps) => {
+    return (
+      <View className="flex-row items-center justify-between border-b border-neutral-100 p-4 dark:border-neutral-800">
+        <View className="w-8" />
+        <Text className="text-base font-bold text-neutral-900 dark:text-white">
+          {title}
+        </Text>
+        <CloseButton close={dismiss} />
+      </View>
+    );
+  },
+);
 BottomSheetHeader.displayName = "BottomSheetHeader";
 
 const CloseButton = ({ close }: { close: () => void }) => {
@@ -112,9 +122,14 @@ const CloseButton = ({ close }: { close: () => void }) => {
       className="z-50 size-8 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-800"
       hitSlop={30}
       accessibilityLabel="close BottomSheet"
+      accessibilityHint="Closes the bottom sheet"
       accessibilityRole="button"
     >
-      <Ionicons name="close-circle" size={28} color={colorScheme === "dark" ? "white" : colors.black} />
+      <Ionicons
+        name="close-circle"
+        size={28}
+        color={colorScheme === "dark" ? "white" : colors.black}
+      />
     </Pressable>
   );
 };

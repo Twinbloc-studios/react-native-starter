@@ -3,7 +3,13 @@ import React from "react";
 import Svg, { Path } from "react-native-svg";
 
 import { colors } from "../utilities";
-import { IconProps, Label, Root, RootProps, SIZE } from "./toggle-shared";
+import {
+  type IconProps,
+  Label,
+  Root,
+  type RootProps,
+  SIZE,
+} from "./toggle-shared";
 
 export const CheckboxIcon = ({ checked = false }: IconProps) => {
   const color = checked ? colors.primaryColor : colors.charcoal[400];
@@ -25,7 +31,11 @@ export const CheckboxIcon = ({ checked = false }: IconProps) => {
         borderColor: { type: "timing", duration: 100 },
       }}
     >
-      <MotiView from={{ opacity: 0 }} animate={{ opacity: checked ? 1 : 0 }} transition={{ opacity: { type: "timing", duration: 100 } }}>
+      <MotiView
+        from={{ opacity: 0 }}
+        animate={{ opacity: checked ? 1 : 0 }}
+        transition={{ opacity: { type: "timing", duration: 100 } }}
+      >
         <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <Path
             d="m16.726 7-.64.633c-2.207 2.212-3.878 4.047-5.955 6.158l-2.28-1.928-.69-.584L6 12.66l.683.577 2.928 2.477.633.535.591-.584c2.421-2.426 4.148-4.367 6.532-6.756l.633-.64L16.726 7Z"
@@ -45,11 +55,22 @@ const CheckboxRoot = ({ checked = false, children, ...props }: RootProps) => {
   );
 };
 
-const CheckboxBase = ({ checked = false, testID, label, ...props }: RootProps & { label?: string }) => {
+const CheckboxBase = ({
+  checked = false,
+  testID,
+  label,
+  ...props
+}: RootProps & { label?: string }) => {
   return (
     <CheckboxRoot checked={checked} testID={testID} {...props}>
       <CheckboxIcon checked={checked} />
-      {label ? <Label text={label} testID={testID ? `${testID}-label` : undefined} className="pr-2" /> : null}
+      {label ? (
+        <Label
+          text={label}
+          testID={testID ? `${testID}-label` : undefined}
+          className="pr-2"
+        />
+      ) : null}
     </CheckboxRoot>
   );
 };

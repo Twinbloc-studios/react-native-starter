@@ -1,3 +1,5 @@
+import type * as SecureStoreType from "../secure-store";
+
 const setup = (platform: "ios" | "web") => {
   jest.resetModules();
 
@@ -23,14 +25,16 @@ const setup = (platform: "ios" | "web") => {
         storage.delete(key);
       }),
       clear: jest.fn(() => storage.clear()),
-      key: jest.fn((index: number) => Array.from(storage.keys())[index] ?? null),
+      key: jest.fn(
+        (index: number) => Array.from(storage.keys())[index] ?? null,
+      ),
       length: 0,
     };
   } else {
     delete (global as { localStorage?: Storage }).localStorage;
   }
 
-  const module = require("../secure-store") as typeof import("../secure-store");
+  const module = require("../secure-store") as typeof SecureStoreType;
 
   return { module, secureStoreMock };
 };
@@ -68,7 +72,10 @@ describe("secure-store", () => {
     await module.getToken();
     await module.deleteToken();
 
-    expect(secureStoreMock.setItemAsync).toHaveBeenCalledWith("auth_token", "token");
+    expect(secureStoreMock.setItemAsync).toHaveBeenCalledWith(
+      "auth_token",
+      "token",
+    );
     expect(secureStoreMock.getItemAsync).toHaveBeenCalledWith("auth_token");
     expect(secureStoreMock.deleteItemAsync).toHaveBeenCalledWith("auth_token");
   });

@@ -7,7 +7,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 1. Install dependencies
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 2. Start the app
@@ -29,7 +29,7 @@ You can start developing by editing the files inside the **src/app** directory. 
 When you're ready, run:
 
 ```bash
-npm run reset-project
+pnpm reset-project
 ```
 
 This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.

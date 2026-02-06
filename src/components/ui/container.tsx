@@ -13,9 +13,16 @@ type ContainerComponent = React.FC<ContainerProps> & {
   Insets: React.FC<ContainerProps>;
 };
 
-export const Container: ContainerComponent = ({ className, children, ...props }) => {
+export const Container: ContainerComponent = ({
+  className,
+  children,
+  ...props
+}) => {
   return (
-    <View className={twMerge("px-5 bg-white dark:bg-black", className)} {...props}>
+    <View
+      className={twMerge("px-5 bg-white dark:bg-black", className)}
+      {...props}
+    >
       {children}
     </View>
   );
@@ -23,7 +30,10 @@ export const Container: ContainerComponent = ({ className, children, ...props })
 
 const Page: React.FC<ContainerProps> = ({ className, children, ...props }) => {
   return (
-    <View className={twMerge("flex-1 bg-white dark:bg-black", className)} {...props}>
+    <View
+      className={twMerge("flex-1 bg-white dark:bg-black", className)}
+      {...props}
+    >
       {children}
     </View>
   );
@@ -37,11 +47,20 @@ const Box: React.FC<ContainerProps> = ({ className, children, ...props }) => {
   );
 };
 
-const Insets: React.FC<ContainerProps> = ({ className, style, children, ...props }) => {
+const Insets: React.FC<ContainerProps> = ({
+  className,
+  style,
+  children,
+  ...props
+}) => {
   const insets = useSafeAreaInsets();
 
   return (
-    <View className={twMerge("flex-1 bg-white dark:bg-[#131313]", className)} style={[{ paddingTop: insets.top }, style]} {...props}>
+    <View
+      className={twMerge("flex-1 bg-white dark:bg-[#131313]", className)}
+      style={[{ paddingTop: insets.top }, style]}
+      {...props}
+    >
       {children}
     </View>
   );

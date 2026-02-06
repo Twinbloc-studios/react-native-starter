@@ -1,11 +1,16 @@
-import { colors } from "@/components/utilities/";
 import type { Theme } from "@react-navigation/native";
-import { DarkTheme as _DarkTheme, DefaultTheme } from "@react-navigation/native";
+import {
+  DarkTheme as _DarkTheme,
+  DefaultTheme,
+} from "@react-navigation/native";
 import { useColorScheme } from "nativewind";
-import { useMMKVString } from "react-native-mmkv";
 import { Appearance } from "react-native";
-import { storageInstance } from "../../lib/utils/storage";
+import { useMMKVString } from "react-native-mmkv";
+
+import { colors } from "@/components/utilities/";
 import { STORAGE_KEY } from "@/store/auth/utils";
+
+import { storageInstance } from "../../lib/utils/storage";
 
 /**
  * Sample usage:
@@ -35,13 +40,26 @@ const LightTheme: Theme = {
 
 export function useTheme() {
   const { colorScheme } = useColorScheme();
-  const [selectedTheme] = useMMKVString(STORAGE_KEY.SELECTED_THEME, storageInstance);
-  const resolvedTheme = selectedTheme && selectedTheme !== "system" ? selectedTheme : colorScheme;
+  const [selectedTheme] = useMMKVString(
+    STORAGE_KEY.SELECTED_THEME,
+    storageInstance,
+  );
+  const resolvedTheme =
+    selectedTheme && selectedTheme !== "system" ? selectedTheme : colorScheme;
 
   if (resolvedTheme === "dark") return DarkTheme;
 
   return LightTheme;
 }
-const selectedTheme = storageInstance?.getString(STORAGE_KEY.SELECTED_THEME) as "light" | "dark" | "system" | undefined;
+const selectedTheme = storageInstance?.getString(STORAGE_KEY.SELECTED_THEME) as
+  | "light"
+  | "dark"
+  | "system"
+  | undefined;
 const systemIsDark = Appearance.getColorScheme() === "dark";
-export const isDark: boolean = selectedTheme === "dark" ? true : selectedTheme === "light" ? false : !!systemIsDark;
+export const isDark: boolean =
+  selectedTheme === "dark"
+    ? true
+    : selectedTheme === "light"
+      ? false
+      : !!systemIsDark;

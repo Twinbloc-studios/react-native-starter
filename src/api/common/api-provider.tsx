@@ -1,8 +1,11 @@
 import { useReactQueryDevTools } from "@dev-plugins/react-query";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
-import { QueryClient } from "@tanstack/react-query";
 import { type AsyncStorage } from "@tanstack/query-persist-client-core";
-import { PersistQueryClientProvider, removeOldestQuery } from "@tanstack/react-query-persist-client";
+import { QueryClient } from "@tanstack/react-query";
+import {
+  PersistQueryClientProvider,
+  removeOldestQuery,
+} from "@tanstack/react-query-persist-client";
 import * as React from "react";
 
 import { mmkvStorage } from "@/lib/utils/storage";
@@ -50,7 +53,10 @@ export function APIProvider({ children }: { children: React.ReactNode }) {
   useReactQueryDevTools(queryClient);
   return (
     // Provide the client to your App
-    <PersistQueryClientProvider client={queryClient} persistOptions={{ persister: clientPersister }}>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{ persister: clientPersister }}
+    >
       {children}
     </PersistQueryClientProvider>
   );

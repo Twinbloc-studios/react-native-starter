@@ -32,7 +32,10 @@ const VStack = ({ className, children, ...props }: StackProps) => {
 
 const Center = ({ className, children, ...props }: StackProps) => {
   return (
-    <View className={twMerge("items-center justify-center", className)} {...props}>
+    <View
+      className={twMerge("items-center justify-center", className)}
+      {...props}
+    >
       {children}
     </View>
   );
@@ -40,10 +43,13 @@ const Center = ({ className, children, ...props }: StackProps) => {
 
 const Circle = ({ className, children, ...props }: StackProps) => {
   return (
-    <View className={twMerge("items-center justify-center rounded-full", className)} {...props}>
+    <View
+      className={twMerge("items-center justify-center rounded-full", className)}
+      {...props}
+    >
       {children}
     </View>
   );
 };
 
-export { Stack, HStack, VStack, Center, Circle };
+export { Center, Circle, HStack, Stack, VStack };

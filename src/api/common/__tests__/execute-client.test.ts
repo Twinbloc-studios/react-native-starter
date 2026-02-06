@@ -1,3 +1,5 @@
+import type * as ExecuteClientType from "../execute-client";
+
 const mockClient = jest.fn();
 const mockIsAxiosError = jest.fn();
 const mockAxiosCreate = jest.fn(() => mockClient);
@@ -45,11 +47,11 @@ describe("execute-client", () => {
   });
 
   const loadExecuteClient = () => {
-    let module: typeof import("../execute-client");
+    let mod: typeof ExecuteClientType;
     jest.isolateModules(() => {
-      module = require("../execute-client");
+      mod = require("../execute-client");
     });
-    return module!;
+    return mod!;
   };
 
   it("returns response data on success", async () => {
@@ -82,7 +84,9 @@ describe("execute-client", () => {
 
     const { executeRest, ApiError } = loadExecuteClient();
 
-    await expect(executeRest("/private", "GET")).rejects.toBeInstanceOf(ApiError);
+    await expect(executeRest("/private", "GET")).rejects.toBeInstanceOf(
+      ApiError,
+    );
 
     expect(mockSignOut).toHaveBeenCalled();
     expect(mockQueryClientClear).toHaveBeenCalled();

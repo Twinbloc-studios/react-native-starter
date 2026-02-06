@@ -1,5 +1,7 @@
 import React from "react";
 
+import type * as ApiProviderType from "../api-provider";
+
 const mockUseReactQueryDevTools = jest.fn();
 const mockCreateAsyncStoragePersister = jest.fn((config) => ({ config }));
 const mockPersistProvider = jest.fn(({ children }) => <>{children}</>);
@@ -44,11 +46,13 @@ describe("api-provider", () => {
     mockMmkvStorage.getItem.mockReset();
     mockMmkvStorage.setItem.mockReset();
     mockMmkvStorage.removeItem.mockReset();
-    mockCreateAsyncStoragePersister.mockImplementation((config) => ({ config }));
+    mockCreateAsyncStoragePersister.mockImplementation((config) => ({
+      config,
+    }));
   });
 
   const loadApiProvider = () => {
-    let module: typeof import("../api-provider");
+    let module: typeof ApiProviderType;
     jest.isolateModules(() => {
       module = require("../api-provider");
     });

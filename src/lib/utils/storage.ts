@@ -1,11 +1,12 @@
-import { STORAGE_KEY } from "@/store/auth/utils";
 import { Env } from "@env";
-import { AsyncStorage } from "@tanstack/react-query-persist-client";
+import { type AsyncStorage } from "@tanstack/react-query-persist-client";
 import * as Crypto from "expo-crypto";
 import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
 import { createMMKV } from "react-native-mmkv";
 import { type StateStorage } from "zustand/middleware";
+
+import { type STORAGE_KEY } from "@/store/auth/utils";
 
 const STORAGE_ID = "app-secure-storage";
 const ENCRYPTION_KEY_ALIAS = "mmkv-encryption-key";
@@ -15,7 +16,9 @@ export let storageInstance!: ReturnType<typeof createMMKV>;
 
 export function getStorageInstance() {
   if (!storageInstance) {
-    throw new Error("Storage instance is not initialized. Call getStorage() first.");
+    throw new Error(
+      "Storage instance is not initialized. Call getStorage() first.",
+    );
   }
   return storageInstance;
 }
@@ -58,7 +61,9 @@ async function getEncryptionKeyAsync() {
     } catch (retryError) {
       console.error("Secure storage recovery failed:", retryError);
       if (Env.APP_ENV === "production") {
-        throw new Error("CRITICAL: Secure storage initialization failed. App cannot proceed securely.");
+        throw new Error(
+          "CRITICAL: Secure storage initialization failed. App cannot proceed securely.",
+        );
       }
       return undefined;
     }

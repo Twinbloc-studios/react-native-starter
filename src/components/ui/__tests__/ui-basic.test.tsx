@@ -1,25 +1,26 @@
-import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react-native";
+import { Image as ExpoImage } from "expo-image";
+import React from "react";
 import { View } from "react-native";
 
-import { Button } from "../button";
 import { Avatar } from "../avatar";
+import { Button } from "../button";
 import { Checkbox } from "../check-box";
 import { Container } from "../container";
 import { Icon } from "../icon";
 import { Image, preloadImages } from "../image";
 import { Radio } from "../radio";
 import { SafeFastImage } from "../safe-fast-image";
-import { Stack, HStack, VStack, Center, Circle } from "../stacks";
+import { Center, Circle, HStack, Stack, VStack } from "../stacks";
 import { Switch } from "../switch";
 import { Text } from "../text";
-import { Root as ToggleRoot, Label as ToggleLabel } from "../toggle-shared";
-
-import { Image as ExpoImage } from "expo-image";
+import { Label as ToggleLabel, Root as ToggleRoot } from "../toggle-shared";
 
 describe("Button", () => {
   it("renders label and handles loading state", () => {
-    const { getByTestId, queryByTestId, rerender } = render(<Button label="Save" testID="button" />);
+    const { getByTestId, queryByTestId, rerender } = render(
+      <Button label="Save" testID="button" />,
+    );
 
     expect(screen.getByText("Save")).toBeTruthy();
     expect(queryByTestId("button-activity-indicator")).toBeNull();
@@ -34,7 +35,12 @@ describe("Toggle shared", () => {
   it("toggles Root on press", () => {
     const onChange = jest.fn();
     const { getByLabelText } = render(
-      <ToggleRoot checked={false} onChange={onChange} accessibilityLabel="toggle-root">
+      <ToggleRoot
+        checked={false}
+        onChange={onChange}
+        accessibilityLabel="toggle-root"
+        accessibilityHint="toggles item"
+      >
         <Text>Item</Text>
       </ToggleRoot>,
     );
@@ -44,7 +50,9 @@ describe("Toggle shared", () => {
   });
 
   it("renders Label text", () => {
-    const { getByText } = render(<ToggleLabel text="Label" testID="toggle-label" />);
+    const { getByText } = render(
+      <ToggleLabel text="Label" testID="toggle-label" />,
+    );
     expect(getByText("Label")).toBeTruthy();
   });
 });
@@ -52,7 +60,16 @@ describe("Toggle shared", () => {
 describe("Checkbox", () => {
   it("renders label and calls onChange", () => {
     const onChange = jest.fn();
-    const { getByTestId } = render(<Checkbox checked={false} onChange={onChange} accessibilityLabel="checkbox" label="Accept" testID="checkbox" />);
+    const { getByTestId } = render(
+      <Checkbox
+        checked={false}
+        onChange={onChange}
+        accessibilityLabel="checkbox"
+        accessibilityHint="toggles checkbox"
+        label="Accept"
+        testID="checkbox"
+      />,
+    );
 
     expect(screen.getByText("Accept")).toBeTruthy();
     fireEvent.press(getByTestId("checkbox"));
@@ -63,7 +80,16 @@ describe("Checkbox", () => {
 describe("Radio", () => {
   it("renders label and calls onChange", () => {
     const onChange = jest.fn();
-    const { getByTestId } = render(<Radio checked={false} onChange={onChange} accessibilityLabel="radio" label="Option" testID="radio" />);
+    const { getByTestId } = render(
+      <Radio
+        checked={false}
+        onChange={onChange}
+        accessibilityLabel="radio"
+        accessibilityHint="selects option"
+        label="Option"
+        testID="radio"
+      />,
+    );
 
     expect(screen.getByText("Option")).toBeTruthy();
     fireEvent.press(getByTestId("radio"));
@@ -74,7 +100,16 @@ describe("Radio", () => {
 describe("Switch", () => {
   it("renders label and calls onChange", () => {
     const onChange = jest.fn();
-    const { getByTestId } = render(<Switch checked={false} onChange={onChange} accessibilityLabel="switch" label="Enable" testID="switch" />);
+    const { getByTestId } = render(
+      <Switch
+        checked={false}
+        onChange={onChange}
+        accessibilityLabel="switch"
+        accessibilityHint="toggles switch"
+        label="Enable"
+        testID="switch"
+      />,
+    );
 
     expect(screen.getByText("Enable")).toBeTruthy();
     fireEvent.press(getByTestId("switch"));
@@ -161,25 +196,42 @@ describe("Icon and Image", () => {
   });
 
   it("renders Image with default placeholder", () => {
-    const { getByTestId } = render(<Image testID="image" source={{ uri: "https://example.com/image.png" }} />);
-    expect(getByTestId("image").props.placeholder).toBe("L6PZfSi_.AyE_3t7t7R**0o#DgR4");
+    const { getByTestId } = render(
+      <Image
+        testID="image"
+        source={{ uri: "https://example.com/image.png" }}
+      />,
+    );
+    expect(getByTestId("image").props.placeholder).toBe(
+      "L6PZfSi_.AyE_3t7t7R**0o#DgR4",
+    );
   });
 
   it("preloads images", () => {
     preloadImages(["https://example.com/a.png"]);
-    expect(ExpoImage.prefetch).toHaveBeenCalledWith(["https://example.com/a.png"]);
+    expect(ExpoImage.prefetch).toHaveBeenCalledWith([
+      "https://example.com/a.png",
+    ]);
   });
 });
 
 describe("SafeFastImage", () => {
   it("uses fallback on invalid source", () => {
-    const { getByTestId } = render(<SafeFastImage testID="safe" source={{ uri: "" }} />);
+    const { getByTestId } = render(
+      <SafeFastImage testID="safe" source={{ uri: "" }} />,
+    );
     expect(getByTestId("safe").props.transition).toBe(0);
     expect(getByTestId("safe").props.source).toBeDefined();
   });
 
   it("uses blurhash placeholder and transition", () => {
-    const { getByTestId } = render(<SafeFastImage testID="safe" source={{ uri: "https://example.com/img.png" }} blurhash="hash" />);
+    const { getByTestId } = render(
+      <SafeFastImage
+        testID="safe"
+        source={{ uri: "https://example.com/img.png" }}
+        blurhash="hash"
+      />,
+    );
     expect(getByTestId("safe").props.placeholder).toBe("hash");
     expect(getByTestId("safe").props.transition).toBe(500);
   });
@@ -188,14 +240,22 @@ describe("SafeFastImage", () => {
 describe("Icon with custom view", () => {
   it("renders with style props", () => {
     const icon = require("@/assets/images/icon.png");
-    const { getByTestId } = render(<Icon icon={icon} testID="icon-styled" style={{ opacity: 0.5 }} />);
+    const { getByTestId } = render(
+      <Icon icon={icon} testID="icon-styled" style={{ opacity: 0.5 }} />,
+    );
     expect(getByTestId("icon-styled")).toBeTruthy();
   });
 });
 
 describe("Image className", () => {
   it("accepts className prop", () => {
-    const { getByTestId } = render(<Image testID="image-class" className="rounded-md" source={{ uri: "https://example.com" }} />);
+    const { getByTestId } = render(
+      <Image
+        testID="image-class"
+        className="rounded-md"
+        source={{ uri: "https://example.com" }}
+      />,
+    );
     expect(getByTestId("image-class")).toBeTruthy();
   });
 });

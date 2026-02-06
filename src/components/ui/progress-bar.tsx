@@ -1,8 +1,15 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { View } from "react-native";
-import Animated, { Easing, useAnimatedProps, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, {
+  Easing,
+  useAnimatedProps,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import Svg, { Circle } from "react-native-svg";
 import { twMerge } from "tailwind-merge";
+
 import { colors } from "../utilities";
 
 type Props = {
@@ -28,7 +35,17 @@ export type CircularProgressBarRef = {
 };
 
 const CircularProgressBar = forwardRef<CircularProgressBarRef, CircularProps>(
-  ({ initialProgress = 0, size = 48, strokeWidth = 6, className = "", trackColor = colors.blue[100], progressColor = colors.blue[600] }, ref) => {
+  (
+    {
+      initialProgress = 0,
+      size = 48,
+      strokeWidth = 6,
+      className = "",
+      trackColor = colors.blue[100],
+      progressColor = colors.blue[600],
+    },
+    ref,
+  ) => {
     const progress = useSharedValue<number>(initialProgress ?? 0);
 
     useImperativeHandle(ref, () => {
@@ -65,9 +82,19 @@ const CircularProgressBar = forwardRef<CircularProgressBarRef, CircularProps>(
     const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
     return (
-      <View className={twMerge("items-center justify-center", className)} style={{ width: size, height: size }}>
+      <View
+        className={twMerge("items-center justify-center", className)}
+        style={{ width: size, height: size }}
+      >
         <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-          <Circle cx={center} cy={center} r={radius} stroke={trackColor} strokeWidth={strokeWidth} fill="transparent" />
+          <Circle
+            cx={center}
+            cy={center}
+            r={radius}
+            stroke={trackColor}
+            strokeWidth={strokeWidth}
+            fill="transparent"
+          />
           <AnimatedCircle
             cx={center}
             cy={center}
@@ -88,45 +115,49 @@ const CircularProgressBar = forwardRef<CircularProgressBarRef, CircularProps>(
 
 CircularProgressBar.displayName = "ProgressBar.Circular";
 
-const BaseProgressBar = forwardRef<ProgressBarRef, Props>(({ initialProgress = 0, className = "" }, ref) => {
-  const progress = useSharedValue<number>(initialProgress ?? 0);
-  useImperativeHandle(ref, () => {
-    return {
-      setProgress: (value: number) => {
-        progress.value = withTiming(value, {
-          duration: 250,
-          easing: Easing.inOut(Easing.quad),
-        });
-      },
-    };
-  }, [progress]);
+const BaseProgressBar = forwardRef<ProgressBarRef, Props>(
+  ({ initialProgress = 0, className = "" }, ref) => {
+    const progress = useSharedValue<number>(initialProgress ?? 0);
+    useImperativeHandle(ref, () => {
+      return {
+        setProgress: (value: number) => {
+          progress.value = withTiming(value, {
+            duration: 250,
+            easing: Easing.inOut(Easing.quad),
+          });
+        },
+      };
+    }, [progress]);
 
-  React.useEffect(() => {
-    const clamped = Math.min(100, Math.max(0, initialProgress ?? 0));
-    progress.value = withTiming(clamped, {
-      duration: 250,
-      easing: Easing.inOut(Easing.quad),
+    React.useEffect(() => {
+      const clamped = Math.min(100, Math.max(0, initialProgress ?? 0));
+      progress.value = withTiming(clamped, {
+        duration: 250,
+        easing: Easing.inOut(Easing.quad),
+      });
+    }, [initialProgress, progress]);
+
+    const style = useAnimatedStyle(() => {
+      return {
+        width: `${progress.value}%`,
+        backgroundColor: colors.blue[600],
+        height: 10,
+        borderRadius: 30,
+      };
     });
-  }, [initialProgress, progress]);
-
-  const style = useAnimatedStyle(() => {
-    return {
-      width: `${progress.value}%`,
-      backgroundColor: colors.blue[600],
-      height: 10,
-      borderRadius: 30,
-    };
-  });
-  return (
-    <View className={twMerge(` bg-[#EAEAEA] w-full rounded-xl`, className)}>
-      <Animated.View style={style} />
-    </View>
-  );
-});
+    return (
+      <View className={twMerge(` bg-[#EAEAEA] w-full rounded-xl`, className)}>
+        <Animated.View style={style} />
+      </View>
+    );
+  },
+);
 
 BaseProgressBar.displayName = "ProgressBar";
 
-type ProgressBarComponent = React.ForwardRefExoticComponent<React.PropsWithoutRef<Props> & React.RefAttributes<ProgressBarRef>> & {
+type ProgressBarComponent = React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<Props> & React.RefAttributes<ProgressBarRef>
+> & {
   Circular: typeof CircularProgressBar;
 };
 

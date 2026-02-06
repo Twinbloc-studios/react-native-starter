@@ -24,14 +24,20 @@ export const rateApp = async () => {
     // Use the specific store package name provided
     const packageName = ANDROID_PACKAGE_NAME || Env.PACKAGE;
 
-    Linking.openURL(`market://details?id=${packageName}`).catch(() => {
-      Linking.openURL(`https://play.google.com/store/apps/details?id=${packageName}`);
+    await Linking.openURL(`market://details?id=${packageName}`).catch(() => {
+      void Linking.openURL(
+        `https://play.google.com/store/apps/details?id=${packageName}`,
+      );
     });
   } else if (Platform.OS === "ios") {
     // iOS App Store URL
-    Linking.openURL(`itms-apps://itunes.apple.com/app/viewContentsUserReviews/id${IOS_APP_ID}?action=write-review`).catch(() => {
+    await Linking.openURL(
+      `itms-apps://itunes.apple.com/app/viewContentsUserReviews/id${IOS_APP_ID}?action=write-review`,
+    ).catch(() => {
       // Fallback to standard https link if itms-apps fails
-      Linking.openURL(`https://apps.apple.com/app/id${IOS_APP_ID}?action=write-review`);
+      void Linking.openURL(
+        `https://apps.apple.com/app/id${IOS_APP_ID}?action=write-review`,
+      );
     });
   }
 };

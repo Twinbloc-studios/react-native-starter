@@ -1,6 +1,7 @@
-import { colors } from "@/components";
 import { type ComponentProps } from "react";
 import { type Toaster } from "sonner-native";
+
+import { colors } from "@/components";
 
 type ToastOptions = ComponentProps<typeof Toaster>["toastOptions"];
 

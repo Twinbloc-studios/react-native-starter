@@ -1,4 +1,13 @@
-const setup = (options: { platform: "ios" | "web"; appEnv: "production" | "development"; existingKey?: string | null; size?: number }) => {
+import type * as AuthUtilsType from "@/store/auth/utils";
+
+import type * as StorageType from "../storage";
+
+const setup = (options: {
+  platform: "ios" | "web";
+  appEnv: "production" | "development";
+  existingKey?: string | null;
+  size?: number;
+}) => {
   jest.resetModules();
 
   const mmkvStore = {
@@ -35,10 +44,17 @@ const setup = (options: { platform: "ios" | "web"; appEnv: "production" | "devel
   }));
   jest.doMock("react-native-mmkv", () => mmkvMock);
 
-  const module = require("../storage") as typeof import("../storage");
-  const { STORAGE_KEY } = require("@/store/auth/utils") as typeof import("@/store/auth/utils");
+  const module = require("../storage") as typeof StorageType;
+  const { STORAGE_KEY } = require("@/store/auth/utils") as typeof AuthUtilsType;
 
-  return { module, mmkvStore, secureStoreMock, cryptoMock, mmkvMock, STORAGE_KEY };
+  return {
+    module,
+    mmkvStore,
+    secureStoreMock,
+    cryptoMock,
+    mmkvMock,
+    STORAGE_KEY,
+  };
 };
 
 describe("storage", () => {
@@ -51,7 +67,9 @@ describe("storage", () => {
 
     await module.getStorage();
 
-    expect(secureStoreMock.getItemAsync).toHaveBeenCalledWith("mmkv-encryption-key");
+    expect(secureStoreMock.getItemAsync).toHaveBeenCalledWith(
+      "mmkv-encryption-key",
+    );
     expect(secureStoreMock.setItemAsync).not.toHaveBeenCalled();
     expect(cryptoMock.randomUUID).not.toHaveBeenCalled();
     expect(mmkvMock.createMMKV).toHaveBeenCalledWith({
@@ -67,12 +85,14 @@ describe("storage", () => {
       existingKey: null,
     });
 
-    await mmkvMock.createMMKV.mock.results;
     await (await require("../storage")).getStorage?.();
     await require("../storage").getStorage();
 
     expect(cryptoMock.randomUUID).toHaveBeenCalled();
-    expect(secureStoreMock.setItemAsync).toHaveBeenCalledWith("mmkv-encryption-key", "new-key");
+    expect(secureStoreMock.setItemAsync).toHaveBeenCalledWith(
+      "mmkv-encryption-key",
+      "new-key",
+    );
     expect(mmkvMock.createMMKV).toHaveBeenCalledWith({
       id: "app-secure-storage",
       encryptionKey: "new-key",
@@ -117,10 +137,15 @@ describe("storage", () => {
     mmkvStore.getString.mockReturnValueOnce(JSON.stringify({ value: 123 }));
 
     await module.setItem(STORAGE_KEY.IS_FIRST_TIME, { value: 123 });
-    const result = await module.getItem<{ value: number }>(STORAGE_KEY.IS_FIRST_TIME);
+    const result = await module.getItem<{ value: number }>(
+      STORAGE_KEY.IS_FIRST_TIME,
+    );
     await module.removeItem(STORAGE_KEY.IS_FIRST_TIME);
 
-    expect(mmkvStore.set).toHaveBeenCalledWith(STORAGE_KEY.IS_FIRST_TIME, JSON.stringify({ value: 123 }));
+    expect(mmkvStore.set).toHaveBeenCalledWith(
+      STORAGE_KEY.IS_FIRST_TIME,
+      JSON.stringify({ value: 123 }),
+    );
     expect(result).toEqual({ value: 123 });
     expect(mmkvStore.remove).toHaveBeenCalledWith(STORAGE_KEY.IS_FIRST_TIME);
   });
@@ -160,8 +185,10 @@ describe("storage", () => {
       createMMKV: jest.fn(),
     }));
 
-    const module = require("../storage") as typeof import("../storage");
-    await expect(module.getStorage()).rejects.toThrow("CRITICAL: Secure storage initialization failed. App cannot proceed securely.");
+    const module = require("../storage") as typeof StorageType;
+    await expect(module.getStorage()).rejects.toThrow(
+      "CRITICAL: Secure storage initialization failed. App cannot proceed securely.",
+    );
 
     errorSpy.mockRestore();
   });

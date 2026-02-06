@@ -20,7 +20,10 @@ const baseDefaults: ToastOptions = {
 
 let defaultOptions: ToastOptions = { ...baseDefaults };
 
-const resolveOptions = (descriptionOrOptions?: string | ToastOptions, options?: ToastOptions) => {
+const resolveOptions = (
+  descriptionOrOptions?: string | ToastOptions,
+  options?: ToastOptions,
+) => {
   if (typeof descriptionOrOptions === "string") {
     return {
       ...defaultOptions,
@@ -48,22 +51,54 @@ export const ShowToast = {
   show: (message: ToastMessage, options?: ToastOptions) => {
     return toast(message, resolveOptions(options));
   },
-  success: (message: ToastMessage, descriptionOrOptions?: string | ToastOptions, options?: ToastOptions) => {
-    return toast.success(message, resolveOptions(descriptionOrOptions, options));
+  success: (
+    message: ToastMessage,
+    descriptionOrOptions?: string | ToastOptions,
+    options?: ToastOptions,
+  ) => {
+    return toast.success(
+      message,
+      resolveOptions(descriptionOrOptions, options),
+    );
   },
-  error: (message: ToastMessage, descriptionOrOptions?: string | ToastOptions, options?: ToastOptions) => {
+  error: (
+    message: ToastMessage,
+    descriptionOrOptions?: string | ToastOptions,
+    options?: ToastOptions,
+  ) => {
     return toast.error(message, resolveOptions(descriptionOrOptions, options));
   },
-  warning: (message: ToastMessage, descriptionOrOptions?: string | ToastOptions, options?: ToastOptions) => {
-    return toast.warning(message, resolveOptions(descriptionOrOptions, options));
+  warning: (
+    message: ToastMessage,
+    descriptionOrOptions?: string | ToastOptions,
+    options?: ToastOptions,
+  ) => {
+    return toast.warning(
+      message,
+      resolveOptions(descriptionOrOptions, options),
+    );
   },
-  info: (message: ToastMessage, descriptionOrOptions?: string | ToastOptions, options?: ToastOptions) => {
+  info: (
+    message: ToastMessage,
+    descriptionOrOptions?: string | ToastOptions,
+    options?: ToastOptions,
+  ) => {
     return toast.info(message, resolveOptions(descriptionOrOptions, options));
   },
-  loading: (message: ToastMessage, descriptionOrOptions?: string | ToastOptions, options?: ToastOptions) => {
-    return toast.loading(message, resolveOptions(descriptionOrOptions, options));
+  loading: (
+    message: ToastMessage,
+    descriptionOrOptions?: string | ToastOptions,
+    options?: ToastOptions,
+  ) => {
+    return toast.loading(
+      message,
+      resolveOptions(descriptionOrOptions, options),
+    );
   },
-  custom: (render: Parameters<typeof toast.custom>[0], options?: ToastOptions) => {
+  custom: (
+    render: Parameters<typeof toast.custom>[0],
+    options?: ToastOptions,
+  ) => {
     return toast.custom(render, resolveOptions(options));
   },
   promise: <T>(promise: Promise<T>, options: ToastPromiseOptions) => {

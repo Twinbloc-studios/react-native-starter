@@ -1,6 +1,8 @@
-import { mmkvStorage } from "@/lib";
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
+
+import { mmkvStorage } from "@/lib";
+
 import { createSelectors } from "../store-utils";
 
 interface TUtility {
@@ -34,6 +36,8 @@ export const UtilitySelector = (state: TUtility) => state;
 
 export const useUtility = createSelectors(_useUtility);
 
-export const setHapticFeedback = (value: boolean) => _useUtility.getState().setHapticFeedback(value);
+export const setHapticFeedback = (value: boolean) =>
+  _useUtility.getState().setHapticFeedback(value);
 
-export const setSizeScale = (value: number) => _useUtility.getState().setSizeScale(value);
+export const setSizeScale = (value: number) =>
+  _useUtility.getState().setSizeScale(value);

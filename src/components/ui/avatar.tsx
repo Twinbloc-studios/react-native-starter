@@ -69,19 +69,53 @@ export interface AvatarProps extends ViewProps {
 
 export const Avatar = React.forwardRef<View, AvatarProps>(
   (
-    { source, size = "md", shape = "circle", radius, label, fallback, className, style, imageProps, imageStyle, textClassName, children, ...rest },
+    {
+      source,
+      size = "md",
+      shape = "circle",
+      radius,
+      label,
+      fallback,
+      className,
+      style,
+      imageProps,
+      imageStyle,
+      textClassName,
+      children,
+      ...rest
+    },
     ref,
   ) => {
     const [hasError, setHasError] = React.useState(false);
     const resolvedSize = typeof size === "number" ? size : sizeMap[size];
-    const resolvedRadius = radius ?? (shape === "square" ? 0 : shape === "rounded" ? Math.round(resolvedSize * 0.2) : Math.round(resolvedSize / 2));
+    const resolvedRadius =
+      radius ??
+      (shape === "square"
+        ? 0
+        : shape === "rounded"
+          ? Math.round(resolvedSize * 0.2)
+          : Math.round(resolvedSize / 2));
 
     const containerStyle = React.useMemo(
-      () => [{ width: resolvedSize, height: resolvedSize, borderRadius: resolvedRadius }, style],
+      () => [
+        {
+          width: resolvedSize,
+          height: resolvedSize,
+          borderRadius: resolvedRadius,
+        },
+        style,
+      ],
       [resolvedSize, resolvedRadius, style],
     );
     const baseImageStyle = React.useMemo(
-      () => [{ width: resolvedSize, height: resolvedSize, borderRadius: resolvedRadius }, imageStyle],
+      () => [
+        {
+          width: resolvedSize,
+          height: resolvedSize,
+          borderRadius: resolvedRadius,
+        },
+        imageStyle,
+      ],
       [resolvedSize, resolvedRadius, imageStyle],
     );
     const resolvedLabel = label?.trim();
@@ -103,7 +137,14 @@ export const Avatar = React.forwardRef<View, AvatarProps>(
 
     const content = React.useMemo(() => {
       if (source && !hasError) {
-        return <SafeFastImage source={source} style={baseImageStyle} onError={handleError} {...imageProps} />;
+        return (
+          <SafeFastImage
+            source={source}
+            style={baseImageStyle}
+            onError={handleError}
+            {...imageProps}
+          />
+        );
       }
 
       if (fallback) {
@@ -113,21 +154,46 @@ export const Avatar = React.forwardRef<View, AvatarProps>(
       if (resolvedLabel) {
         const initials = getInitials(resolvedLabel);
         const textSizeClass = typeof size === "number" ? "" : textSizeMap[size];
-        const textStyle = typeof size === "number" ? { fontSize: Math.round(resolvedSize * 0.4) } : undefined;
+        const textStyle =
+          typeof size === "number"
+            ? { fontSize: Math.round(resolvedSize * 0.4) }
+            : undefined;
         return (
-          <Text className={twMerge("text-white font-semibold", textSizeClass, textClassName)} style={textStyle} numberOfLines={1}>
+          <Text
+            className={twMerge(
+              "text-white font-semibold",
+              textSizeClass,
+              textClassName,
+            )}
+            style={textStyle}
+            numberOfLines={1}
+          >
             {initials}
           </Text>
         );
       }
 
       return <ExpoImage source={FALLBACK_IMAGE} style={baseImageStyle} />;
-    }, [source, hasError, baseImageStyle, handleError, imageProps, fallback, resolvedLabel, size, resolvedSize, textClassName]);
+    }, [
+      source,
+      hasError,
+      baseImageStyle,
+      handleError,
+      imageProps,
+      fallback,
+      resolvedLabel,
+      size,
+      resolvedSize,
+      textClassName,
+    ]);
 
     return (
       <View
         ref={ref}
-        className={twMerge("items-center justify-center overflow-hidden bg-neutral-400 dark:bg-neutral-700", className)}
+        className={twMerge(
+          "items-center justify-center overflow-hidden bg-neutral-400 dark:bg-neutral-700",
+          className,
+        )}
         style={containerStyle}
         {...rest}
       >

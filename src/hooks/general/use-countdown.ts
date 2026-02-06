@@ -14,7 +14,11 @@ interface UseCountdownProps {
   onComplete?: () => void;
 }
 
-export const useCountdown = ({ initialSeconds = 60, initialActive = false, onComplete }: UseCountdownProps = {}) => {
+export const useCountdown = ({
+  initialSeconds = 60,
+  initialActive = false,
+  onComplete,
+}: UseCountdownProps = {}) => {
   const [seconds, setSeconds] = useState(initialSeconds);
   const [isActive, setIsActive] = useState(initialActive);
 

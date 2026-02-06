@@ -3,7 +3,7 @@ import React from "react";
 import { I18nManager, Switch as RNSwitch, View } from "react-native";
 
 import { colors, IS_IOS } from "../utilities";
-import { IconProps, Label, Root, RootProps } from "./toggle-shared";
+import { type IconProps, Label, Root, type RootProps } from "./toggle-shared";
 
 const WIDTH = 50;
 const HEIGHT = 28;
@@ -42,8 +42,9 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
             true: colors.success[500],
           }}
           ios_backgroundColor={colors.charcoal[400]}
-          thumbColor="white"
+          thumbColor={colors.white}
           accessibilityLabel={ctx?.accessibilityLabel}
+          accessibilityHint="Double tap to toggle setting"
           accessible={false}
           style={{ transform: [{ scaleX: iosScaleX }, { scaleY: iosScaleY }] }}
         />
@@ -51,7 +52,9 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
     );
   }
 
-  const translateX = checked ? THUMB_OFFSET : WIDTH - THUMB_WIDTH - THUMB_OFFSET;
+  const translateX = checked
+    ? THUMB_OFFSET
+    : WIDTH - THUMB_WIDTH - THUMB_OFFSET;
 
   const backgroundColor = checked ? colors.primaryColor : colors.charcoal[400];
 
@@ -71,7 +74,7 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
           height: THUMB_HEIGHT,
           width: THUMB_WIDTH,
           position: "absolute",
-          backgroundColor: "white",
+          backgroundColor: colors.white,
           borderRadius: 13,
           right: 0,
         }}
@@ -105,11 +108,18 @@ const SwitchRoot = ({ checked = false, children, ...props }: RootProps) => {
   );
 };
 
-const SwitchBase = ({ checked = false, testID, label, ...props }: RootProps & { label?: string }) => {
+const SwitchBase = ({
+  checked = false,
+  testID,
+  label,
+  ...props
+}: RootProps & { label?: string }) => {
   return (
     <SwitchRoot checked={checked} testID={testID} {...props}>
       <SwitchIcon checked={checked} />
-      {label ? <Label text={label} testID={testID ? `${testID}-label` : undefined} /> : null}
+      {label ? (
+        <Label text={label} testID={testID ? `${testID}-label` : undefined} />
+      ) : null}
     </SwitchRoot>
   );
 };

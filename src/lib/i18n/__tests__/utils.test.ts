@@ -1,3 +1,5 @@
+import type * as I18nUtilsType from "../utils";
+
 type SetupOptions = {
   platform: "ios" | "android" | "web";
   appOwnership: "expo" | "standalone";
@@ -47,7 +49,7 @@ const setup = (options: SetupOptions) => {
     storageInstance,
   }));
 
-  const module = require("../utils") as typeof import("../utils");
+  const module = require("../utils") as typeof I18nUtilsType;
   return {
     module,
     storageInstance,
@@ -61,7 +63,15 @@ const setup = (options: SetupOptions) => {
 
 describe("i18n utils", () => {
   it("stores language and reloads in dev native", () => {
-    const { module, storageInstance, mockChangeLanguage, mockAllowRTL, mockForceRTL, mockReload, mockRestart } = setup({
+    const {
+      module,
+      storageInstance,
+      mockChangeLanguage,
+      mockAllowRTL,
+      mockForceRTL,
+      mockReload,
+      mockRestart,
+    } = setup({
       platform: "ios",
       appOwnership: "expo",
       dev: true,
@@ -107,7 +117,8 @@ describe("i18n utils", () => {
 
   it("reloads on web", () => {
     const reload = jest.fn();
-    global.window = { location: { reload } } as unknown as Window & typeof globalThis;
+    global.window = { location: { reload } } as unknown as Window &
+      typeof globalThis;
 
     const { module } = setup({
       platform: "web",

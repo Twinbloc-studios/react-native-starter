@@ -1,4 +1,8 @@
-import { type SheetDetent, type TrueSheet } from "@lodev09/react-native-true-sheet";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  type SheetDetent,
+  type TrueSheet,
+} from "@lodev09/react-native-true-sheet";
 import { FlashList } from "@shopify/flash-list";
 import * as React from "react";
 import type { FieldValues } from "react-hook-form";
@@ -10,15 +14,15 @@ import Svg, { Path } from "react-native-svg";
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
 
+import { BottomSheet, Input, Text, useBottomSheet } from ".";
 import type { InputControllerType } from "./input";
-import { Text, Input, BottomSheet, useBottomSheet } from ".";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const selectTv = tv({
   slots: {
     container: "mb-4",
     label: "text-grey-100 mb-1 text-base dark:text-neutral-100",
-    input: "border-grey-50 mt-0 flex-row items-center justify-center rounded-xl border p-3 py-4  dark:border-neutral-500 dark:bg-neutral-800",
+    input:
+      "border-grey-50 mt-0 flex-row items-center justify-center rounded-xl border p-3 py-4  dark:border-neutral-500 dark:bg-neutral-800",
     inputValue: "dark:text-neutral-100",
   },
 
@@ -61,12 +65,26 @@ type OptionsProps = {
 };
 
 export const Options = React.forwardRef<TrueSheet, OptionsProps>(
-  ({ options, onSelect, value, testID, title = "Select", scrollable = false, searchable = false, detents = [1] }, ref) => {
+  (
+    {
+      options,
+      onSelect,
+      value,
+      testID,
+      title = "Select",
+      scrollable = false,
+      searchable = false,
+      detents = [1],
+    },
+    ref,
+  ) => {
     const [searchQuery, setSearchQuery] = React.useState("");
 
     const filteredOptions = React.useMemo(() => {
       if (!searchQuery) return options;
-      return options.filter((option) => option.label.toLowerCase().includes(searchQuery.toLowerCase()));
+      return options.filter((option) =>
+        option.label.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
     }, [options, searchQuery]);
 
     const renderSelectItem = React.useCallback(
@@ -85,22 +103,34 @@ export const Options = React.forwardRef<TrueSheet, OptionsProps>(
     );
 
     return (
-      <BottomSheet ref={ref} title={title} scrollable={scrollable} detents={detents}>
+      <BottomSheet
+        ref={ref}
+        title={title}
+        scrollable={scrollable}
+        detents={detents}
+      >
         {searchable && (
           <View className="px-4 pb-2">
-            <Input placeholder="Search..." value={searchQuery} onChangeText={setSearchQuery} autoCapitalize="none" />
+            <Input
+              placeholder="Search..."
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              autoCapitalize="none"
+            />
           </View>
         )}
         <FlashList
           data={filteredOptions}
           renderItem={renderSelectItem}
           testID={testID ? `${testID}-modal` : undefined}
-          // @ts-ignore
+          // @ts-expect-error - estimatedItemSize is required by FlashList but types might be inferred incorrectly here
           estimatedItemSize={102}
           className={twMerge("", searchable && "pt-36")}
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-10">
-              <Text className="text-gray-500 dark:text-gray-400">No options found</Text>
+              <Text className="text-gray-500 dark:text-gray-400">
+                No options found
+              </Text>
             </View>
           }
         />
@@ -147,7 +177,8 @@ export interface SelectProps {
   searchable?: boolean;
   detents?: SheetDetent[];
 }
-interface ControlledSelectProps<T extends FieldValues> extends SelectProps, InputControllerType<T> {}
+interface ControlledSelectProps<T extends FieldValues>
+  extends SelectProps, InputControllerType<T> {}
 
 export const Select = (props: SelectProps) => {
   const {
@@ -184,7 +215,10 @@ export const Select = (props: SelectProps) => {
   );
 
   const textValue = React.useMemo(
-    () => (value !== undefined ? (options?.filter((t) => t.value === value)?.[0]?.label ?? placeholder) : placeholder),
+    () =>
+      value !== undefined
+        ? (options?.filter((t) => t.value === value)?.[0]?.label ?? placeholder)
+        : placeholder,
     [value, options, placeholder],
   );
 
@@ -192,18 +226,32 @@ export const Select = (props: SelectProps) => {
     <>
       <View className={styles.container()}>
         {label && (
-          <Text testID={testID ? `${testID}-label` : undefined} className={styles.label()}>
+          <Text
+            testID={testID ? `${testID}-label` : undefined}
+            className={styles.label()}
+          >
             {label}
           </Text>
         )}
-        <Pressable className={styles.input()} disabled={disabled} onPress={modal.present} testID={testID ? `${testID}-trigger` : undefined}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={label || "Select option"}
+          accessibilityHint="Double tap to open selection options"
+          className={styles.input()}
+          disabled={disabled}
+          onPress={modal.present}
+          testID={testID ? `${testID}-trigger` : undefined}
+        >
           <View className="flex-1">
             <Text className={styles.inputValue()}>{textValue}</Text>
           </View>
           <MaterialCommunityIcons name="chevron-down" />
         </Pressable>
         {error && (
-          <Text testID={`${testID}-error`} className="text-sm text-danger-300 dark:text-danger-600">
+          <Text
+            testID={`${testID}-error`}
+            className="text-sm text-danger-300 dark:text-danger-600"
+          >
             {error}
           </Text>
         )}
@@ -223,7 +271,9 @@ export const Select = (props: SelectProps) => {
 };
 
 // only used with react-hook-form
-export function ControlledSelect<T extends FieldValues>(props: ControlledSelectProps<T>) {
+export function ControlledSelect<T extends FieldValues>(
+  props: ControlledSelectProps<T>,
+) {
   const { name, control, rules, onSelect: onNSelect, ...selectProps } = props;
 
   const { field, fieldState } = useController({ control, name, rules });
@@ -234,12 +284,31 @@ export function ControlledSelect<T extends FieldValues>(props: ControlledSelectP
     },
     [field, onNSelect],
   );
-  return <Select onSelect={onSelect} value={field.value} error={fieldState.error?.message} {...selectProps} />;
+  return (
+    <Select
+      onSelect={onSelect}
+      value={field.value}
+      error={fieldState.error?.message}
+      {...selectProps}
+    />
+  );
 }
 
 const Check = ({ ...props }: SvgProps) => (
-  <Svg width={25} height={24} fill="none" viewBox="0 0 25 24" {...props} className="stroke-black dark:stroke-white">
-    <Path d="m20.256 6.75-10.5 10.5L4.506 12" strokeWidth={2.438} strokeLinecap="round" strokeLinejoin="round" />
+  <Svg
+    width={25}
+    height={24}
+    fill="none"
+    viewBox="0 0 25 24"
+    {...props}
+    className="stroke-black dark:stroke-white"
+  >
+    <Path
+      d="m20.256 6.75-10.5 10.5L4.506 12"
+      strokeWidth={2.438}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </Svg>
 );
 

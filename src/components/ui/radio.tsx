@@ -2,7 +2,13 @@ import { MotiView } from "moti";
 import React from "react";
 
 import { colors } from "../utilities";
-import { IconProps, Label, Root, RootProps, SIZE } from "./toggle-shared";
+import {
+  type IconProps,
+  Label,
+  Root,
+  type RootProps,
+  SIZE,
+} from "./toggle-shared";
 
 export const RadioIcon = ({ checked = false }: IconProps) => {
   const color = checked ? colors.primaryColor : colors.charcoal[400];
@@ -38,11 +44,18 @@ const RadioRoot = ({ checked = false, children, ...props }: RootProps) => {
   );
 };
 
-const RadioBase = ({ checked = false, testID, label, ...props }: RootProps & { label?: string }) => {
+const RadioBase = ({
+  checked = false,
+  testID,
+  label,
+  ...props
+}: RootProps & { label?: string }) => {
   return (
     <RadioRoot checked={checked} testID={testID} {...props}>
       <RadioIcon checked={checked} />
-      {label ? <Label text={label} testID={testID ? `${testID}-label` : undefined} /> : null}
+      {label ? (
+        <Label text={label} testID={testID ? `${testID}-label` : undefined} />
+      ) : null}
     </RadioRoot>
   );
 };

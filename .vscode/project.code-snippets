@@ -1,0 +1,161 @@
+{
+  "View": {
+    "prefix": "v",
+    "body": [
+      "<View className=\"flex-1 items-center justify-center\">",
+      "  $1",
+      "</View>"
+    ],
+    "description": "A Simple View "
+  },
+  "Text": {
+    "prefix": "t",
+    "body": [
+      "<Text className=\"text-center text-base\">",
+      "  $1",
+      "</Text>"
+    ],
+    "description": "A Simple Text"
+  },
+  "export *": {
+    "prefix": "ex *",
+    "body": [
+      "export * from '.$1';"
+    ],
+    "description": "export *"
+  },
+  "Component": {
+    "prefix": "comp",
+    "body": [
+      "import * as React from 'react';",
+      "",
+      "import { Text, View } from '@/components/ui';",
+      "",
+      "type Props = {",
+      "  $2",
+      "};",
+      "export const ${1:CompName} = ({}: Props) => {",
+      "  return (",
+      "    <View className=\"flex-1\">",
+      "      <Text className=\"text-base\">${1:CompName} Component</Text>",
+      "    </View>",
+      "  );",
+      "};",
+      ""
+    ],
+    "description": "Component"
+  },
+  "useQuery with variables": {
+    "prefix": "useqv",
+    "body": [
+      "import { useQuery } from '@tanstack/react-query';",
+      "import type { AxiosError } from 'axios';",
+      "",
+      "import { client } from '@/api/common/execute-client';",
+      "",
+      "type Variables = {$3};",
+      "type Response = {$4};",
+      "",
+      "export const use$1 = (variables: Variables) => {",
+      "  return useQuery<Response, AxiosError>({",
+      "    queryKey: ['$2', variables],",
+      "    queryFn: () => {",
+      "      return client",
+      "        .get(`$2/\\${variables.${5}}`)",
+      "        .then((response) => response.data);",
+      "    },",
+      "  });",
+      "};",
+      ""
+    ],
+    "description": "useQuery with variables"
+  },
+  "useQuery": {
+    "prefix": "useq",
+    "body": [
+      "import { useQuery } from '@tanstack/react-query';",
+      "import type { AxiosError } from 'axios';",
+      "",
+      "import { client } from '@/api/common/execute-client';",
+      "",
+      "type Response = {$3};",
+      "",
+      "export const use$1 = () => {",
+      "  return useQuery<Response, AxiosError>({",
+      "    queryKey: ['$2'],",
+      "    queryFn: () => {",
+      "      return client.get(`$2`).then((response) => response.data);",
+      "    },",
+      "  });",
+      "};",
+      ""
+    ],
+    "description": "useQuery"
+  },
+  "useInfiniteQuery": {
+    "prefix": "useiq",
+    "body": [
+      "import { useInfiniteQuery } from '@tanstack/react-query';",
+      "import type { AxiosError } from 'axios';",
+      "",
+      "import { client } from '@/api/common/execute-client';",
+      "import { DEFAULT_LIMIT, getNextPageParam } from '@/api/common/api-utils';",
+      "import type { PaginateQuery } from '@/api/common/types';",
+      "",
+      "type Response = {$3};",
+      "",
+      "export const use$1 = () => {",
+      "  return useInfiniteQuery<PaginateQuery<Response>, AxiosError>({",
+      "    queryKey: ['$2'],",
+      "    initialPageParam: 0,",
+      "    getNextPageParam,",
+      "    queryFn: ({ pageParam }) => {",
+      "      return client",
+      "        .get(`$2`, {",
+      "          params: {",
+      "            limit: DEFAULT_LIMIT,",
+      "            offset: pageParam,",
+      "          },",
+      "        })",
+      "        .then((response) => response.data);",
+      "    },",
+      "  });",
+      "};",
+      ""
+    ],
+    "description": "useInfiniteQuery"
+  },
+  "useMutation": {
+    "prefix": "usem",
+    "body": [
+      "import { useMutation } from '@tanstack/react-query';",
+      "import type { AxiosError } from 'axios';",
+      "",
+      "import { client } from '@/api/common/execute-client';",
+      "",
+      "type Variables = {$3};",
+      "type Response = {$4};",
+      "",
+      "export const use$1 = () => {",
+      "  return useMutation<Response, AxiosError, Variables>({",
+      "    mutationFn: (variables) =>",
+      "      client({",
+      "        url: '$2',",
+      "        method: 'POST',",
+      "        data: variables,",
+      "      }).then((response) => response.data),",
+      "  });",
+      "};",
+      ""
+    ],
+    "description": "useMutation"
+  },
+  "navigate": {
+    "prefix": "navigate",
+    "body": [
+      "const router = useRouter();",
+      ""
+    ],
+    "description": "navigate"
+  }
+}

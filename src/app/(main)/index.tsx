@@ -1,8 +1,9 @@
+import React from "react";
+import { Pressable } from "react-native";
+
 import { Container, Text } from "@/components/ui";
 import { View } from "@/components/ui/view";
 import { useIsFirstTime } from "@/hooks/general/use-is-first-time";
-import React from "react";
-import { Pressable } from "react-native";
 
 export default function Index() {
   const [_, setIsFirstTime] = useIsFirstTime();
@@ -22,13 +23,23 @@ export default function Index() {
       </View>
 
       <>
-        <Pressable onPress={() => setIsVisible((prev) => !prev)}>
-          <View className="p-4 bg-white dark:bg-black">
+        <Pressable
+          onPress={() => setIsVisible((prev) => !prev)}
+          accessibilityRole="button"
+          accessibilityLabel="Toggle view"
+          accessibilityHint="Toggles the visibility of the animated view"
+        >
+          <View className="bg-white p-4 dark:bg-black">
             <Text>Default View</Text>
           </View>
         </Pressable>
 
-        <View animatePresence isVisible={isVisible} className="p-4 bg-gray-500 dark:bg-black" motionPreset="fadeDown">
+        <View
+          animatePresence
+          isVisible={isVisible}
+          className="bg-gray-500 p-4 dark:bg-black"
+          motionPreset="fadeDown"
+        >
           <Text>Animated View</Text>
         </View>
       </>

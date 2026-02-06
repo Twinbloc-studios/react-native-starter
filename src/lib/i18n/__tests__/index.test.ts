@@ -1,3 +1,5 @@
+import type * as I18nIndexType from "../index";
+
 type SetupOptions = {
   storedLanguage?: string;
   locale?: string;
@@ -64,13 +66,27 @@ const setup = (options: SetupOptions) => {
     },
   }));
 
-  const module = require("../index") as typeof import("../index");
-  return { module, mockInit, mockChangeLanguage, mockAllowRTL, mockForceRTL, mockGetStorage };
+  const module = require("../index") as typeof I18nIndexType;
+  return {
+    module,
+    mockInit,
+    mockChangeLanguage,
+    mockAllowRTL,
+    mockForceRTL,
+    mockGetStorage,
+  };
 };
 
 describe("i18n init", () => {
   it("initializes with stored language", async () => {
-    const { module, mockInit, mockChangeLanguage, mockAllowRTL, mockForceRTL, mockGetStorage } = setup({
+    const {
+      module,
+      mockInit,
+      mockChangeLanguage,
+      mockAllowRTL,
+      mockForceRTL,
+      mockGetStorage,
+    } = setup({
       storedLanguage: "es",
       locale: "fr",
       initialized: false,

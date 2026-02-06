@@ -1,6 +1,11 @@
 import React from "react";
 import { Pressable, type StyleProp, View, type ViewStyle } from "react-native";
-import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, {
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 /**
  * Accordion Component
@@ -44,12 +49,21 @@ import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming
 export interface AccordionProps<T> {
   sections: T[];
   activeSections: number[];
-  renderHeader: (section: T, index: number, isActive: boolean) => React.ReactNode;
-  renderContent: (section: T, index: number, isActive: boolean) => React.ReactNode;
+  renderHeader: (
+    section: T,
+    index: number,
+    isActive: boolean,
+  ) => React.ReactNode;
+  renderContent: (
+    section: T,
+    index: number,
+    isActive: boolean,
+  ) => React.ReactNode;
   onChange: (activeSections: number[]) => void;
   expandMultiple?: boolean;
   containerStyle?: StyleProp<ViewStyle>;
   sectionContainerStyle?: StyleProp<ViewStyle>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   touchableComponent?: React.ComponentType<any>;
   duration?: number;
 }
@@ -60,7 +74,11 @@ interface AccordionItemProps {
   duration?: number;
 }
 
-function AccordionItem({ isExpanded, children, duration = 300 }: AccordionItemProps) {
+function AccordionItem({
+  isExpanded,
+  children,
+  duration = 300,
+}: AccordionItemProps) {
   const height = useSharedValue(0);
 
   const derivedHeight = useDerivedValue(() => {
@@ -128,6 +146,11 @@ export function Accordion<T>({
               accessibilityRole="button"
               accessibilityState={{ expanded: isActive }}
               accessibilityLabel={`Accordion section ${index + 1}`}
+              accessibilityHint={
+                isActive
+                  ? "Double tap to collapse this section"
+                  : "Double tap to expand this section"
+              }
             >
               {renderHeader(section, index, isActive)}
             </Pressable>

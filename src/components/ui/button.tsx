@@ -87,7 +87,8 @@ const button = tv({
 });
 
 type ButtonVariants = VariantProps<typeof button>;
-export interface BProps extends ButtonVariants, Omit<PressableProps, "disabled"> {
+export interface BProps
+  extends ButtonVariants, Omit<PressableProps, "disabled"> {
   label?: string;
   loading?: boolean;
   className?: string;
@@ -111,10 +112,19 @@ export const Button = React.forwardRef<View, BProps>(
     },
     ref,
   ) => {
-    const styles = React.useMemo(() => button({ variant, disabled, size }), [variant, disabled, size]);
+    const styles = React.useMemo(
+      () => button({ variant, disabled, size }),
+      [variant, disabled, size],
+    );
 
     return (
-      <Pressable disabled={disabled || loading} className={styles.container({ className })} {...props} ref={ref} testID={testID}>
+      <Pressable
+        disabled={disabled || loading}
+        className={styles.container({ className })}
+        {...props}
+        ref={ref}
+        testID={testID}
+      >
         {props.children ? (
           props.children
         ) : (
@@ -126,7 +136,10 @@ export const Button = React.forwardRef<View, BProps>(
                 testID={testID ? `${testID}-activity-indicator` : undefined}
               />
             ) : (
-              <Text testID={testID ? `${testID}-label` : undefined} className={styles.label({ className: textClassName })}>
+              <Text
+                testID={testID ? `${testID}-label` : undefined}
+                className={styles.label({ className: textClassName })}
+              >
                 {text}
               </Text>
             )}

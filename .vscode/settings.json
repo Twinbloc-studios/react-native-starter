@@ -1,7 +1,44 @@
 {
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit",
-    "source.organizeImports": "explicit",
-    "source.sortMembers": "explicit"
-  }
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "search.exclude": {
+    "yarn.lock": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "eslint.format.enable": true,
+  "[javascript][typescript][typescriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true,
+      "source.addMissingImports": true
+    }
+  },
+  "[json][jsonc]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[astro]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "astro-build.astro-vscode"
+  },
+  "cSpell.words": [
+    "blurhash",
+    "Favorited",
+    "Flashlist",
+    "Galeria",
+    "irapada",
+    "Lato",
+    "nandorojo",
+    "partialize",
+    "Unfollowing"
+  ],
+  "i18n-ally.localesPaths": ["src/translations/"],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.disabled": false, // make sure to disable i18n-ally in your global setting and only enable it for such projects
+  "tailwindCSS.experimental.classRegex": [
+    ["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ]
 }

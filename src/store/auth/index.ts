@@ -2,11 +2,11 @@ import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
 import { queryClient } from "@/api/common/api-provider";
-
-import { AuthType, getToken, setToken, STORAGE_KEY } from "./utils";
-import { clearStorage } from "@/lib/utils/storage";
-import { createSelectors } from "../store-utils";
 import { secureStorage } from "@/lib/utils/secure-store";
+import { clearStorage } from "@/lib/utils/storage";
+
+import { createSelectors } from "../store-utils";
+import { type AuthType, getToken, setToken, STORAGE_KEY } from "./utils";
 
 export enum AuthStatus {
   IDLE = "idle",
@@ -32,21 +32,29 @@ const _useAuth = create<AuthState>()(
         auth_data: null,
         signIn: async (auth_data) => {
           await setToken(auth_data);
-          set({ userId: auth_data.userId, status: AuthStatus.AUTHENTICATED, auth_data });
+          set({
+            userId: auth_data.userId,
+            status: AuthStatus.AUTHENTICATED,
+            auth_data,
+          });
         },
         signOut: async () => {
           await clearStorage(STORAGE_KEY.TOKEN);
           queryClient.clear();
-          set({ userId: undefined, status: AuthStatus.UNAUTHENTICATED, auth_data: null });
+          set({
+            userId: undefined,
+            status: AuthStatus.UNAUTHENTICATED,
+            auth_data: null,
+          });
           await secureStorage.removeItem("authState");
         },
         hydrate: async () => {
           try {
             const userToken = await getToken();
             if (userToken !== null && userToken.access) {
-              get().signIn(userToken);
+              await get().signIn(userToken);
             } else {
-              get().signOut();
+              await get().signOut();
             }
           } catch {
             // catch error here

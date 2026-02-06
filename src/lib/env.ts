@@ -7,6 +7,9 @@
 
 import Constants from "expo-constants";
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 type ClientEnvType = typeof import("../../root-env.js").ClientEnv;
 
-export const Env = Object.freeze(Constants.expoConfig?.extra ?? {}) as Readonly<ClientEnvType>;
+export const Env = Object.freeze(
+  Constants.expoConfig?.extra ?? {},
+) as Readonly<ClientEnvType>;

@@ -1,14 +1,34 @@
-import { getNextPageParam, getPreviousPageParam, getUrlParameters, normalizePages } from "../api-utils";
+import {
+  getNextPageParam,
+  getPreviousPageParam,
+  getUrlParameters,
+  normalizePages,
+} from "../api-utils";
 
 describe("api-utils", () => {
   describe("normalizePages", () => {
     it("flattens paginated results", () => {
       const pages = [
-        { results: [{ id: 1 }, { id: 2 }], count: 4, next: null, previous: null },
-        { results: [{ id: 3 }, { id: 4 }], count: 4, next: null, previous: null },
+        {
+          results: [{ id: 1 }, { id: 2 }],
+          count: 4,
+          next: null,
+          previous: null,
+        },
+        {
+          results: [{ id: 3 }, { id: 4 }],
+          count: 4,
+          next: null,
+          previous: null,
+        },
       ];
 
-      expect(normalizePages(pages)).toEqual([{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]);
+      expect(normalizePages(pages)).toEqual([
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+      ]);
     });
   });
 
@@ -18,7 +38,9 @@ describe("api-utils", () => {
     });
 
     it("parses absolute URLs", () => {
-      expect(getUrlParameters("https://api.example.com/items?offset=20&limit=10")).toEqual({
+      expect(
+        getUrlParameters("https://api.example.com/items?offset=20&limit=10"),
+      ).toEqual({
         offset: "20",
         limit: "10",
       });

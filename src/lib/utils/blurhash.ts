@@ -13,14 +13,22 @@
  * const hash = await generateBlurhash('file:///path/to/image.jpg');
  * console.log(hash); // "LEHV6nWB2yk8pyo0adR*.7kCMdnj"
  */
-export const generateBlurhash = async (imageUri: string, componentX: number = 4, componentY: number = 3): Promise<string | null> => {
+export const generateBlurhash = async (
+  imageUri: string,
+  componentX: number = 4,
+  componentY: number = 3,
+): Promise<string | null> => {
   try {
     const blurhashModule = require("react-native-blurhash") as {
       Blurhash: {
         encode: (uri: string, x: number, y: number) => Promise<string>;
       };
     };
-    const hash = await blurhashModule.Blurhash.encode(imageUri, componentX, componentY);
+    const hash = await blurhashModule.Blurhash.encode(
+      imageUri,
+      componentX,
+      componentY,
+    );
     return hash;
   } catch (error) {
     console.error("Failed to generate blurhash:", error);

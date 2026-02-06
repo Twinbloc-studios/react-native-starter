@@ -1,17 +1,19 @@
-import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react-native";
-import { Pressable } from "react-native";
+import React from "react";
 import { useForm } from "react-hook-form";
+import { Pressable } from "react-native";
 
 import { Accordion } from "../accordion";
 import { BottomSheet, useBottomSheet } from "../bottom-sheet";
-import { Input, ControlledInput } from "../input";
+import { ControlledInput, Input } from "../input";
 import { InputView } from "../input-view";
 import { Select } from "../select";
 import { Text } from "../text";
 
 const getTrueSheetMocks = () => {
-  const module = jest.requireMock("@lodev09/react-native-true-sheet") as { __mocks: { mockPresent: jest.Mock; mockDismiss: jest.Mock } };
+  const module = jest.requireMock("@lodev09/react-native-true-sheet") as {
+    __mocks: { mockPresent: jest.Mock; mockDismiss: jest.Mock };
+  };
   return module.__mocks;
 };
 
@@ -54,7 +56,13 @@ describe("BottomSheet and useBottomSheet", () => {
       const sheet = useBottomSheet();
       return (
         <>
-          <Pressable onPress={sheet.present} testID="present" />
+          <Pressable
+            onPress={sheet.present}
+            testID="present"
+            accessibilityRole="button"
+            accessibilityLabel="present"
+            accessibilityHint="Presents the bottom sheet"
+          />
           <BottomSheet ref={sheet.ref}>
             <Text>Sheet</Text>
           </BottomSheet>
@@ -77,8 +85,17 @@ describe("Input", () => {
 
   it("renders ControlledInput with form control", () => {
     const Sample = () => {
-      const { control } = useForm<{ name: string }>({ defaultValues: { name: "" } });
-      return <ControlledInput name="name" control={control} testID="name-input" label="Name" />;
+      const { control } = useForm<{ name: string }>({
+        defaultValues: { name: "" },
+      });
+      return (
+        <ControlledInput
+          name="name"
+          control={control}
+          testID="name-input"
+          label="Name"
+        />
+      );
     };
 
     render(<Sample />);
@@ -104,7 +121,13 @@ describe("Select", () => {
     const onSelect = jest.fn();
     const { mockPresent, mockDismiss } = getTrueSheetMocks();
 
-    render(<Select testID="select" options={[{ label: "One", value: "1" }]} onSelect={onSelect} />);
+    render(
+      <Select
+        testID="select"
+        options={[{ label: "One", value: "1" }]}
+        onSelect={onSelect}
+      />,
+    );
 
     fireEvent.press(screen.getByTestId("select-trigger"));
     expect(mockPresent).toHaveBeenCalled();

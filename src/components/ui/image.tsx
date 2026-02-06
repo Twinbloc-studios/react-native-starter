@@ -1,5 +1,4 @@
-import type { ImageProps } from "expo-image";
-import { Image as IMG } from "expo-image";
+import { Image as IMG, type ImageProps } from "expo-image";
 import * as React from "react";
 import { withUniwind } from "uniwind";
 

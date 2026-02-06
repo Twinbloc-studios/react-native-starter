@@ -1,6 +1,10 @@
 import Constants from "expo-constants";
-import type { TOptions } from "i18next";
-import { changeLanguage as i18nChangeLanguage, dir, t } from "i18next";
+import {
+  changeLanguage as i18nChangeLanguage,
+  dir,
+  t,
+  type TOptions,
+} from "i18next";
 import memoize from "lodash.memoize";
 import { useCallback } from "react";
 import { I18nManager, NativeModules, Platform } from "react-native";

@@ -1,6 +1,9 @@
 import { Env } from "@env";
-import { type AxiosRequestConfig, isAxiosError, type Method } from "axios";
-import axios from "axios";
+import axios, {
+  type AxiosRequestConfig,
+  isAxiosError,
+  type Method,
+} from "axios";
 
 import { accessToken, signOut } from "@/store/auth";
 

@@ -1,12 +1,11 @@
 import React from "react";
-import type { PressableProps } from "react-native";
 import {
   ActivityIndicator,
   Pressable as RNPressable,
+  type PressableProps,
   View as RNView,
 } from "react-native";
-import type { VariantProps } from "tailwind-variants";
-import { tv } from "tailwind-variants";
+import { tv, type VariantProps } from "tailwind-variants";
 import { withUniwind } from "uniwind";
 
 import { Text } from "./text";

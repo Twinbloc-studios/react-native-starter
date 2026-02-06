@@ -5,12 +5,13 @@ import {
 } from "@lodev09/react-native-true-sheet";
 import { FlashList } from "@shopify/flash-list";
 import * as React from "react";
-import type { FieldValues } from "react-hook-form";
-import { useController } from "react-hook-form";
-import { View as RNView } from "react-native";
-import { Pressable as RNPressable, type PressableProps } from "react-native";
-import type { SvgProps } from "react-native-svg";
-import Svg, { Path } from "react-native-svg";
+import { type FieldValues, useController } from "react-hook-form";
+import {
+  Pressable as RNPressable,
+  type PressableProps,
+  View as RNView,
+} from "react-native";
+import Svg, { Path, type SvgProps } from "react-native-svg";
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
 import { withUniwind } from "uniwind";

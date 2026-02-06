@@ -1,13 +1,16 @@
 import * as React from "react";
-import type {
-  Control,
-  FieldValues,
-  Path,
-  RegisterOptions,
+import {
+  type Control,
+  type FieldValues,
+  type Path,
+  type RegisterOptions,
+  useController,
 } from "react-hook-form";
-import { useController } from "react-hook-form";
-import type { TextInputProps } from "react-native";
-import { TextInput as NTextInput, View as RNView } from "react-native";
+import {
+  TextInput as NTextInput,
+  type TextInputProps,
+  View as RNView,
+} from "react-native";
 import { tv } from "tailwind-variants";
 import { withUniwind } from "uniwind";
 

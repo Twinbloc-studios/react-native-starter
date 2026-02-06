@@ -1,11 +1,15 @@
 import React from "react";
-import type { TextProps, TextStyle } from "react-native";
-import { I18nManager, StyleSheet, Text as NNText } from "react-native";
+import {
+  I18nManager,
+  StyleSheet,
+  Text as NNText,
+  type TextProps,
+  type TextStyle,
+} from "react-native";
 import { twMerge } from "tailwind-merge";
 import { withUniwind } from "uniwind";
 
-import type { TxKeyPath } from "@/lib/i18n";
-import { translate } from "@/lib/i18n";
+import { translate, type TxKeyPath } from "@/lib/i18n";
 import { useUtility } from "@/store/utility";
 
 interface Props extends TextProps {

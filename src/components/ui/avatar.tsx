@@ -1,8 +1,11 @@
-import type { ImageSource } from "expo-image";
-import { Image as ExpoImage } from "expo-image";
+import { Image as ExpoImage, type ImageSource } from "expo-image";
 import React from "react";
-import type { ImageStyle, StyleProp, ViewProps } from "react-native";
-import { View as RNView } from "react-native";
+import {
+  type ImageStyle,
+  type StyleProp,
+  View as RNView,
+  type ViewProps,
+} from "react-native";
 import { twMerge } from "tailwind-merge";
 import { withUniwind } from "uniwind";
 

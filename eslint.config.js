@@ -129,7 +129,7 @@ module.exports = (async () => {
         "import/no-cycle": ["error", { maxDepth: "∞" }],
         "import/first": "error",
         "import/newline-after-import": "error",
-        "import/no-duplicates": "error",
+        "import/no-duplicates": ["error", { "prefer-inline": true }],
         "import/no-unresolved": ["error", { ignore: ["^@expo-google-fonts/"] }],
 
         // --- Prettier ---

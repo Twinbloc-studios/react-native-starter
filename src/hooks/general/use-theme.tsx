@@ -1,7 +1,7 @@
-import type { Theme } from "@react-navigation/native";
 import {
   DarkTheme as _DarkTheme,
   DefaultTheme,
+  type Theme,
 } from "@react-navigation/native";
 import { Appearance, useColorScheme } from "react-native";
 import { useMMKVString } from "react-native-mmkv";

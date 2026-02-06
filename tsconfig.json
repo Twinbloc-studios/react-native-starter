@@ -9,7 +9,14 @@
       "@env": ["src/lib/env.ts"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".maestro/**/*.js", ".maestro/**/*.ts"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".maestro/**/*.js",
+    ".maestro/**/*.ts",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ],
   "exclude": [
     "node_modules",
     "babel.config.js",

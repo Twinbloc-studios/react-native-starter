@@ -12,6 +12,7 @@
     "lokalise.i18n-ally",
     "wesbos.theme-cobalt2",
     "ChakrounAnas.turbo-console-log",
-    "expo.vscode-expo-tools"
+    "expo.vscode-expo-tools",
+    "mobile-dev-inc.maestro-vscode"
   ]
 }

@@ -9,10 +9,12 @@ const Onboarding = () => {
   return (
     <Container.Insets>
       <Text
+        testID="onboarding-button"
         onPress={() => {
           setIsFirstTime(false);
           router.push("/");
         }}
+        className="text-yellow-300"
       >
         onboarding
       </Text>

@@ -14,6 +14,7 @@ export default function Index() {
     <Container.Insets>
       <View>
         <Text
+          testID="app-reset-button"
           onPress={() => {
             setIsFirstTime(true);
           }}
@@ -29,7 +30,7 @@ export default function Index() {
           accessibilityLabel="Toggle view"
           accessibilityHint="Toggles the visibility of the animated view"
         >
-          <View className="bg-white p-4 dark:bg-black">
+          <View className="bg-green-500 p-4 dark:bg-black">
             <Text>Default View</Text>
           </View>
         </Pressable>
@@ -37,7 +38,7 @@ export default function Index() {
         <View
           animatePresence
           isVisible={isVisible}
-          className="bg-gray-500 p-4 dark:bg-black"
+          className="bg-green-900 p-4 dark:bg-black"
           motionPreset="fadeDown"
         >
           <Text>Animated View</Text>

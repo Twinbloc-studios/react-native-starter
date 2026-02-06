@@ -41,3 +41,7 @@ app-example
 # generated native folders
 /ios
 /android
+
+# Maestro
+.maestro/report.xml
+.maestro/generated/

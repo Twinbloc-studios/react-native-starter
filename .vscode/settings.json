@@ -40,5 +40,8 @@
   "i18n-ally.disabled": false, // make sure to disable i18n-ally in your global setting and only enable it for such projects
   "tailwindCSS.experimental.classRegex": [
     ["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
-  ]
+  ],
+  "yaml.schemas": {
+    "http://json-schema.org/draft-07/schema": [".maestro/*.yaml"]
+  }
 }

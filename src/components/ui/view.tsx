@@ -3,7 +3,8 @@ import { cssInterop } from "nativewind";
 import { type ComponentProps, useMemo } from "react";
 import { View as RNView, type ViewProps } from "react-native";
 
-cssInterop(MotiView, { className: "style" });
+const NativeMotiView = cssInterop(MotiView, { className: "style" });
+const NativeView = cssInterop(RNView, { className: "style" });
 
 type MotiProps = ComponentProps<typeof MotiView>;
 type PresenceProps = ComponentProps<typeof AnimatePresence>;
@@ -59,15 +60,15 @@ export function View({
   );
 
   if (!animatePresence) {
-    return <RNView {...props}>{children}</RNView>;
+    return <NativeView {...props}>{children}</NativeView>;
   }
 
   return (
     <AnimatePresence {...presenceProps}>
       {isVisible ? (
-        <MotiView {...props} {...mergedMotionProps} key="moti-view">
+        <NativeMotiView {...props} {...mergedMotionProps} key="moti-view">
           {children}
-        </MotiView>
+        </NativeMotiView>
       ) : null}
     </AnimatePresence>
   );

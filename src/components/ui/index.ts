@@ -13,3 +13,4 @@ export * from "./safe-fast-image";
 export * from "./stacks";
 export * from "./switch";
 export * from "./text";
+export * from "./view";

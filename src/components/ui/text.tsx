@@ -1,3 +1,4 @@
+import { cssInterop } from "nativewind";
 import React from "react";
 import type { TextProps, TextStyle } from "react-native";
 import { I18nManager, StyleSheet, Text as NNText } from "react-native";
@@ -14,7 +15,10 @@ interface Props extends TextProps {
 }
 
 // Tailwind/Nativewind default font sizes & line heights
-const textSizeMapping: Record<string, { fontSize: number; lineHeight: number }> = {
+const textSizeMapping: Record<
+  string,
+  { fontSize: number; lineHeight: number }
+> = {
   "text-xs": { fontSize: 12, lineHeight: 16 },
   "text-sm": { fontSize: 14, lineHeight: 20 },
   "text-base": { fontSize: 16, lineHeight: 24 },
@@ -39,20 +43,37 @@ const relativeLineHeightMapping: Record<string, number> = {
   "leading-loose": 2,
 };
 
-export const Text = ({ className = "", style, tx, children, disableSizeScale = false, ...props }: Props) => {
+export const Text = ({
+  className = "",
+  style,
+  tx,
+  children,
+  disableSizeScale = false,
+  ...props
+}: Props) => {
   const { sizeScale } = useUtility();
-  const fontClass = className.split(" ").find((cls) => fontFamilyMapping[cls]) ?? "font-regular";
+  const fontClass =
+    className.split(" ").find((cls) => fontFamilyMapping[cls]) ??
+    "font-regular";
 
   const textStyle = React.useMemo(
     () =>
-      twMerge("text-base text-black dark:text-white font-regular", className, fontClass ? `font-[${fontFamilyMapping[fontClass]}]` : "font-regular"),
+      twMerge(
+        "text-base text-black dark:text-white font-regular",
+        className,
+        fontClass ? `font-[${fontFamilyMapping[fontClass]}]` : "font-regular",
+      ),
     [className, fontClass],
   );
 
-  const { fontSize: baseFontSizeFromClass, lineHeight: baseLineHeightFromClass } = React.useMemo(() => {
+  const {
+    fontSize: baseFontSizeFromClass,
+    lineHeight: baseLineHeightFromClass,
+  } = React.useMemo(() => {
     const classes = textStyle.split(" ");
     // Find the last text size class (NativeWind/Tailwind precedence)
-    const sizeClass = classes.reverse().find((cls) => textSizeMapping[cls]) ?? "text-base";
+    const sizeClass =
+      classes.reverse().find((cls) => textSizeMapping[cls]) ?? "text-base";
     const sizeData = textSizeMapping[sizeClass] ?? textSizeMapping["text-base"];
 
     let lineHeight = sizeData.lineHeight;
@@ -60,7 +81,8 @@ export const Text = ({ className = "", style, tx, children, disableSizeScale = f
 
     if (leadingClass) {
       if (relativeLineHeightMapping[leadingClass]) {
-        lineHeight = sizeData.fontSize * relativeLineHeightMapping[leadingClass];
+        lineHeight =
+          sizeData.fontSize * relativeLineHeightMapping[leadingClass];
       } else {
         const match = leadingClass.match(/^leading-(\d+)$/);
         if (match) {
@@ -90,20 +112,34 @@ export const Text = ({ className = "", style, tx, children, disableSizeScale = f
     const baseFontSize = baseStyle?.fontSize ?? baseFontSizeFromClass;
     const baseLineHeight = baseStyle?.lineHeight ?? baseLineHeightFromClass;
 
-    const scaledFontSize = baseFontSize && sizeScale ? baseFontSize * sizeScale : undefined;
-    const scaledLineHeight = baseLineHeight && sizeScale ? baseLineHeight * sizeScale : undefined;
+    const scaledFontSize =
+      baseFontSize && sizeScale ? baseFontSize * sizeScale : undefined;
+    const scaledLineHeight =
+      baseLineHeight && sizeScale ? baseLineHeight * sizeScale : undefined;
 
     return {
       ...baseStyle,
       ...(scaledFontSize ? { fontSize: scaledFontSize } : {}),
       ...(scaledLineHeight ? { lineHeight: scaledLineHeight } : {}),
     } as TextStyle;
-  }, [style, fontClass, sizeScale, baseFontSizeFromClass, baseLineHeightFromClass, disableSizeScale]);
+  }, [
+    style,
+    fontClass,
+    sizeScale,
+    baseFontSizeFromClass,
+    baseLineHeightFromClass,
+    disableSizeScale,
+  ]);
 
   return (
-    <NNText allowFontScaling={false} className={textStyle} style={nStyle} {...props}>
+    <NativeText
+      allowFontScaling={false}
+      className={textStyle}
+      style={nStyle}
+      {...props}
+    >
       {tx ? translate(tx) : children}
-    </NNText>
+    </NativeText>
   );
 };
 
@@ -113,3 +149,5 @@ const fontFamilyMapping: Record<string, string> = {
   "font-semibold": "Inter_600SemiBold",
   "font-bold": "Inter_700Bold",
 };
+
+const NativeText = cssInterop(NNText, { className: "style" });

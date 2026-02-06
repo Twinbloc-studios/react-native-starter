@@ -22,6 +22,8 @@
     "lint:fix": "eslint src --fix",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
+    "install-maestro": "curl -Ls \"https://get.maestro.mobile.dev\" | bash",
+    "test:e2e": "maestro test .maestro/ -e APP_ID=com.development.reactnativestarter",
     "prepare": "husky"
   },
   "overrides": {

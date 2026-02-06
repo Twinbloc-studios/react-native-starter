@@ -7,7 +7,7 @@ export type ImgProps = ImageProps & {
   className?: string;
 };
 
-cssInterop(IMG, { className: "style" });
+const NativeImage = cssInterop(IMG, { className: "style" });
 
 export const Image = ({
   style,
@@ -16,7 +16,7 @@ export const Image = ({
   ...props
 }: ImgProps) => {
   return (
-    <IMG
+    <NativeImage
       className={className}
       placeholder={placeholder}
       style={style}

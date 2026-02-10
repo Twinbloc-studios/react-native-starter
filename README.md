@@ -1,49 +1,166 @@
-# Welcome to your Expo app 👋
+# Twinbloc React Native Starter 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+[![Expo SDK](https://img.shields.io/badge/Expo-SDK%2054-black?logo=expo)](https://expo.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-## Get started
+Twinbloc is a comprehensive, production-ready React Native starter kit engineered with **Expo SDK 54**, **TypeScript**, and **UniWind**. It provides a robust, type-safe foundation for building high-performance mobile applications with a modern developer experience.
 
-1. Install dependencies
+For full documentation, visit [rn-starter.twinbloc.org](https://rn-starter.twinbloc.org).
 
-   ```bash
-   pnpm install
-   ```
+## 🚀 Features
 
-2. Start the app
+- **End-to-End Type Safety**: Built with TypeScript and Zod for schema validation.
+- **Modern Styling**: [UniWind](https://docs.uniwind.dev/) (Universal Tailwind) for consistent, responsive UI across platforms.
+- **State Management**: [Zustand](https://zustand-demo.pmnd.rs/) for global state and [TanStack Query](https://tanstack.com/query/latest) for server state.
+- **Fast Storage**: [MMKV](https://github.com/morousg/react-native-mmkv) for high-performance key/value storage.
+- **File-based Routing**: [Expo Router](https://docs.expo.dev/router/introduction/) for intuitive navigation.
+- **Performance Optimized**: Includes [FlashList](https://shopify.github.io/flash-list/), [Reanimated 4](https://docs.swmansion.com/react-native-reanimated/), and [Moti](https://moti.fyi/).
+- **Internationalization**: Full i18n support with [i18next](https://www.i18next.com/).
+- **E2E Testing**: Pre-configured with [Maestro](https://maestro.mobile.dev/) for mobile UI testing.
+- **Developer Experience**: Pre-configured with Husky, Commitlint, Biome/ESLint, and VS Code/Cursor snippets.
 
-   ```bash
-   npx expo start
-   ```
+## 🛠 Technology Stack
 
-In the output, you'll find options to open the app in a
+| Category       | Tools                                          |
+| :------------- | :--------------------------------------------- |
+| **Core**       | Expo SDK 54, React Native 0.81, React 19       |
+| **Navigation** | Expo Router v6                                 |
+| **Styling**    | UniWind, Tailwind Variants, Lucide Icons       |
+| **Data**       | TanStack Query v5, Axios, React Hook Form, Zod |
+| **State**      | Zustand                                        |
+| **Storage**    | MMKV, Expo Secure Store                        |
+| **Animation**  | Reanimated 4, Moti                             |
+| **Testing**    | Jest, Maestro E2E                              |
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
+## 📥 Installation & Setup
 
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Requirements
 
-## Get a fresh project
+- [Node.js LTS](https://nodejs.org/)
+- [pnpm](https://pnpm.io/) (Recommended)
+- [React Native Environment Setup](https://reactnative.dev/docs/environment-setup) (for iOS/Android)
 
-When you're ready, run:
+### 1. Initialize Project
+
+Run the interactive CLI to create your project:
 
 ```bash
-pnpm reset-project
+npx create-twinbloc-app@latest
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Install Dependencies
 
-## Learn more
+```bash
+pnpm install
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+### 3. Run the App
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Since this template uses native modules, it requires a **Development Build**.
 
-## Join the community
+```bash
+# Run on iOS
+pnpm ios
 
-Join our community of developers creating universal apps.
+# Run on Android
+pnpm android
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## 📂 Project Structure
+
+```text
+src/
+├── api/            # API services and TanStack Query hooks
+├── app/            # Expo Router file-based navigation
+├── components/     # UI primitives and shared components
+├── hooks/          # Custom React hooks (general & feature-specific)
+├── lib/            # Utilities, i18n, and environment config
+├── store/          # Zustand store definitions
+├── translations/   # i18n locale files (en, ar, es, fr)
+└── types/          # Global TypeScript declarations
+```
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+Configure your environment in `.env.development`, `.env.staging`, or `.env.production`.
+All variables are validated in `root-env.js` using Zod.
+
+```bash
+# Example .env.development
+EXPO_PUBLIC_API_URL=https://api.example.com
+APP_NAME="My App (Dev)"
+```
+
+## 📖 Usage Examples
+
+### Using TanStack Query
+
+```tsx
+import { useGetUser } from "@/api/user";
+
+export function UserProfile() {
+  const { data, isLoading } = useGetUser();
+
+  if (isLoading) return <Text>Loading...</Text>;
+  return <Text>Hello, {data?.name}!</Text>;
+}
+```
+
+### Using UniWind for Styling
+
+```tsx
+import { View, Text, Button } from "@/components/ui";
+
+export function WelcomeCard() {
+  return (
+    <View className="p-4 bg-white dark:bg-slate-900 rounded-xl shadow-sm">
+      <Text className="text-xl font-bold text-slate-900 dark:text-white">
+        Welcome to Twinbloc
+      </Text>
+      <Button variant="primary" className="mt-4">
+        Get Started
+      </Button>
+    </View>
+  );
+}
+```
+
+## � Documentation
+
+For more detailed information, guides, and API references, please visit our official documentation website:
+
+👉 **[rn-starter.twinbloc.org](https://rn-starter.twinbloc.org)**
+
+## �🛠 Troubleshooting
+
+- **Native Module Issues**: If iOS builds fail after adding a library, try:
+  ```bash
+  cd ios && pod deintegrate && pod install && cd ..
+  ```
+- **Stale Cache**: Clear Metro bundler cache:
+  ```bash
+  npx expo start -c
+  ```
+- **Environment Variables**: Ensure `EXPO_PUBLIC_` prefix is used for client-side variables and restart the server.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+Built with ❤️ by [Twinbloc Studios](https://github.com/Twinbloc-studios)

@@ -1,4 +1,5 @@
-import type { ExpoConfig, ConfigContext } from "expo/config";
+import type { ConfigContext, ExpoConfig } from "expo/config";
+
 import { ClientEnv, Env } from "./root-env.js";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({

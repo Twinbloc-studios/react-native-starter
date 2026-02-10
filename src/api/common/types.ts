@@ -6,5 +6,6 @@ export type PaginateQuery<T> = {
 };
 
 export enum QueryKey {
+  //Add more
   USER = "user",
 }

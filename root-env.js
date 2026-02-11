@@ -3,7 +3,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const dotenv = require("dotenv");
 
-const packageJSON = require("./package.json");
+const rootPackageJSON = require("../../package.json");
 
 const APP_ENV = process.env.APP_ENV ?? "development";
 const envPath = path.resolve(process.cwd(), `.env.${APP_ENV}`);
@@ -17,13 +17,17 @@ const SLUG = process.env.APP_SLUG ?? "react-native-starter";
 const SCHEME = process.env.APP_SCHEME ?? "reactnativestarter";
 
 const bundleIdByEnv = {
-  development: process.env.APP_BUNDLE_ID_DEVELOPMENT ?? "com.development.reactnativestarter",
-  staging: process.env.APP_BUNDLE_ID_STAGING ?? "com.staging.reactnativestarter",
+  development:
+    process.env.APP_BUNDLE_ID_DEVELOPMENT ??
+    "com.development.reactnativestarter",
+  staging:
+    process.env.APP_BUNDLE_ID_STAGING ?? "com.staging.reactnativestarter",
   production: process.env.APP_BUNDLE_ID_PRODUCTION ?? "com.reactnativestarter",
 };
 
 const packageByEnv = {
-  development: process.env.APP_PACKAGE_DEVELOPMENT ?? "com.development.reactnativestarter",
+  development:
+    process.env.APP_PACKAGE_DEVELOPMENT ?? "com.development.reactnativestarter",
   staging: process.env.APP_PACKAGE_STAGING ?? "com.staging.reactnativestarter",
   production: process.env.APP_PACKAGE_PRODUCTION ?? "com.reactnativestarter",
 };
@@ -83,7 +87,7 @@ const _clientEnv = {
   SCHEME,
   BUNDLE_ID,
   PACKAGE,
-  VERSION: packageJSON.version,
+  VERSION: rootPackageJSON.version,
   EXPO_PUBLIC_API_URL: process.env.EXPO_PUBLIC_API_URL,
 };
 
@@ -109,7 +113,9 @@ if (parsed.success === false) {
     `\n❌ Missing variables in ${path.basename(resolvedEnvPath)}, make sure all required variables are defined.`,
     `\n💡 Tip: If you recently updated the .env.${APP_ENV} file and the error still persists, try restarting the server with the -c flag to clear the cache.`,
   );
-  throw new Error("Invalid environment variables, Check terminal for more details ");
+  throw new Error(
+    "Invalid environment variables, Check terminal for more details ",
+  );
 }
 
 const Env = parsed.data;

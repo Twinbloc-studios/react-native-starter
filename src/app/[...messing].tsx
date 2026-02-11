@@ -1,9 +1,3 @@
-// import { Redirect } from 'expo-router';
-
-// export default function NotFoundScreen() {
-//   return <Redirect href="/" />;
-// }
-
 import { Link, Stack } from "expo-router";
 import { View } from "react-native";
 

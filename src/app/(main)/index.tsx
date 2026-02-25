@@ -1,23 +1,13 @@
 import React from "react";
 
-import { Container, Text, View } from "@/components/ui";
-import { useIsFirstTime } from "@/hooks/general/use-is-first-time";
+import { Container, Text } from "@/components/ui";
 
 export default function Index() {
-  const [_, setIsFirstTime] = useIsFirstTime();
-
   return (
-    <Container.Insets>
-      <View className="flex-1 items-center justify-center">
-        <Text
-          testID="app-reset-button"
-          onPress={() => {
-            setIsFirstTime(true);
-          }}
-        >
-          Edit app/(main)/index.tsx to see changes.
-        </Text>
-      </View>
+    <Container.Insets className="justify-center items-center">
+      <Text className="text-xl text-slate-900 dark:text-white">
+        Edit /index.tsx to see the changes
+      </Text>
     </Container.Insets>
   );
 }

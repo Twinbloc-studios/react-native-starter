@@ -1,11 +1,12 @@
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { Pressable, View } from "react-native";
-import { toast } from "sonner-native";
+import { toast, type ToastMessage } from "goey-native-toast";
+import { useState } from "react";
+import { ActivityIndicator, Pressable } from "react-native";
 
 import { Text } from "../ui/text";
+import { View } from "../ui/view";
+import { WIDTH } from "./ui-utils";
 
 interface ConfirmationOptions {
-  id?: string | number;
   title?: string;
   description: string;
   onConfirm: () => void | Promise<void>;
@@ -13,9 +14,10 @@ interface ConfirmationOptions {
   confirmLabel?: string;
   cancelLabel?: string;
   variant?: "default" | "destructive";
+  updateOptions?: Partial<ToastMessage>;
 }
 
-let activeConfirmationId: string | number | null = null;
+let activeConfirmationId: string = "";
 
 // Sample usage:
 // confirmDialog({
@@ -27,12 +29,12 @@ let activeConfirmationId: string | number | null = null;
 //   onConfirm: async () => {
 //     await deleteItem();
 //   },
-//   onCancel: () => {
-//     console.log("Canceled");
+//   updateOptions: {
+//     title: "Item deleted",
+//     description: "Your item has been removed.",
 //   },
 // });
 export const confirmDialog = ({
-  id,
   title = "Are you sure?",
   description,
   onConfirm,
@@ -40,94 +42,119 @@ export const confirmDialog = ({
   confirmLabel = "Confirm",
   cancelLabel = "Cancel",
   variant = "default",
+  updateOptions,
 }: ConfirmationOptions) => {
   if (activeConfirmationId) {
     toast.dismiss(activeConfirmationId);
   }
-
-  const toastId = id ?? `modal-${Date.now()}`;
   const isDestructive = variant === "destructive";
 
-  const handleConfirm = async () => {
-    try {
-      const result = onConfirm();
-      if (result instanceof Promise) {
-        toast.loading("Loading", {
-          id: toastId,
-          description: "Please wait...",
-          duration: Infinity,
-          dismissible: false,
-          action: undefined,
-          cancel: undefined,
+  const CompletedBody = ({ description }: { description?: string }) => (
+    <View
+      style={{ width: WIDTH * 0.9 }}
+      className="w-full self-center rounded-2xl px-4"
+    >
+      <Text className="text-sm py-2 leading-5 text-white">
+        {description || "Action completed successfully"}
+      </Text>
+    </View>
+  );
+
+  const ConfirmationBody = () => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleConfirm = async () => {
+      if (isLoading) {
+        return;
+      }
+      setIsLoading(true);
+      try {
+        await Promise.resolve(onConfirm());
+        const shouldUseDefaultBody =
+          updateOptions?.customBody === undefined &&
+          updateOptions?.title === undefined &&
+          updateOptions?.description === undefined;
+
+        toast.update(activeConfirmationId, {
+          title: updateOptions?.title || "Success",
+          autoDismiss: true,
+          duration: 4000,
+          dismissible: true,
+          backgroundColor: isDestructive ? "#006400" : "#7FFF00",
+          ...(shouldUseDefaultBody ? { customBody: <CompletedBody /> } : {}),
+          ...updateOptions,
         });
-        await result;
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error("Confirmation action failed:", error);
-    } finally {
-      toast.dismiss(toastId);
-      if (activeConfirmationId === toastId) {
-        activeConfirmationId = null;
-      }
-    }
+    };
+
+    return (
+      <View
+        style={{ width: WIDTH * 0.9 }}
+        className={`w-full self-center rounded-2xl px-4 `}
+      >
+        {/* <View className="flex-row items-center gap-2">
+          {isDestructive ? <MaterialIcons name="remove-circle" size={22} color="white" /> : <MaterialIcons name="info" size={22} color="white" />}
+          <Text className="text-lg font-bold text-white">{title}</Text>
+        </View> */}
+        <Text className="text-sm leading-5 text-white">{description}</Text>
+        <View className="mt-4 flex-row gap-3">
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={cancelLabel}
+            accessibilityHint="Cancels the action"
+            onPress={() => {
+              if (isLoading) {
+                return;
+              }
+              onCancel?.();
+              toast.dismiss(activeConfirmationId);
+            }}
+            className="flex-1 items-center justify-center rounded-xl border border-white py-2"
+          >
+            <Text className="text-[15px] font-semibold text-white">
+              {cancelLabel}
+            </Text>
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={confirmLabel}
+            accessibilityHint="Confirms the action"
+            onPress={handleConfirm}
+            disabled={isLoading}
+            className="flex-1 items-center justify-center rounded-xl bg-white py-2"
+          >
+            {isLoading ? (
+              <ActivityIndicator
+                size="small"
+                color={isDestructive ? "#991b1b" : "#1e3a8a"}
+              />
+            ) : (
+              <Text
+                className={`text-[15px] font-semibold ${isDestructive ? "text-danger-800" : "text-blue-900"}`}
+              >
+                {confirmLabel}
+              </Text>
+            )}
+          </Pressable>
+        </View>
+      </View>
+    );
   };
 
-  activeConfirmationId = toast.custom(
-    <View
-      className={`w-[95%] self-center rounded-2xl p-5 ${isDestructive ? "bg-danger-600" : "bg-blue-900"}`}
-    >
-      <View className="flex-row items-center gap-2">
-        {isDestructive ? (
-          <MaterialIcons name="remove-circle" size={22} color="white" />
-        ) : (
-          <MaterialIcons name="info" size={22} color="white" />
-        )}
-        <Text className="text-lg font-bold text-white">{title}</Text>
-      </View>
-      <Text className="mt-3 text-sm leading-5 text-white">{description}</Text>
-      <View className="mt-4 flex-row gap-3">
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={cancelLabel}
-          accessibilityHint="Cancels the action"
-          onPress={() => {
-            onCancel?.();
-            toast.dismiss(toastId);
-          }}
-          className="flex-1 items-center justify-center rounded-xl border border-white py-2"
-        >
-          <Text className="text-[15px] font-semibold text-white">
-            {cancelLabel}
-          </Text>
-        </Pressable>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={confirmLabel}
-          accessibilityHint="Confirms the action"
-          onPress={handleConfirm}
-          className="flex-1 items-center justify-center rounded-xl bg-white py-2"
-        >
-          <Text
-            className={`text-[15px] font-semibold ${isDestructive ? "text-danger-800" : "text-blue-900"}`}
-          >
-            {confirmLabel}
-          </Text>
-        </Pressable>
-      </View>
-    </View>,
-    {
-      id: toastId,
-      dismissible: false,
-      position: "center",
-      duration: Infinity,
-      onDismiss: () => {
-        activeConfirmationId = null;
-      },
-      style: {
-        backgroundColor: "transparent",
-        borderWidth: 0,
-        padding: 0,
-      },
+  activeConfirmationId = toast.custom(title, {
+    backgroundColor: isDestructive ? "red" : "blue",
+    textStyle: { color: "white" },
+    iconColor: "white",
+    autoDismiss: false,
+    position: "top-left",
+    duration: Infinity,
+    expandWithSpring: true,
+    onDismiss: () => {
+      activeConfirmationId = "";
     },
-  );
+    // style: { backgroundColor: "transparent", borderWidth: 0, padding: 0 },
+    customBody: <ConfirmationBody />,
+  });
 };

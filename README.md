@@ -28,6 +28,7 @@ For full documentation, visit [rn-starter.twinbloc.org](https://rn-starter.twinb
 | **Core**       | Expo SDK 54, React Native 0.81, React 19       |
 | **Navigation** | Expo Router v6                                 |
 | **Styling**    | UniWind, Tailwind Variants, Lucide Icons       |
+| **UI**         | Goey Native Toast, True Sheet                  |
 | **Data**       | TanStack Query v5, Axios, React Hook Form, Zod |
 | **State**      | Zustand                                        |
 | **Storage**    | MMKV, Expo Secure Store                        |
@@ -127,6 +128,28 @@ export function WelcomeCard() {
     </View>
   );
 }
+```
+
+### Showing Toasts & Confirm Dialogs
+
+```tsx
+import { ShowToast, confirmDialog } from "@/components/utilities";
+
+ShowToast.success("Profile Updated", "Your changes have been saved.");
+
+confirmDialog({
+  title: "Delete Account?",
+  description: "This action cannot be undone.",
+  variant: "destructive",
+  confirmLabel: "Delete",
+  onConfirm: async () => {
+    await deleteAccount();
+  },
+  updateOptions: {
+    title: "Account deleted",
+    description: "Your account has been removed.",
+  },
+});
 ```
 
 ## � Documentation

@@ -198,6 +198,12 @@ module.exports = (async () => {
       },
     },
     {
+      files: ["src/lib/utils/delay.ts"],
+      rules: {
+        "promise/avoid-new": "off",
+      },
+    },
+    {
       // Allow camelCase for specific configuration files if unicorn complains
       files: [
         "app.config.ts",

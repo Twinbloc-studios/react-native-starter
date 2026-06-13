@@ -5,6 +5,7 @@ import { useMMKVString } from "react-native-mmkv";
 import { storageInstance } from "@/lib";
 import { STORAGE_KEY } from "@/store/auth/utils";
 
+type RNColorSchemeName = "light" | "dark" | "unspecified";
 export type ColorSchemeType = "light" | "dark" | "system";
 /**
  * Sample usage:
@@ -20,9 +21,9 @@ export const useSelectedTheme = () => {
   const setSelectedTheme = React.useCallback(
     (t: ColorSchemeType) => {
       if (t === "system") {
-        Appearance.setColorScheme(null);
+        Appearance.setColorScheme("unspecified");
       } else {
-        Appearance.setColorScheme(t);
+        Appearance.setColorScheme(t as RNColorSchemeName);
       }
       _setTheme(t);
     },
@@ -36,8 +37,8 @@ export const useSelectedTheme = () => {
 export const loadSelectedTheme = () => {
   const theme = storageInstance?.getString(STORAGE_KEY.SELECTED_THEME);
   if (theme !== undefined && theme !== "system") {
-    Appearance.setColorScheme(theme as "light" | "dark");
+    Appearance.setColorScheme(theme as RNColorSchemeName);
   } else {
-    Appearance.setColorScheme(null);
+    Appearance.setColorScheme("unspecified");
   }
 };

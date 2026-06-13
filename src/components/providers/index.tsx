@@ -1,5 +1,4 @@
 import { ReanimatedTrueSheetProvider } from "@lodev09/react-native-true-sheet/reanimated";
-import { ThemeProvider } from "@react-navigation/native";
 import { Toaster } from "goey-native-toast";
 import React from "react";
 import { I18nextProvider } from "react-i18next";
@@ -28,23 +27,19 @@ function Providers({ children }: { children: React.ReactNode }) {
       className={theme.dark ? `dark` : undefined}
     >
       <I18nextProvider i18n={i18n}>
-        <ThemeProvider value={theme}>
-          <UniwindInsetUpdater />
-          <APIProvider>
-            <ReanimatedTrueSheetProvider>
-              {children}
-              <Toaster
-                theme={theme.dark ? "dark" : "light"}
-                swipeToDismissDirection={
-                  toasterDefaults.swipeToDismissDirection
-                }
-                position={toasterDefaults.position}
-                duration={toasterDefaults.duration}
-                solidColors={toasterDefaults.solidColors}
-              />
-            </ReanimatedTrueSheetProvider>
-          </APIProvider>
-        </ThemeProvider>
+        <UniwindInsetUpdater />
+        <APIProvider>
+          <ReanimatedTrueSheetProvider>
+            {children}
+            <Toaster
+              theme={theme.dark ? "dark" : "light"}
+              swipeToDismissDirection={toasterDefaults.swipeToDismissDirection}
+              position={toasterDefaults.position}
+              duration={toasterDefaults.duration}
+              solidColors={toasterDefaults.solidColors}
+            />
+          </ReanimatedTrueSheetProvider>
+        </APIProvider>
       </I18nextProvider>
     </GestureHandlerRootView>
   );

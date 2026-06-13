@@ -70,6 +70,10 @@ module.exports = (async () => {
         "react-native/no-inline-styles": "off", // Syncing with user intent (was warn)
         "react/destructuring-assignment": "off",
         "react/require-default-props": "off",
+        // Disable react-hooks/refs and set-state-in-effect temporarily due to false positives
+        // See https://github.com/facebook/react/issues/34775
+        "react-hooks/refs": "off",
+        "react-hooks/set-state-in-effect": "off",
 
         // --- React Native Accessibility ---
         ...reactNativeA11yPlugin.configs.all.rules,

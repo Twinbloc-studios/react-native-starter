@@ -1,6 +1,7 @@
 import { Env } from "@env";
-import axios, {
+import {
   type AxiosRequestConfig,
+  create,
   isAxiosError,
   type Method,
 } from "axios";
@@ -9,7 +10,7 @@ import { accessToken, signOut } from "@/store/auth";
 
 import { queryClient } from "./api-provider";
 
-export const client = axios.create({
+export const client = create({
   baseURL: Env.EXPO_PUBLIC_API_URL,
 });
 

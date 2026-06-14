@@ -1,22 +1,22 @@
-import { Image as ExpoImage, type ImageSource } from "expo-image";
-import React from "react";
+import { Image as ExpoImage, type ImageSource } from 'expo-image';
+import React from 'react';
 import {
   type ImageStyle,
   type StyleProp,
   View as RNView,
   type ViewProps,
-} from "react-native";
-import { twMerge } from "tailwind-merge";
-import { withUniwind } from "uniwind";
+} from 'react-native';
+import { twMerge } from 'tailwind-merge';
+import { withUniwind } from 'uniwind';
 
-import { SafeFastImage, type SafeFastImageProps } from "./safe-fast-image";
-import { Text } from "./text";
+import { SafeFastImage, type SafeFastImageProps } from './safe-fast-image';
+import { Text } from './text';
 
 const View = withUniwind(RNView);
 
-const FALLBACK_IMAGE = require("@/assets/images/icon.png");
+const FALLBACK_IMAGE = require('@/assets/images/icon.png');
 
-type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 const sizeMap: Record<AvatarSize, number> = {
   xs: 24,
@@ -24,22 +24,22 @@ const sizeMap: Record<AvatarSize, number> = {
   md: 40,
   lg: 48,
   xl: 64,
-  "2xl": 80,
+  '2xl': 80,
 };
 
 const textSizeMap: Record<AvatarSize, string> = {
-  xs: "text-xs",
-  sm: "text-sm",
-  md: "text-base",
-  lg: "text-lg",
-  xl: "text-xl",
-  "2xl": "text-2xl",
+  xs: 'text-xs',
+  sm: 'text-sm',
+  md: 'text-base',
+  lg: 'text-lg',
+  xl: 'text-xl',
+  '2xl': 'text-2xl',
 };
 
 const getInitials = (label: string) => {
   const trimmed = label.trim();
   if (!trimmed) {
-    return "";
+    return '';
   }
   const parts = trimmed.split(/\s+/);
   if (parts.length === 1) {
@@ -61,13 +61,13 @@ const getInitials = (label: string) => {
 export interface AvatarProps extends ViewProps {
   source?: ImageSource;
   size?: AvatarSize | number;
-  shape?: "circle" | "rounded" | "square";
+  shape?: 'circle' | 'rounded' | 'square';
   radius?: number;
   label?: string;
   fallback?: React.ReactNode;
   className?: string;
-  imageProps?: Omit<SafeFastImageProps, "source" | "style" | "onError"> & {
-    onError?: SafeFastImageProps["onError"];
+  imageProps?: Omit<SafeFastImageProps, 'source' | 'style' | 'onError'> & {
+    onError?: SafeFastImageProps['onError'];
   };
   imageStyle?: StyleProp<ImageStyle>;
   textClassName?: string;
@@ -77,8 +77,8 @@ export const Avatar = React.forwardRef<RNView, AvatarProps>(
   (
     {
       source,
-      size = "md",
-      shape = "circle",
+      size = 'md',
+      shape = 'circle',
       radius,
       label,
       fallback,
@@ -93,12 +93,12 @@ export const Avatar = React.forwardRef<RNView, AvatarProps>(
     ref,
   ) => {
     const [hasError, setHasError] = React.useState(false);
-    const resolvedSize = typeof size === "number" ? size : sizeMap[size];
+    const resolvedSize = typeof size === 'number' ? size : sizeMap[size];
     const resolvedRadius =
       radius ??
-      (shape === "square"
+      (shape === 'square'
         ? 0
-        : shape === "rounded"
+        : shape === 'rounded'
           ? Math.round(resolvedSize * 0.2)
           : Math.round(resolvedSize / 2));
 
@@ -128,7 +128,7 @@ export const Avatar = React.forwardRef<RNView, AvatarProps>(
 
     const onImageError = imageProps?.onError;
     const handleError = React.useCallback(
-      (event: Parameters<NonNullable<SafeFastImageProps["onError"]>>[0]) => {
+      (event: Parameters<NonNullable<SafeFastImageProps['onError']>>[0]) => {
         setHasError(true);
         if (onImageError) {
           onImageError(event);
@@ -159,15 +159,15 @@ export const Avatar = React.forwardRef<RNView, AvatarProps>(
 
       if (resolvedLabel) {
         const initials = getInitials(resolvedLabel);
-        const textSizeClass = typeof size === "number" ? "" : textSizeMap[size];
+        const textSizeClass = typeof size === 'number' ? '' : textSizeMap[size];
         const textStyle =
-          typeof size === "number"
+          typeof size === 'number'
             ? { fontSize: Math.round(resolvedSize * 0.4) }
             : undefined;
         return (
           <Text
             className={twMerge(
-              "text-white font-semibold",
+              'font-semibold text-white',
               textSizeClass,
               textClassName,
             )}
@@ -197,7 +197,7 @@ export const Avatar = React.forwardRef<RNView, AvatarProps>(
       <View
         ref={ref}
         className={twMerge(
-          "items-center justify-center overflow-hidden bg-neutral-400 dark:bg-neutral-700",
+          'items-center justify-center overflow-hidden bg-neutral-400 dark:bg-neutral-700',
           className,
         )}
         style={containerStyle}
@@ -210,4 +210,4 @@ export const Avatar = React.forwardRef<RNView, AvatarProps>(
   },
 );
 
-Avatar.displayName = "Avatar";
+Avatar.displayName = 'Avatar';

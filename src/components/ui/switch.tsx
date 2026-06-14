@@ -1,10 +1,10 @@
-import { MotiView } from "moti";
-import React from "react";
-import { I18nManager, Switch as RNSwitch, View as RNView } from "react-native";
-import { withUniwind } from "uniwind";
+import { MotiView } from 'moti';
+import { createContext, useContext } from 'react';
+import { I18nManager, Switch as RNSwitch, View as RNView } from 'react-native';
+import { withUniwind } from 'uniwind';
 
-import { colors, IS_IOS } from "../utilities";
-import { type IconProps, Label, Root, type RootProps } from "./toggle-shared";
+import { colors, IS_IOS } from '../utilities';
+import { type IconProps, Label, Root, type RootProps } from './toggle-shared';
 
 const View = withUniwind(RNView);
 const StyledSwitch = withUniwind(RNSwitch);
@@ -23,10 +23,10 @@ type SwitchContextValue = {
   testID?: string;
 };
 
-const SwitchContext = React.createContext<SwitchContextValue | null>(null);
+const SwitchContext = createContext<SwitchContextValue | null>(null);
 
 export const SwitchIcon = ({ checked = false }: IconProps) => {
-  const ctx = React.useContext(SwitchContext);
+  const ctx = useContext(SwitchContext);
 
   if (IS_IOS) {
     const isChecked = ctx?.checked ?? checked;
@@ -34,7 +34,7 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
     const iosScaleY = HEIGHT / 38;
 
     return (
-      <View style={{ width: WIDTH, height: HEIGHT, justifyContent: "center" }}>
+      <View style={{ width: WIDTH, height: HEIGHT, justifyContent: 'center' }}>
         <StyledSwitch
           value={isChecked}
           disabled={ctx?.disabled ?? undefined}
@@ -47,7 +47,7 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
           }}
           ios_backgroundColor={colors.charcoal[400]}
           thumbColor={colors.white}
-          accessibilityLabel={ctx?.accessibilityLabel ?? "Switch"}
+          accessibilityLabel={ctx?.accessibilityLabel ?? 'Switch'}
           accessibilityHint="Double tap to toggle setting"
           accessible={false}
           style={{ transform: [{ scaleX: iosScaleX }, { scaleY: iosScaleY }] }}
@@ -63,7 +63,7 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
   const backgroundColor = checked ? colors.primaryColor : colors.charcoal[400];
 
   return (
-    <View className="w-[50px] justify-center">
+    <View className="w-12.5 justify-center">
       <View className="overflow-hidden rounded-full">
         <View
           style={{
@@ -77,7 +77,7 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
         style={{
           height: THUMB_HEIGHT,
           width: THUMB_WIDTH,
-          position: "absolute",
+          position: 'absolute',
           backgroundColor: colors.white,
           borderRadius: 13,
           right: 0,

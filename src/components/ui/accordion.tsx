@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 import {
   Pressable as RNPressable,
   type StyleProp,
   View as RNView,
   type ViewStyle,
-} from "react-native";
+} from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
   withTiming,
-} from "react-native-reanimated";
-import { withUniwind } from "uniwind";
+} from 'react-native-reanimated';
+import { withUniwind } from 'uniwind';
 
 const View = withUniwind(RNView);
 const Pressable = withUniwind(RNPressable);
@@ -99,7 +99,7 @@ function AccordionItem({
   const bodyStyle = useAnimatedStyle(() => {
     return {
       height: derivedHeight.value,
-      overflow: "hidden",
+      overflow: 'hidden',
     };
   });
 
@@ -157,8 +157,8 @@ export function Accordion<T>({
               accessibilityLabel={`Accordion section ${index + 1}`}
               accessibilityHint={
                 isActive
-                  ? "Double tap to collapse this section"
-                  : "Double tap to expand this section"
+                  ? 'Double tap to collapse this section'
+                  : 'Double tap to expand this section'
               }
             >
               {renderHeader(section, index, isActive)}

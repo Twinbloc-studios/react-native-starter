@@ -1,26 +1,25 @@
-import React from "react";
-import { View as RNView, type ViewProps } from "react-native";
-import { twMerge } from "tailwind-merge";
-import { withUniwind } from "uniwind";
+import { View as RNView, type ViewProps } from 'react-native';
+import { twMerge } from 'tailwind-merge';
+import { withUniwind } from 'uniwind';
 
 const View = withUniwind(RNView);
 
 export interface SeparatorProps extends ViewProps {
-  orientation?: "horizontal" | "vertical";
+  orientation?: 'horizontal' | 'vertical';
   className?: string;
 }
 
 export const Separator = ({
-  orientation = "horizontal",
+  orientation = 'horizontal',
   className,
   ...props
 }: SeparatorProps) => {
   const baseClassName =
-    orientation === "vertical"
-      ? "w-px self-stretch bg-neutral-200 dark:bg-neutral-700"
-      : "h-px w-full bg-neutral-200 dark:bg-neutral-700";
+    orientation === 'vertical'
+      ? 'w-px self-stretch bg-neutral-200 dark:bg-neutral-700'
+      : 'h-px w-full bg-neutral-200 dark:bg-neutral-700';
 
   return <View className={twMerge(baseClassName, className)} {...props} />;
 };
 
-Separator.displayName = "Separator";
+Separator.displayName = 'Separator';

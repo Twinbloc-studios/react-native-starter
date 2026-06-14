@@ -1,15 +1,14 @@
-import { MotiView as NMotiView } from "moti";
-import React from "react";
-import { withUniwind } from "uniwind";
+import { MotiView as NMotiView } from 'moti';
+import { withUniwind } from 'uniwind';
 
-import { colors } from "../utilities";
+import { colors } from '../utilities';
 import {
   type IconProps,
   Label,
   Root,
   type RootProps,
   SIZE,
-} from "./toggle-shared";
+} from './toggle-shared';
 
 const MotiView = withUniwind(NMotiView);
 
@@ -23,17 +22,17 @@ export const RadioIcon = ({ checked = false }: IconProps) => {
         borderColor: color,
       }}
       className="items-center justify-center rounded-[20px] border-2 bg-transparent"
-      from={{ borderColor: "#CCCFD6" }}
+      from={{ borderColor: '#CCCFD6' }}
       animate={{
         borderColor: color,
       }}
-      transition={{ borderColor: { duration: 100, type: "timing" } }}
+      transition={{ borderColor: { duration: 100, type: 'timing' } }}
     >
       <MotiView
-        className={`size-[10px] rounded-[10px] ${checked && "bg-primaryColor dark:bg-white"} `}
+        className={`size-2.5 rounded-[10px] ${checked && 'bg-primaryColor dark:bg-white'} `}
         from={{ opacity: 0 }}
         animate={{ opacity: checked ? 1 : 0 }}
-        transition={{ opacity: { duration: 50, type: "timing" } }}
+        transition={{ opacity: { duration: 50, type: 'timing' } }}
       />
     </MotiView>
   );

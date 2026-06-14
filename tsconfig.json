@@ -7,7 +7,9 @@
       "@/assets/*": ["assets/*"],
       "@/*": ["src/*"],
       "@env": ["src/lib/env.ts"]
-    }
+    },
+    "ignoreDeprecations": "6.0",
+    "types": ["jest"]
   },
   "include": [
     "**/*.ts",

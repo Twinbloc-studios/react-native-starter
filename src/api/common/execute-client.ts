@@ -9,6 +9,7 @@ import { accessToken, signOut } from "@/store/auth";
 
 import { queryClient } from "./api-provider";
 
+// eslint-disable-next-line import/no-named-as-default-member
 export const client = axios.create({
   baseURL: Env.EXPO_PUBLIC_API_URL,
 });

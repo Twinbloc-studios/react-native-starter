@@ -1,6 +1,8 @@
-import { toast } from "sonner-native";
+import { toast } from "goey-native-toast";
 
-// Documentation: https://sonner-native.netlify.app/
+import { toastDefaults } from "@/lib/utils/toast-config";
+
+// Documentation: https://github.com/Teepheh-Git/goey-native-toast
 //
 // Sample usage:
 // ShowToast.success("Saved", "Your changes are live");
@@ -9,13 +11,13 @@ import { toast } from "sonner-native";
 // ShowToast.loading("Syncing...");
 // ShowToast.dismiss();
 
-type ToastMessage = Parameters<typeof toast>[0];
-type ToastOptions = Parameters<typeof toast>[1];
+type ToastMessage = Parameters<typeof toast.success>[0];
+type ToastOptions = Parameters<typeof toast.success>[1];
 type ToastPromiseOptions = Parameters<typeof toast.promise>[1];
 
 const baseDefaults: ToastOptions = {
-  position: "top-center",
-  duration: 4000,
+  position: toastDefaults.position,
+  duration: toastDefaults.duration,
 };
 
 let defaultOptions: ToastOptions = { ...baseDefaults };
@@ -49,7 +51,7 @@ export const ShowToast = {
     defaultOptions = { ...baseDefaults };
   },
   show: (message: ToastMessage, options?: ToastOptions) => {
-    return toast(message, resolveOptions(options));
+    return toast.info(message, resolveOptions(options));
   },
   success: (
     message: ToastMessage,
@@ -90,16 +92,13 @@ export const ShowToast = {
     descriptionOrOptions?: string | ToastOptions,
     options?: ToastOptions,
   ) => {
-    return toast.loading(
-      message,
-      resolveOptions(descriptionOrOptions, options),
-    );
+    return toast.info(message, {
+      ...resolveOptions(descriptionOrOptions, options),
+      duration: Infinity,
+    });
   },
-  custom: (
-    render: Parameters<typeof toast.custom>[0],
-    options?: ToastOptions,
-  ) => {
-    return toast.custom(render, resolveOptions(options));
+  custom: (title: ToastMessage, options?: ToastOptions) => {
+    return toast.custom(title, resolveOptions(options));
   },
   promise: <T>(promise: Promise<T>, options: ToastPromiseOptions) => {
     return toast.promise(promise, options);

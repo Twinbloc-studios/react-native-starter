@@ -1,14 +1,14 @@
-import React, { useCallback } from "react";
-import { Pressable as RNPressable, type PressableProps } from "react-native";
-import { withUniwind } from "uniwind";
+import { useCallback } from 'react';
+import { Pressable as RNPressable, type PressableProps } from 'react-native';
+import { withUniwind } from 'uniwind';
 
-import { Text } from "./text";
+import { Text } from './text';
 
 const Pressable = withUniwind(RNPressable);
 
 export const SIZE = 20;
 
-export interface RootProps extends Omit<PressableProps, "onPress"> {
+export interface RootProps extends Omit<PressableProps, 'onPress'> {
   onChange: (checked: boolean) => void;
   checked?: boolean;
   className?: string;
@@ -24,7 +24,7 @@ export const Root = ({
   children,
   onChange,
   disabled,
-  className = "",
+  className = '',
   ...props
 }: RootProps) => {
   const handleChange = useCallback(() => {
@@ -34,7 +34,7 @@ export const Root = ({
   return (
     <Pressable
       onPress={handleChange}
-      className={`flex-row items-center ${className} ${disabled ? "opacity-50" : ""}`}
+      className={`flex-row items-center ${className} ${disabled ? 'opacity-50' : ''}`}
       accessibilityState={{ checked }}
       disabled={disabled}
       {...props}
@@ -50,7 +50,7 @@ export type LabelProps = {
   testID?: string;
 };
 
-export const Label = ({ text, testID, className = "" }: LabelProps) => {
+export const Label = ({ text, testID, className = '' }: LabelProps) => {
   return (
     <Text testID={testID} className={` ${className} pl-0`}>
       {text}

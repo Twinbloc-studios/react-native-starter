@@ -136,7 +136,7 @@ jest.mock("@dev-plugins/react-query", () => ({
   useReactQueryDevTools: jest.fn(),
 }));
 
-jest.mock("sonner-native", () => {
+jest.mock("goey-native-toast", () => {
   const React = require("react");
   const { View } = require("react-native");
   const Toaster = (props) => <View {...props} />;
@@ -148,6 +148,7 @@ jest.mock("sonner-native", () => {
       warning: jest.fn(),
       info: jest.fn(),
       custom: jest.fn(),
+      promise: jest.fn(),
       dismiss: jest.fn(),
     },
     Toaster,

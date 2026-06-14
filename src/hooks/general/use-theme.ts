@@ -1,8 +1,3 @@
-import {
-  DarkTheme as _DarkTheme,
-  DefaultTheme,
-  type Theme,
-} from "@react-navigation/native";
 import { Appearance, useColorScheme } from "react-native";
 import { useMMKVString } from "react-native-mmkv";
 
@@ -11,15 +6,22 @@ import { STORAGE_KEY } from "@/store/auth/utils";
 
 import { storageInstance } from "../../lib/utils/storage";
 
-/**
- * Sample usage:
- * const theme = useTheme();
- * return <NavigationContainer theme={theme}>...</NavigationContainer>;
- */
+export interface ThemeColors {
+  primary: string;
+  background: string;
+  text: string;
+  border: string;
+  card: string;
+}
+
+export interface Theme {
+  dark: boolean;
+  colors: ThemeColors;
+}
+
 const DarkTheme: Theme = {
-  ..._DarkTheme,
+  dark: true,
   colors: {
-    ..._DarkTheme.colors,
     primary: colors.primary[200],
     background: colors.charcoal[950],
     text: colors.charcoal[100],
@@ -29,11 +31,13 @@ const DarkTheme: Theme = {
 };
 
 const LightTheme: Theme = {
-  ...DefaultTheme,
+  dark: false,
   colors: {
-    ...DefaultTheme.colors,
     primary: colors.primary[400],
     background: colors.white,
+    text: colors.charcoal[950],
+    border: colors.charcoal[200],
+    card: colors.white,
   },
 };
 

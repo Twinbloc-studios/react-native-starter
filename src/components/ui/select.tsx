@@ -1,52 +1,53 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   type SheetDetent,
   type TrueSheet,
-} from "@lodev09/react-native-true-sheet";
-import { FlashList } from "@shopify/flash-list";
-import * as React from "react";
-import { type FieldValues, useController } from "react-hook-form";
+} from '@lodev09/react-native-true-sheet';
+import { FlashList } from '@shopify/flash-list';
+import { forwardRef, memo, useCallback, useMemo, useState } from 'react';
+// import * as React from "react";
+import { type FieldValues, useController } from 'react-hook-form';
 import {
   Pressable as RNPressable,
   type PressableProps,
   View as RNView,
-} from "react-native";
-import Svg, { Path, type SvgProps } from "react-native-svg";
-import { twMerge } from "tailwind-merge";
-import { tv } from "tailwind-variants";
-import { withUniwind } from "uniwind";
+} from 'react-native';
+import Svg, { Path, type SvgProps } from 'react-native-svg';
+import { twMerge } from 'tailwind-merge';
+import { tv } from 'tailwind-variants';
+import { withUniwind } from 'uniwind';
 
-import { BottomSheet, Input, Text, useBottomSheet } from ".";
-import type { InputControllerType } from "./input";
+import { BottomSheet, Input, Text, useBottomSheet } from '.';
+import type { InputControllerType } from './input';
 
 const View = withUniwind(RNView);
 const Pressable = withUniwind(RNPressable);
 
 const selectTv = tv({
   slots: {
-    container: "mb-4",
-    label: "text-grey-100 mb-1 text-base dark:text-neutral-100",
+    container: 'mb-4',
+    label: 'text-grey-100 mb-1 text-base dark:text-neutral-100',
     input:
-      "border-grey-50 mt-0 flex-row items-center justify-center rounded-xl border p-3 py-4  dark:border-neutral-500 dark:bg-neutral-800",
-    inputValue: "dark:text-neutral-100",
+      'border-grey-50 mt-0 flex-row items-center justify-center rounded-xl border p-3 py-4  dark:border-neutral-500 dark:bg-neutral-800',
+    inputValue: 'dark:text-neutral-100',
   },
 
   variants: {
     focused: {
       true: {
-        input: "border-primaryText",
+        input: 'border-primaryText',
       },
     },
     error: {
       true: {
-        input: "border-danger-600",
-        label: "text-danger-600 dark:text-danger-600",
-        inputValue: "text-danger-600",
+        input: 'border-danger-600',
+        label: 'text-danger-600 dark:text-danger-600',
+        inputValue: 'text-danger-600',
       },
     },
     disabled: {
       true: {
-        input: "bg-neutral-200",
+        input: 'bg-neutral-200',
       },
     },
   },
@@ -69,37 +70,37 @@ type OptionsProps = {
   detents?: SheetDetent[];
 };
 
-export const Options = React.forwardRef<TrueSheet, OptionsProps>(
+export const Options = forwardRef<TrueSheet, OptionsProps>(
   (
     {
       options,
       onSelect,
       value,
       testID,
-      title = "Select",
+      title = 'Select',
       scrollable = false,
       searchable = false,
       detents = [1],
     },
     ref,
   ) => {
-    const [searchQuery, setSearchQuery] = React.useState("");
+    const [searchQuery, setSearchQuery] = useState('');
 
-    const filteredOptions = React.useMemo(() => {
+    const filteredOptions = useMemo(() => {
       if (!searchQuery) return options;
       return options.filter((option) =>
         option.label.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }, [options, searchQuery]);
 
-    const renderSelectItem = React.useCallback(
+    const renderSelectItem = useCallback(
       ({ item }: { item: OptionType }) => (
         <Option
           label={item.label}
           selected={value === item.value}
           onPress={() => {
             onSelect(item);
-            setSearchQuery("");
+            setSearchQuery('');
           }}
           testID={testID ? `${testID}-item-${item.value}` : undefined}
         />
@@ -130,7 +131,7 @@ export const Options = React.forwardRef<TrueSheet, OptionsProps>(
           testID={testID ? `${testID}-modal` : undefined}
           // @ts-expect-error - estimatedItemSize is required by FlashList but types might be inferred incorrectly here
           estimatedItemSize={102}
-          className={twMerge("", searchable && "pt-36")}
+          className={twMerge('', searchable && 'pt-36')}
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-10">
               <Text className="text-gray-500 dark:text-gray-400">
@@ -144,7 +145,7 @@ export const Options = React.forwardRef<TrueSheet, OptionsProps>(
   },
 );
 
-const Option = React.memo(
+const Option = memo(
   ({
     label,
     selected = false,
@@ -159,7 +160,7 @@ const Option = React.memo(
         hitSlop={20}
         {...props}
       >
-        <Text className="flex-1 dark:text-neutral-100 " numberOfLines={1}>
+        <Text className="flex-1 dark:text-neutral-100" numberOfLines={1}>
           {label.trim()}
         </Text>
         {selected && <Check />}
@@ -191,7 +192,7 @@ export const Select = (props: SelectProps) => {
     value,
     error,
     options = [],
-    placeholder = "select...",
+    placeholder = 'select...',
     disabled = false,
     onSelect,
     testID,
@@ -202,7 +203,7 @@ export const Select = (props: SelectProps) => {
   } = props;
   const modal = useBottomSheet();
 
-  const onSelectOption = React.useCallback(
+  const onSelectOption = useCallback(
     (option: OptionType) => {
       onSelect?.(option.value);
       modal.dismiss();
@@ -210,7 +211,7 @@ export const Select = (props: SelectProps) => {
     [modal, onSelect],
   );
 
-  const styles = React.useMemo(
+  const styles = useMemo(
     () =>
       selectTv({
         error: Boolean(error),
@@ -219,7 +220,7 @@ export const Select = (props: SelectProps) => {
     [error, disabled],
   );
 
-  const textValue = React.useMemo(
+  const textValue = useMemo(
     () =>
       value !== undefined
         ? (options?.filter((t) => t.value === value)?.[0]?.label ?? placeholder)
@@ -240,7 +241,7 @@ export const Select = (props: SelectProps) => {
         )}
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={label || "Select option"}
+          accessibilityLabel={label || 'Select option'}
           accessibilityHint="Double tap to open selection options"
           className={styles.input()}
           disabled={disabled}
@@ -255,7 +256,7 @@ export const Select = (props: SelectProps) => {
         {error && (
           <Text
             testID={`${testID}-error`}
-            className="text-sm text-danger-300 dark:text-danger-600"
+            className="text-danger-300 dark:text-danger-600 text-sm"
           >
             {error}
           </Text>
@@ -282,7 +283,7 @@ export function ControlledSelect<T extends FieldValues>(
   const { name, control, rules, onSelect: onNSelect, ...selectProps } = props;
 
   const { field, fieldState } = useController({ control, name, rules });
-  const onSelect = React.useCallback(
+  const onSelect = useCallback(
     (value: string | number) => {
       field.onChange(value);
       onNSelect?.(value);
@@ -317,5 +318,5 @@ const Check = ({ ...props }: SvgProps) => (
   </Svg>
 );
 
-Options.displayName = "Options";
-Option.displayName = "Option";
+Options.displayName = 'Options';
+Option.displayName = 'Option';

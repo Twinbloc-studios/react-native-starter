@@ -75,7 +75,6 @@ export type InputControllerType<T extends FieldValues> = {
   control: Control<T>;
   rules?: RuleType<T>;
 };
-
 interface ControlledInputProps<T extends FieldValues>
   extends NInputProps, InputControllerType<T> {}
 

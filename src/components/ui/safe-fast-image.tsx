@@ -1,10 +1,10 @@
-import { Image as ExpoImage, type ImageProps } from "expo-image";
-import React, { useState } from "react";
-import { withUniwind } from "uniwind";
+import { Image as ExpoImage, type ImageProps } from 'expo-image';
+import { useState } from 'react';
+import { withUniwind } from 'uniwind';
 
 const Image = withUniwind(ExpoImage);
 
-const FALLBACK_IMAGE = require("@/assets/images/icon.png");
+const FALLBACK_IMAGE = require('@/assets/images/icon.png');
 
 export interface SafeFastImageProps extends ImageProps {
   blurhash?: string;
@@ -23,8 +23,8 @@ export const SafeFastImage = (props: SafeFastImageProps) => {
   // FastImage source can be a number (require) or object with uri
   const isValidSource =
     source &&
-    (typeof source === "number" ||
-      (typeof source === "object" && "uri" in source && !!source.uri));
+    (typeof source === 'number' ||
+      (typeof source === 'object' && 'uri' in source && !!source.uri));
 
   if (!isValidSource || hasError) {
     return (
@@ -44,7 +44,7 @@ export const SafeFastImage = (props: SafeFastImageProps) => {
       source={source}
       placeholder={activePlaceholder}
       transition={activeTransition}
-      cachePolicy={"memory-disk"}
+      cachePolicy={'memory-disk'}
       onError={(e) => {
         setHasError(true);
         if (onError) {

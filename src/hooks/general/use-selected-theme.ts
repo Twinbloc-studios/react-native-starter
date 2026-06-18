@@ -1,27 +1,28 @@
-import React from "react";
-import { Appearance } from "react-native";
-import { useMMKVString } from "react-native-mmkv";
+import React from 'react';
+import { Appearance, useColorScheme } from 'react-native';
+import { useMMKVString } from 'react-native-mmkv';
 
-import { storageInstance } from "@/lib";
-import { STORAGE_KEY } from "@/store/auth/utils";
+import { storageInstance } from '@/lib';
+import { STORAGE_KEY } from '@/store/auth/utils';
 
-type RNColorSchemeName = "light" | "dark" | "unspecified";
-export type ColorSchemeType = "light" | "dark" | "system";
+type RNColorSchemeName = 'light' | 'dark' | 'unspecified';
+export type ColorSchemeType = 'light' | 'dark' | 'system';
 /**
  * Sample usage:
  * const { selectedTheme, setSelectedTheme } = useSelectedTheme();
  * setSelectedTheme("dark");
  */
 export const useSelectedTheme = () => {
-  const [theme, _setTheme] = useMMKVString(
+  const [storedTheme, _setTheme] = useMMKVString(
     STORAGE_KEY.SELECTED_THEME,
     storageInstance,
   );
+  const systemColorScheme = useColorScheme();
 
   const setSelectedTheme = React.useCallback(
     (t: ColorSchemeType) => {
-      if (t === "system") {
-        Appearance.setColorScheme("unspecified");
+      if (t === 'system') {
+        Appearance.setColorScheme('unspecified');
       } else {
         Appearance.setColorScheme(t as RNColorSchemeName);
       }
@@ -30,15 +31,21 @@ export const useSelectedTheme = () => {
     [_setTheme],
   );
 
-  const selectedTheme = (theme ?? "light") as ColorSchemeType;
+  // Resolve the actual theme: if stored theme is "system" or not set, use system color scheme
+  const selectedTheme = (
+    storedTheme && storedTheme !== 'system'
+      ? storedTheme
+      : (systemColorScheme ?? 'light')
+  ) as ColorSchemeType;
+
   return { selectedTheme, setSelectedTheme } as const;
 };
 // to be used in the root file to load the selected theme from MMKV
 export const loadSelectedTheme = () => {
   const theme = storageInstance?.getString(STORAGE_KEY.SELECTED_THEME);
-  if (theme !== undefined && theme !== "system") {
+  if (theme !== undefined && theme !== 'system') {
     Appearance.setColorScheme(theme as RNColorSchemeName);
   } else {
-    Appearance.setColorScheme("unspecified");
+    Appearance.setColorScheme('unspecified');
   }
 };

@@ -14,14 +14,14 @@
   },
   "packageManager": "pnpm@11.6.0",
   "scripts": {
-    "start": "expo start",
-    "prebuild": "expo prebuild",
+    "start": "cross-env EXPO_NO_DOTENV=1 expo start",
+    "prebuild": "cross-env EXPO_NO_DOTENV=1 expo prebuild",
     "doctor": "npx expo-doctor",
     "reset-project": "node ./app-example/scripts/reset-project.js",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "ios:device": "expo run:ios --device",
-    "web": "expo start --web",
+    "android": "cross-env EXPO_NO_DOTENV=1 expo run:android",
+    "ios": "cross-env EXPO_NO_DOTENV=1 expo run:ios",
+    "ios:device": "cross-env EXPO_NO_DOTENV=1 expo run:ios --device",
+    "web": "cross-env EXPO_NO_DOTENV=1 expo start --web",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "typecheck": "tsc --noEmit",
@@ -92,6 +92,7 @@
     "zustand": "^5.0.11"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "@commitlint/cli": "^20.4.1",
     "@commitlint/config-conventional": "^20.4.1",
     "@tailwindcss/node": "^4.3.1",

@@ -1,31 +1,31 @@
-import "@testing-library/jest-native/extend-expect";
+import '@testing-library/jest-native/extend-expect';
 
-import { jest } from "@jest/globals";
+import { jest } from '@jest/globals';
 
-jest.mock("@expo/vector-icons", () => {
-  const React = require("react");
-  const { View } = require("react-native");
+jest.mock('@expo/vector-icons', () => {
+  const React = require('react');
+  const { View } = require('react-native');
   const Ionicons = (props) => <View {...props} />;
-  Ionicons.displayName = "Ionicons";
+  Ionicons.displayName = 'Ionicons';
   const MaterialCommunityIcons = (props) => <View {...props} />;
-  MaterialCommunityIcons.displayName = "MaterialCommunityIcons";
+  MaterialCommunityIcons.displayName = 'MaterialCommunityIcons';
   return {
     Ionicons,
     MaterialCommunityIcons,
   };
 });
 
-jest.mock("@expo/vector-icons/MaterialIcons", () => {
-  const React = require("react");
-  const { View } = require("react-native");
+jest.mock('@expo/vector-icons/MaterialIcons', () => {
+  const React = require('react');
+  const { View } = require('react-native');
   const MaterialIcons = (props) => <View {...props} />;
-  MaterialIcons.displayName = "MaterialIcons";
+  MaterialIcons.displayName = 'MaterialIcons';
   return MaterialIcons;
 });
 
-jest.mock("@lodev09/react-native-true-sheet", () => {
-  const React = require("react");
-  const { View } = require("react-native");
+jest.mock('@lodev09/react-native-true-sheet', () => {
+  const React = require('react');
+  const { View } = require('react-native');
   const mockPresent = jest.fn();
   const mockDismiss = jest.fn();
   const TrueSheet = React.forwardRef((props, ref) => {
@@ -35,13 +35,13 @@ jest.mock("@lodev09/react-native-true-sheet", () => {
     }));
     return <View {...props}>{props.children}</View>;
   });
-  TrueSheet.displayName = "TrueSheet";
+  TrueSheet.displayName = 'TrueSheet';
   return { TrueSheet, __mocks: { mockPresent, mockDismiss } };
 });
 
-jest.mock("@shopify/flash-list", () => {
-  const React = require("react");
-  const { View } = require("react-native");
+jest.mock('@shopify/flash-list', () => {
+  const React = require('react');
+  const { View } = require('react-native');
   const FlashList = ({
     data = [],
     renderItem,
@@ -49,11 +49,7 @@ jest.mock("@shopify/flash-list", () => {
     ...props
   }) => {
     if (!data.length) {
-      return (
-        <View {...props}>
-          {ListEmptyComponent ? <ListEmptyComponent /> : null}
-        </View>
-      );
+      return <View {...props}>{ListEmptyComponent}</View>;
     }
     return (
       <View {...props}>
@@ -64,50 +60,42 @@ jest.mock("@shopify/flash-list", () => {
       </View>
     );
   };
-  FlashList.displayName = "FlashList";
+  FlashList.displayName = 'FlashList';
   return { FlashList };
 });
 
-jest.mock("expo-image", () => {
-  const React = require("react");
-  const { View } = require("react-native");
+jest.mock('expo-image', () => {
+  const React = require('react');
+  const { View } = require('react-native');
   const Image = (props) => <View {...props} />;
-  Image.displayName = "ExpoImage";
+  Image.displayName = 'ExpoImage';
   Image.prefetch = jest.fn();
   return { Image };
 });
 
-jest.mock("react-native-avoid-softinput", () => {
-  const React = require("react");
-  const { View } = require("react-native");
+jest.mock('react-native-avoid-softinput', () => {
+  const React = require('react');
+  const { View } = require('react-native');
   const AvoidSoftInputView = (props) => (
     <View {...props}>{props.children}</View>
   );
-  AvoidSoftInputView.displayName = "AvoidSoftInputView";
+  AvoidSoftInputView.displayName = 'AvoidSoftInputView';
   return { AvoidSoftInputView };
 });
 
-jest.mock("react-native-safe-area-context", () => ({
+jest.mock('react-native-safe-area-context', () => ({
   useSafeAreaInsets: () => ({ top: 10, bottom: 0, left: 0, right: 0 }),
 }));
 
-jest.mock("moti", () => {
-  const React = require("react");
-  const { View } = require("react-native");
-  const MotiView = (props) => <View {...props} />;
-  MotiView.displayName = "MotiView";
-  return { MotiView };
-});
-
-jest.mock("react-native-svg", () => {
-  const React = require("react");
-  const { View } = require("react-native");
+jest.mock('react-native-svg', () => {
+  const React = require('react');
+  const { View } = require('react-native');
   const Svg = (props) => <View {...props} />;
-  Svg.displayName = "Svg";
+  Svg.displayName = 'Svg';
   const Path = (props) => <View {...props} />;
-  Path.displayName = "Path";
+  Path.displayName = 'Path';
   const DefaultSvg = (props) => <View {...props} />;
-  DefaultSvg.displayName = "DefaultSvg";
+  DefaultSvg.displayName = 'DefaultSvg';
   return {
     __esModule: true,
     default: DefaultSvg,
@@ -116,31 +104,99 @@ jest.mock("react-native-svg", () => {
   };
 });
 
-jest.mock("react-native-reanimated", () => {
-  const { View } = require("react-native");
+jest.mock('react-native-reanimated', () => {
+  const { View } = require('react-native');
   const useSharedValue = (value) => ({ value });
   const useDerivedValue = (fn) => ({ value: fn() });
   const useAnimatedStyle = (fn) => fn();
+  const useAnimatedProps = (fn) => fn();
   const withTiming = (value) => value;
+  const withSpring = (value) => value;
+  const interpolateColor = (value, input, output) =>
+    output[value === 0 ? 0 : output.length - 1];
+  const interpolate = (value, input, output) =>
+    output[value === 0 ? 0 : output.length - 1];
+  // Chainable animation builders (FadeIn.duration(200), LinearTransition, ...).
+  // Each chained call returns a fresh clone that records the applied config
+  // under `applied`, so tests can assert exactly what was chained.
+  const createAnimation = (name) => {
+    const animation = {};
+    Object.defineProperty(animation, 'name', { value: name });
+    animation.applied = {};
+    for (const method of [
+      'duration',
+      'delay',
+      'easing',
+      'springify',
+      'damping',
+      'mass',
+      'stiffness',
+      'overshootClamping',
+      'restDisplacementThreshold',
+      'restSpeedThreshold',
+      'withCallback',
+      'randomDelay',
+      'build',
+      'buildReducedMotion',
+    ]) {
+      animation[method] = (arg) => {
+        const next = createAnimation(name);
+        next.applied = { ...animation.applied, [method]: arg };
+        return next;
+      };
+    }
+    return animation;
+  };
+  const Easing = {
+    linear: (t) => t,
+    quad: (t) => t,
+    cubic: (t) => t,
+    circle: (t) => t,
+    in: (easing) => easing,
+    out: (easing) => easing,
+    inOut: (easing) => easing,
+    bezier: () => (t) => t,
+    poly: () => (t) => t,
+  };
   return {
     __esModule: true,
     default: { View },
+    Animated: { View },
     useSharedValue,
     useDerivedValue,
     useAnimatedStyle,
+    useAnimatedProps,
     withTiming,
+    withSpring,
+    interpolateColor,
+    interpolate,
+    Easing,
+    FadeIn: createAnimation('FadeIn'),
+    FadeOut: createAnimation('FadeOut'),
+    FadeInUp: createAnimation('FadeInUp'),
+    FadeInDown: createAnimation('FadeInDown'),
+    FadeOutUp: createAnimation('FadeOutUp'),
+    FadeOutDown: createAnimation('FadeOutDown'),
+    ZoomIn: createAnimation('ZoomIn'),
+    ZoomOut: createAnimation('ZoomOut'),
+    LinearTransition: createAnimation('LinearTransition'),
+    SequencedTransition: createAnimation('SequencedTransition'),
+    CurvedTransition: createAnimation('CurvedTransition'),
+    FadingTransition: createAnimation('FadingTransition'),
+    JumpingTransition: createAnimation('JumpingTransition'),
+    EntryExitTransition: createAnimation('EntryExitTransition'),
   };
 });
 
-jest.mock("@dev-plugins/react-query", () => ({
+jest.mock('@dev-plugins/react-query', () => ({
   useReactQueryDevTools: jest.fn(),
 }));
 
-jest.mock("goey-native-toast", () => {
-  const React = require("react");
-  const { View } = require("react-native");
+jest.mock('goey-native-toast', () => {
+  const React = require('react');
+  const { View } = require('react-native');
   const Toaster = (props) => <View {...props} />;
-  Toaster.displayName = "Toaster";
+  Toaster.displayName = 'Toaster';
   return {
     toast: {
       success: jest.fn(),
@@ -155,32 +211,32 @@ jest.mock("goey-native-toast", () => {
   };
 });
 
-jest.mock("@/store/utility", () => ({
+jest.mock('@/store/utility', () => ({
   useUtility: () => ({ sizeScale: 1 }),
 }));
 
-jest.mock("expo-crypto", () => ({
-  randomUUID: jest.fn(() => "mock-uuid"),
+jest.mock('expo-crypto', () => ({
+  randomUUID: jest.fn(() => 'mock-uuid'),
 }));
 
-jest.mock("expo-localization", () => ({
-  getLocales: jest.fn(() => [{ languageCode: "en" }]),
+jest.mock('expo-localization', () => ({
+  getLocales: jest.fn(() => [{ languageCode: 'en' }]),
 }));
 
-jest.mock("expo-constants", () => ({
+jest.mock('expo-constants', () => ({
   __esModule: true,
   default: {
     expoConfig: { extra: {} },
   },
 }));
 
-jest.mock("expo-secure-store", () => ({
+jest.mock('expo-secure-store', () => ({
   setItemAsync: jest.fn(),
   getItemAsync: jest.fn(),
   deleteItemAsync: jest.fn(),
 }));
 
-jest.mock("react-native-mmkv", () => ({
+jest.mock('react-native-mmkv', () => ({
   createMMKV: jest.fn(() => ({
     getString: jest.fn(),
     set: jest.fn(),

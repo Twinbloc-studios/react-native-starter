@@ -1,12 +1,18 @@
-import { MotiView } from 'moti';
 import { createContext, useContext } from 'react';
 import { I18nManager, Switch as RNSwitch, View as RNView } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
+
+import { useTween } from '@/hooks/general/use-tween';
 
 import { colors, IS_IOS } from '../utilities';
 import { type IconProps, Label, Root, type RootProps } from './toggle-shared';
 
 const View = withUniwind(RNView);
+const AnimatedView = withUniwind(Animated.View);
 const StyledSwitch = withUniwind(RNSwitch);
 
 const WIDTH = 50;
@@ -27,6 +33,17 @@ const SwitchContext = createContext<SwitchContextValue | null>(null);
 
 export const SwitchIcon = ({ checked = false }: IconProps) => {
   const ctx = useContext(SwitchContext);
+
+  const progress = useTween(checked, { spring: true });
+
+  const offTarget = I18nManager.isRTL
+    ? WIDTH - THUMB_WIDTH - THUMB_OFFSET
+    : -(WIDTH - THUMB_WIDTH - THUMB_OFFSET);
+  const onTarget = I18nManager.isRTL ? THUMB_OFFSET : -THUMB_OFFSET;
+
+  const thumbStyle = useAnimatedStyle(() => ({
+    translateX: interpolate(progress.value, [0, 1], [offTarget, onTarget]),
+  }));
 
   if (IS_IOS) {
     const isChecked = ctx?.checked ?? checked;
@@ -56,11 +73,7 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
     );
   }
 
-  const translateX = checked
-    ? THUMB_OFFSET
-    : WIDTH - THUMB_WIDTH - THUMB_OFFSET;
-
-  const backgroundColor = checked ? colors.primaryColor : colors.charcoal[400];
+  const backgroundColor = checked ? colors.primary[600] : colors.charcoal[400];
 
   return (
     <View className="w-12.5 justify-center">
@@ -73,19 +86,18 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
           }}
         />
       </View>
-      <MotiView
-        style={{
-          height: THUMB_HEIGHT,
-          width: THUMB_WIDTH,
-          position: 'absolute',
-          backgroundColor: colors.white,
-          borderRadius: 13,
-          right: 0,
-        }}
-        animate={{
-          translateX: I18nManager.isRTL ? translateX : -translateX,
-        }}
-        transition={{ translateX: { overshootClamping: true } }}
+      <AnimatedView
+        style={[
+          {
+            height: THUMB_HEIGHT,
+            width: THUMB_WIDTH,
+            position: 'absolute',
+            backgroundColor: colors.white,
+            borderRadius: 13,
+            right: 0,
+          },
+          thumbStyle,
+        ]}
       />
     </View>
   );

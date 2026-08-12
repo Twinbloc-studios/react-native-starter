@@ -3,11 +3,13 @@ import {
   Inter_500Medium,
   Inter_600SemiBold,
   Inter_700Bold,
-} from "@expo-google-fonts/inter";
-import * as Font from "expo-font";
+} from '@expo-google-fonts/inter';
+import * as Font from 'expo-font';
 
-import { initI18n } from "./i18n";
-import { getStorage } from "./utils/storage";
+import { hydrateAuth } from '@/store/auth';
+
+import { initI18n } from './i18n';
+import { getStorage } from './utils/storage';
 
 export const initApp = async () => {
   await Font.loadAsync({
@@ -33,4 +35,5 @@ export const initApp = async () => {
   });
   await getStorage();
   await initI18n();
+  await hydrateAuth();
 };

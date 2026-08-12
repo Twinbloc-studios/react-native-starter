@@ -4,8 +4,7 @@ import {
   type TrueSheet,
 } from '@lodev09/react-native-true-sheet';
 import { FlashList } from '@shopify/flash-list';
-import { forwardRef, memo, useCallback, useMemo, useState } from 'react';
-// import * as React from "react";
+import { forwardRef, memo, useState } from 'react';
 import { type FieldValues, useController } from 'react-hook-form';
 import {
   Pressable as RNPressable,
@@ -26,16 +25,16 @@ const Pressable = withUniwind(RNPressable);
 const selectTv = tv({
   slots: {
     container: 'mb-4',
-    label: 'text-grey-100 mb-1 text-base dark:text-neutral-100',
+    label: 'text-neutral-500 mb-1 text-base dark:text-neutral-100',
     input:
-      'border-grey-50 mt-0 flex-row items-center justify-center rounded-xl border p-3 py-4  dark:border-neutral-500 dark:bg-neutral-800',
+      'border-neutral-300 mt-0 flex-row items-center justify-center rounded-xl border p-3 py-4 dark:border-neutral-500 dark:bg-neutral-800',
     inputValue: 'dark:text-neutral-100',
   },
 
   variants: {
     focused: {
       true: {
-        input: 'border-primaryText',
+        input: 'border-primary-500',
       },
     },
     error: {
@@ -86,26 +85,22 @@ export const Options = forwardRef<TrueSheet, OptionsProps>(
   ) => {
     const [searchQuery, setSearchQuery] = useState('');
 
-    const filteredOptions = useMemo(() => {
-      if (!searchQuery) return options;
-      return options.filter((option) =>
-        option.label.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
-    }, [options, searchQuery]);
+    const filteredOptions = searchQuery
+      ? options.filter((option) =>
+          option.label.toLowerCase().includes(searchQuery.toLowerCase()),
+        )
+      : options;
 
-    const renderSelectItem = useCallback(
-      ({ item }: { item: OptionType }) => (
-        <Option
-          label={item.label}
-          selected={value === item.value}
-          onPress={() => {
-            onSelect(item);
-            setSearchQuery('');
-          }}
-          testID={testID ? `${testID}-item-${item.value}` : undefined}
-        />
-      ),
-      [onSelect, value, testID],
+    const renderSelectItem = ({ item }: { item: OptionType }) => (
+      <Option
+        label={item.label}
+        selected={value === item.value}
+        onPress={() => {
+          onSelect(item);
+          setSearchQuery('');
+        }}
+        testID={testID ? `${testID}-item-${item.value}` : undefined}
+      />
     );
 
     return (
@@ -203,30 +198,20 @@ export const Select = (props: SelectProps) => {
   } = props;
   const modal = useBottomSheet();
 
-  const onSelectOption = useCallback(
-    (option: OptionType) => {
-      onSelect?.(option.value);
-      modal.dismiss();
-    },
-    [modal, onSelect],
-  );
+  const onSelectOption = (option: OptionType) => {
+    onSelect?.(option.value);
+    modal.dismiss();
+  };
 
-  const styles = useMemo(
-    () =>
-      selectTv({
-        error: Boolean(error),
-        disabled,
-      }),
-    [error, disabled],
-  );
+  const styles = selectTv({
+    error: Boolean(error),
+    disabled,
+  });
 
-  const textValue = useMemo(
-    () =>
-      value !== undefined
-        ? (options?.filter((t) => t.value === value)?.[0]?.label ?? placeholder)
-        : placeholder,
-    [value, options, placeholder],
-  );
+  const textValue =
+    value !== undefined
+      ? (options?.filter((t) => t.value === value)?.[0]?.label ?? placeholder)
+      : placeholder;
 
   return (
     <>
@@ -266,6 +251,7 @@ export const Select = (props: SelectProps) => {
         testID={testID}
         ref={modal.ref}
         options={options}
+        value={value}
         onSelect={onSelectOption}
         title={title}
         scrollable={scrollable}
@@ -283,13 +269,10 @@ export function ControlledSelect<T extends FieldValues>(
   const { name, control, rules, onSelect: onNSelect, ...selectProps } = props;
 
   const { field, fieldState } = useController({ control, name, rules });
-  const onSelect = useCallback(
-    (value: string | number) => {
-      field.onChange(value);
-      onNSelect?.(value);
-    },
-    [field, onNSelect],
-  );
+  const onSelect = (value: string | number) => {
+    field.onChange(value);
+    onNSelect?.(value);
+  };
   return (
     <Select
       onSelect={onSelect}

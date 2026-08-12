@@ -1,7 +1,7 @@
-import { useMMKVBoolean } from "react-native-mmkv";
+import { useMMKVBoolean } from 'react-native-mmkv';
 
-import { storageInstance } from "@/lib";
-import { STORAGE_KEY } from "@/store/auth/utils";
+import { storageInstance } from '@/lib';
+import { STORAGE_KEY } from '@/store/auth/utils';
 
 /**
  * Sample usage:

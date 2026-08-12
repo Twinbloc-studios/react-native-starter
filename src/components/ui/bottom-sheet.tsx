@@ -1,18 +1,18 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons } from '@expo/vector-icons';
 import {
   TrueSheet,
   type TrueSheetProps,
-} from "@lodev09/react-native-true-sheet";
-import * as React from "react";
+} from '@lodev09/react-native-true-sheet';
+import * as React from 'react';
 import {
   Pressable as RNPressable,
   useColorScheme,
   View as RNView,
-} from "react-native";
-import { withUniwind } from "uniwind";
+} from 'react-native';
+import { withUniwind } from 'uniwind';
 
-import { colors } from "..";
-import { Text } from "./text";
+import { colors } from '..';
+import { Text } from './text';
 
 const View = withUniwind(RNView);
 const Pressable = withUniwind(RNPressable);
@@ -56,19 +56,19 @@ export interface BottomSheetRef {
  */
 export const useBottomSheet = () => {
   const ref = React.useRef<TrueSheet>(null);
-  const present = React.useCallback(() => {
+  const present = () => {
     void ref.current?.present();
-  }, []);
-  const dismiss = React.useCallback(() => {
+  };
+  const dismiss = () => {
     void ref.current?.dismiss();
-  }, []);
+  };
   return { ref, present, dismiss };
 };
 
 export const BottomSheet = React.forwardRef<TrueSheet, BottomSheetProps>(
   ({ title, style, children, ...props }, ref) => {
     const colorScheme = useColorScheme();
-    const isDark = colorScheme === "dark";
+    const isDark = colorScheme === 'dark';
     const innerRef = React.useRef<TrueSheet>(null);
     React.useImperativeHandle(ref, () => innerRef.current as TrueSheet);
 
@@ -85,7 +85,7 @@ export const BottomSheet = React.forwardRef<TrueSheet, BottomSheetProps>(
         grabberOptions={{
           width: 40,
           height: 4,
-          color: isDark ? "#525252" : "#D1D5DB",
+          color: isDark ? '#525252' : '#D1D5DB',
         }}
         style={[{ paddingBottom: 20 }, style]}
         {...props}
@@ -96,7 +96,7 @@ export const BottomSheet = React.forwardRef<TrueSheet, BottomSheetProps>(
     );
   },
 );
-BottomSheet.displayName = "BottomSheet";
+BottomSheet.displayName = 'BottomSheet';
 
 /**
  * BottomSheetHeader
@@ -119,7 +119,7 @@ const BottomSheetHeader = React.memo(
     );
   },
 );
-BottomSheetHeader.displayName = "BottomSheetHeader";
+BottomSheetHeader.displayName = 'BottomSheetHeader';
 
 const CloseButton = ({ close }: { close: () => void }) => {
   const colorScheme = useColorScheme();
@@ -135,7 +135,7 @@ const CloseButton = ({ close }: { close: () => void }) => {
       <Ionicons
         name="close-circle"
         size={28}
-        color={colorScheme === "dark" ? "white" : colors.black}
+        color={colorScheme === 'dark' ? 'white' : colors.black}
       />
     </Pressable>
   );

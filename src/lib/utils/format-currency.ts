@@ -7,11 +7,11 @@
  */
 export function formatCurrency(
   amount: number | string = 0,
-  currency: string = "NGN",
-  locale: string = "en-NG",
+  currency: string = 'NGN',
+  locale: string = 'en-NG',
 ) {
   return (Number(amount) || 0).toLocaleString(locale, {
-    style: "currency",
+    style: 'currency',
     currency,
   });
 }

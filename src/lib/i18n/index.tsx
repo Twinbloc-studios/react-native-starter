@@ -1,14 +1,14 @@
-import { getLocales } from "expo-localization";
-import i18n, { dir } from "i18next";
-import { initReactI18next } from "react-i18next";
-import { I18nManager } from "react-native";
+import { getLocales } from 'expo-localization';
+import i18n, { dir } from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import { I18nManager } from 'react-native';
 
-import { getStorage, storageInstance } from "../utils/storage";
-import { resources } from "./resources";
-import { LOCAL } from "./utils";
+import { getStorage, storageInstance } from '../utils/storage';
+import { resources } from './resources';
+import { LOCAL } from './utils';
 
-const locale = getLocales()[0]?.languageCode ?? "en";
-export * from "./utils";
+const locale = getLocales()[0]?.languageCode ?? 'en';
+export * from './utils';
 
 export const initI18n = async () => {
   // Sample usage:
@@ -25,8 +25,8 @@ export const initI18n = async () => {
     await i18n.use(initReactI18next).init({
       resources,
       lng: language,
-      fallbackLng: "en",
-      compatibilityJSON: "v4",
+      fallbackLng: 'en',
+      compatibilityJSON: 'v4',
       interpolation: {
         escapeValue: false,
       },
@@ -39,13 +39,13 @@ export const initI18n = async () => {
     await i18n.changeLanguage(language);
   }
 
-  const isRTL = dir(language) === "rtl";
+  const isRTL = dir(language) === 'rtl';
   I18nManager.allowRTL(isRTL);
   I18nManager.forceRTL(isRTL);
 
   return i18n;
 };
 
-export const isRTL = () => dir() === "rtl";
+export const isRTL = () => dir() === 'rtl';
 
 export default i18n;

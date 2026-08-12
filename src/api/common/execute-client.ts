@@ -1,13 +1,14 @@
-import { Env } from "@env";
+import { Env } from '@env';
 import axios, {
   type AxiosRequestConfig,
   isAxiosError,
   type Method,
-} from "axios";
+} from 'axios';
 
-import { accessToken, signOut } from "@/store/auth";
+import { accessToken, signOut } from '@/store/auth';
 
-import { queryClient } from "./api-provider";
+import { queryClient } from './api-provider';
+import { refreshAuthSession } from './refresh-auth';
 
 // eslint-disable-next-line import/no-named-as-default-member
 export const client = axios.create({
@@ -22,8 +23,41 @@ export class ApiError<TData = unknown> extends Error {
     public originalError?: unknown,
   ) {
     super(message);
-    this.name = "ApiError";
+    this.name = 'ApiError';
   }
+}
+
+function toApiError(error: unknown): ApiError {
+  if (isAxiosError(error)) {
+    const status = error.response?.status;
+    const responseData = error.response?.data as unknown;
+
+    const apiErrorMessage =
+      typeof responseData === 'string'
+        ? responseData
+        : (
+            responseData as
+              | { message?: string; error?: string }
+              | null
+              | undefined
+          )?.message ||
+          (
+            responseData as
+              | { message?: string; error?: string }
+              | null
+              | undefined
+          )?.error ||
+          error.message ||
+          'Request failed';
+
+    return new ApiError(apiErrorMessage, status, responseData, error);
+  }
+
+  // For non-axios errors (e.g., network setup issues that don't look like axios errors, though axios usually wraps them)
+  console.error('Error executing request:', error);
+  const fallbackMessage =
+    error instanceof Error && error.message ? error.message : 'Unknown error';
+  return new ApiError(fallbackMessage, undefined, undefined, error);
 }
 
 // Define a more specific type for the response data if possible, otherwise use generic TResult
@@ -37,73 +71,69 @@ export async function executeRest<TResult = unknown, TData = unknown>(
     headers?: Record<string, string>;
     axiosConfig?: Omit<
       AxiosRequestConfig,
-      "url" | "method" | "data" | "params" | "headers" | "baseURL"
+      'url' | 'method' | 'data' | 'params' | 'headers' | 'baseURL'
     > & {
       headers?: Record<string, string>;
     };
-    ignore401?: boolean; // If true, do not sign out/clear cache on 401
+    ignore401?: boolean; // If true, do not refresh/sign out/clear cache on 401
   },
 ): Promise<TResult> {
-  const token = options?.customToken || accessToken()?.access;
-  const { headers: axiosHeaders, ...restAxiosConfig } =
-    options?.axiosConfig ?? {};
-  const mergedHeaders = {
-    ...(token && { Authorization: `Bearer ${token}` }),
-    ...(options?.headers || {}),
-    ...(axiosHeaders || {}),
+  const buildConfig = (token?: string): AxiosRequestConfig => {
+    const { headers: axiosHeaders, ...restAxiosConfig } =
+      options?.axiosConfig ?? {};
+    const mergedHeaders = {
+      ...(token && { Authorization: `Bearer ${token}` }),
+      ...(options?.headers || {}),
+      ...(axiosHeaders || {}),
+    };
+    return {
+      url,
+      method,
+      data,
+      params: options?.params,
+      headers: mergedHeaders,
+      ...restAxiosConfig,
+    };
   };
 
-  const config: AxiosRequestConfig = {
-    url,
-    method,
-    data,
-    params: options?.params,
-    headers: mergedHeaders,
-    ...restAxiosConfig,
+  // Performs the request once with a given token.
+  const perform = async (token?: string): Promise<TResult> => {
+    const response = await client<TResult>(buildConfig(token));
+    return response.data;
   };
+
+  const initialToken = options?.customToken || accessToken()?.access;
 
   try {
-    // Assuming your client is the configured axios instance directly
-    const response = await client<TResult>(config);
-    // Adjust if your API wraps data, e.g., response.data.data
-    return response.data;
+    return await perform(initialToken);
   } catch (error) {
-    if (isAxiosError(error)) {
-      const status = error.response?.status;
-      const responseData = error.response?.data as unknown;
-
-      // Handle Unauthorized error (401)
-      if (token && status === 401 && !options?.ignore401) {
-        console.error("Unauthorized access - 401. Signing out.");
-        void signOut();
-        queryClient.clear(); // Clear React Query/TanStack Query cache if used
+    if (
+      isAxiosError(error) &&
+      error.response?.status === 401 &&
+      initialToken &&
+      !options?.ignore401
+    ) {
+      // Try to silently rotate the access token with the stored refresh token.
+      const refreshed = await refreshAuthSession();
+      if (refreshed) {
+        try {
+          // Retry the original request once with the rotated token.
+          return await perform(accessToken()?.access);
+        } catch (retryError) {
+          // The rotated token was also rejected — the session is truly invalid.
+          if (isAxiosError(retryError) && retryError.response?.status === 401) {
+            console.error('Access token rejected after refresh. Signing out.');
+            void signOut();
+            queryClient.clear(); // Clear React Query/TanStack Query cache if used
+          }
+          throw toApiError(retryError);
+        }
       }
-
-      const apiErrorMessage =
-        typeof responseData === "string"
-          ? responseData
-          : (
-              responseData as
-                | { message?: string; error?: string }
-                | null
-                | undefined
-            )?.message ||
-            (
-              responseData as
-                | { message?: string; error?: string }
-                | null
-                | undefined
-            )?.error ||
-            error.message ||
-            "Request failed";
-
-      throw new ApiError(apiErrorMessage, status, responseData, error);
+      console.error('Session refresh failed. Signing out.');
+      void signOut();
+      queryClient.clear(); // Clear React Query/TanStack Query cache if used
     }
 
-    // For non-axios errors (e.g., network setup issues that don't look like axios errors, though axios usually wraps them)
-    console.error("Error executing request:", error);
-    const fallbackMessage =
-      error instanceof Error && error.message ? error.message : "Unknown error";
-    throw new ApiError(fallbackMessage, undefined, undefined, error);
+    throw toApiError(error);
   }
 }

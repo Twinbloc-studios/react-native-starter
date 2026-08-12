@@ -2,14 +2,14 @@ import {
   getSecureItem,
   removeSecureItem,
   setSecureItem,
-} from "@/lib/utils/secure-store";
+} from '@/lib/utils/secure-store';
 
 export enum STORAGE_KEY {
-  IS_FIRST_TIME = "IS_FIRST_TIME",
-  TOKEN = "TOKEN",
-  API_TOKEN = "API_TOKEN",
-  SELECTED_THEME = "SELECTED_THEME",
-  LOCAL = "LOCAL",
+  IS_FIRST_TIME = 'IS_FIRST_TIME',
+  TOKEN = 'TOKEN',
+  API_TOKEN = 'API_TOKEN',
+  SELECTED_THEME = 'SELECTED_THEME',
+  LOCAL = 'LOCAL',
 }
 
 export type AuthType = {

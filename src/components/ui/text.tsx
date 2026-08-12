@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
 import {
   I18nManager,
+  type StyleProp,
   StyleSheet,
   Text as NNText,
   type TextProps,
@@ -47,6 +47,81 @@ const relativeLineHeightMapping: Record<string, number> = {
   'leading-loose': 2,
 };
 
+const fontFamilyMapping: Record<string, string> = {
+  'font-regular': 'Inter_400Regular',
+  'font-medium': 'Inter_500Medium',
+  'font-semibold': 'Inter_600SemiBold',
+  'font-bold': 'Inter_700Bold',
+};
+
+const resolveTextMetrics = (textStyle: string) => {
+  const classes = textStyle.split(' ');
+  // Find the last text size class (NativeWind/Tailwind precedence)
+  const sizeClass =
+    classes.reverse().find((cls) => textSizeMapping[cls]) ?? 'text-base';
+  const sizeData = textSizeMapping[sizeClass] ?? textSizeMapping['text-base'];
+
+  let lineHeight = sizeData.lineHeight;
+  const leadingClass = classes.find((cls) => cls.startsWith('leading-'));
+
+  if (leadingClass) {
+    if (relativeLineHeightMapping[leadingClass]) {
+      lineHeight = sizeData.fontSize * relativeLineHeightMapping[leadingClass];
+    } else {
+      const match = leadingClass.match(/^leading-(\d+)$/);
+      if (match) {
+        lineHeight = parseInt(match[1], 10) * 4;
+      }
+    }
+  }
+
+  return { fontSize: sizeData.fontSize, lineHeight };
+};
+
+const resolveScaledStyle = ({
+  style,
+  fontClass,
+  sizeScale,
+  disableSizeScale,
+  baseFontSizeFromClass,
+  baseLineHeightFromClass,
+}: {
+  style: StyleProp<TextStyle>;
+  fontClass: string;
+  sizeScale: number;
+  disableSizeScale: boolean;
+  baseFontSizeFromClass: number;
+  baseLineHeightFromClass: number;
+}) => {
+  const baseStyle = StyleSheet.flatten([
+    {
+      writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
+      fontFamily: fontFamilyMapping[fontClass] || 'Inter_400Regular',
+    },
+    style,
+  ]) as TextStyle;
+
+  // If size scale is disabled, return base style without scaling
+  if (disableSizeScale) {
+    return baseStyle;
+  }
+
+  // Get fontSize from style prop if present, otherwise use className-based fontSize
+  const baseFontSize = baseStyle?.fontSize ?? baseFontSizeFromClass;
+  const baseLineHeight = baseStyle?.lineHeight ?? baseLineHeightFromClass;
+
+  const scaledFontSize =
+    baseFontSize && sizeScale ? baseFontSize * sizeScale : undefined;
+  const scaledLineHeight =
+    baseLineHeight && sizeScale ? baseLineHeight * sizeScale : undefined;
+
+  return {
+    ...baseStyle,
+    ...(scaledFontSize ? { fontSize: scaledFontSize } : {}),
+    ...(scaledLineHeight ? { lineHeight: scaledLineHeight } : {}),
+  } as TextStyle;
+};
+
 export const Text = ({
   className = '',
   style,
@@ -56,102 +131,36 @@ export const Text = ({
   ...props
 }: Props) => {
   const { sizeScale } = useUtility();
+
   const fontClass =
     className.split(' ').find((cls) => fontFamilyMapping[cls]) ??
     'font-regular';
 
-  const textStyle = useMemo(
-    () =>
-      twMerge(
-        'font-regular text-black dark:text-white text-base',
-        className,
-        fontClass ? `font-[${fontFamilyMapping[fontClass]}]` : 'font-regular',
-      ),
-    [className, fontClass],
+  const textStyle = twMerge(
+    'font-regular text-black dark:text-white text-base',
+    className,
+    fontClass ? `font-[${fontFamilyMapping[fontClass]}]` : 'font-regular',
   );
 
   const {
     fontSize: baseFontSizeFromClass,
     lineHeight: baseLineHeightFromClass,
-  } = useMemo(() => {
-    const classes = textStyle.split(' ');
-    // Find the last text size class (NativeWind/Tailwind precedence)
-    const sizeClass =
-      classes.reverse().find((cls) => textSizeMapping[cls]) ?? 'text-base';
-    const sizeData = textSizeMapping[sizeClass] ?? textSizeMapping['text-base'];
+  } = resolveTextMetrics(textStyle);
 
-    let lineHeight = sizeData.lineHeight;
-    const leadingClass = classes.find((cls) => cls.startsWith('leading-'));
-
-    if (leadingClass) {
-      if (relativeLineHeightMapping[leadingClass]) {
-        lineHeight =
-          sizeData.fontSize * relativeLineHeightMapping[leadingClass];
-      } else {
-        const match = leadingClass.match(/^leading-(\d+)$/);
-        if (match) {
-          lineHeight = parseInt(match[1], 10) * 4;
-        }
-      }
-    }
-
-    return { fontSize: sizeData.fontSize, lineHeight };
-  }, [textStyle]);
-
-  const nStyle = useMemo(() => {
-    const baseStyle = StyleSheet.flatten([
-      {
-        writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr',
-        fontFamily: fontFamilyMapping[fontClass] || 'Inter_400Regular',
-      },
-      style,
-    ]) as TextStyle;
-
-    // If size scale is disabled, return base style without scaling
-    if (disableSizeScale) {
-      return baseStyle;
-    }
-
-    // Get fontSize from style prop if present, otherwise use className-based fontSize
-    const baseFontSize = baseStyle?.fontSize ?? baseFontSizeFromClass;
-    const baseLineHeight = baseStyle?.lineHeight ?? baseLineHeightFromClass;
-
-    const scaledFontSize =
-      baseFontSize && sizeScale ? baseFontSize * sizeScale : undefined;
-    const scaledLineHeight =
-      baseLineHeight && sizeScale ? baseLineHeight * sizeScale : undefined;
-
-    return {
-      ...baseStyle,
-      ...(scaledFontSize ? { fontSize: scaledFontSize } : {}),
-      ...(scaledLineHeight ? { lineHeight: scaledLineHeight } : {}),
-    } as TextStyle;
-  }, [
+  const nStyle = resolveScaledStyle({
     style,
     fontClass,
     sizeScale,
+    disableSizeScale,
     baseFontSizeFromClass,
     baseLineHeightFromClass,
-    disableSizeScale,
-  ]);
+  });
 
   return (
-    <NativeText
-      allowFontScaling={false}
-      className={textStyle}
-      style={nStyle}
-      {...props}
-    >
+    <NativeText className={textStyle} style={nStyle} {...props}>
       {tx ? translate(tx) : children}
     </NativeText>
   );
-};
-
-const fontFamilyMapping: Record<string, string> = {
-  'font-regular': 'Inter_400Regular',
-  'font-medium': 'Inter_500Medium',
-  'font-semibold': 'Inter_600SemiBold',
-  'font-bold': 'Inter_700Bold',
 };
 
 const NativeText = withUniwind(NNText);

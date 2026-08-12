@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { Pressable as RNPressable, type PressableProps } from 'react-native';
 import { withUniwind } from 'uniwind';
 
@@ -27,9 +26,9 @@ export const Root = ({
   className = '',
   ...props
 }: RootProps) => {
-  const handleChange = useCallback(() => {
+  const handleChange = () => {
     onChange(!checked);
-  }, [onChange, checked]);
+  };
 
   return (
     <Pressable

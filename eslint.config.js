@@ -12,6 +12,7 @@ const reactNativeA11yPlugin = require('eslint-plugin-react-native-a11y');
 const simpleImportSort = require('eslint-plugin-simple-import-sort');
 const tailwindcssPlugin = require('eslint-plugin-tailwindcss');
 const unusedImports = require('eslint-plugin-unused-imports');
+const reactCompilerPlugin = require('eslint-plugin-react-compiler');
 
 module.exports = (async () => {
   const { default: eslintPluginUnicorn } =
@@ -40,6 +41,7 @@ module.exports = (async () => {
         'react-native-a11y': reactNativeA11yPlugin,
         promise: promisePlugin,
         'tailwind-canonical-classes': tailwindCanonicalClasses,
+        'react-compiler': reactCompilerPlugin,
       },
 
       settings: {
@@ -56,6 +58,9 @@ module.exports = (async () => {
       rules: {
         // --- Complexity & Code Quality ---
         'max-params': ['error', 6],
+
+        // --- React Compiler (redundant manual memoization is an error) ---
+        'react-compiler/react-compiler': 'error',
         'max-lines-per-function': ['error', 300],
 
         // --- Tailwind CSS Canonical Classes (v4) ---

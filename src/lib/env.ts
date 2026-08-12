@@ -5,10 +5,10 @@
  * Env is readonly and must not be mutated.
  */
 
-import Constants from "expo-constants";
+import Constants from 'expo-constants';
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-type ClientEnvType = typeof import("../../root-env.js").ClientEnv;
+type ClientEnvType = typeof import('../../root-env.js').ClientEnv;
 
 export const Env = Object.freeze(
   Constants.expoConfig?.extra ?? {},

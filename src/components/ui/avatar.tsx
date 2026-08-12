@@ -102,96 +102,67 @@ export const Avatar = React.forwardRef<RNView, AvatarProps>(
           ? Math.round(resolvedSize * 0.2)
           : Math.round(resolvedSize / 2));
 
-    const containerStyle = React.useMemo(
-      () => [
-        {
-          width: resolvedSize,
-          height: resolvedSize,
-          borderRadius: resolvedRadius,
-        },
-        style,
-      ],
-      [resolvedSize, resolvedRadius, style],
-    );
-    const baseImageStyle = React.useMemo(
-      () => [
-        {
-          width: resolvedSize,
-          height: resolvedSize,
-          borderRadius: resolvedRadius,
-        },
-        imageStyle,
-      ],
-      [resolvedSize, resolvedRadius, imageStyle],
-    );
+    const containerStyle = [
+      {
+        width: resolvedSize,
+        height: resolvedSize,
+        borderRadius: resolvedRadius,
+      },
+      style,
+    ];
+    const baseImageStyle = [
+      {
+        width: resolvedSize,
+        height: resolvedSize,
+        borderRadius: resolvedRadius,
+      },
+      imageStyle,
+    ];
     const resolvedLabel = label?.trim();
 
     const onImageError = imageProps?.onError;
-    const handleError = React.useCallback(
-      (event: Parameters<NonNullable<SafeFastImageProps['onError']>>[0]) => {
-        setHasError(true);
-        if (onImageError) {
-          onImageError(event);
-        }
-      },
-      [onImageError],
-    );
+    const handleError = (
+      event: Parameters<NonNullable<SafeFastImageProps['onError']>>[0],
+    ) => {
+      setHasError(true);
+      if (onImageError) {
+        onImageError(event);
+      }
+    };
 
     React.useEffect(() => {
       setHasError(false);
     }, [source]);
 
-    const content = React.useMemo(() => {
-      if (source && !hasError) {
-        return (
-          <SafeFastImage
-            source={source}
-            style={baseImageStyle}
-            onError={handleError}
-            {...imageProps}
-          />
-        );
-      }
-
-      if (fallback) {
-        return fallback;
-      }
-
-      if (resolvedLabel) {
-        const initials = getInitials(resolvedLabel);
-        const textSizeClass = typeof size === 'number' ? '' : textSizeMap[size];
-        const textStyle =
-          typeof size === 'number'
-            ? { fontSize: Math.round(resolvedSize * 0.4) }
-            : undefined;
-        return (
-          <Text
-            className={twMerge(
-              'font-semibold text-white',
-              textSizeClass,
-              textClassName,
-            )}
-            style={textStyle}
-            numberOfLines={1}
-          >
-            {initials}
-          </Text>
-        );
-      }
-
-      return <ExpoImage source={FALLBACK_IMAGE} style={baseImageStyle} />;
-    }, [
-      source,
-      hasError,
-      baseImageStyle,
-      handleError,
-      imageProps,
-      fallback,
-      resolvedLabel,
-      size,
-      resolvedSize,
-      textClassName,
-    ]);
+    const content =
+      source && !hasError ? (
+        <SafeFastImage
+          source={source}
+          style={baseImageStyle}
+          {...imageProps}
+          onError={handleError}
+        />
+      ) : fallback ? (
+        fallback
+      ) : resolvedLabel ? (
+        <Text
+          className={twMerge(
+            'font-semibold text-white',
+            typeof size === 'number' ? '' : textSizeMap[size],
+            textClassName,
+          )}
+          style={
+            typeof size === 'number'
+              ? { fontSize: Math.round(resolvedSize * 0.4) }
+              : undefined
+          }
+          numberOfLines={1}
+        >
+          {getInitials(resolvedLabel)}
+        </Text>
+      ) : (
+        <ExpoImage source={FALLBACK_IMAGE} style={baseImageStyle} />
+      );
 
     return (
       <View

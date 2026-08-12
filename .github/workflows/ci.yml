@@ -28,6 +28,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Verify generated colors are in sync
+        run: pnpm sync:colors:check
+
+      - name: Format check
+        run: pnpm format:check
+
       - name: Lint
         run: pnpm lint
 

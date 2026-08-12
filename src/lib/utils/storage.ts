@@ -1,15 +1,14 @@
-import { Env } from "@env";
-import { type AsyncStorage } from "@tanstack/react-query-persist-client";
-import * as Crypto from "expo-crypto";
-import * as SecureStore from "expo-secure-store";
-import { Platform } from "react-native";
-import { createMMKV } from "react-native-mmkv";
-import { type StateStorage } from "zustand/middleware";
+import { Env } from '@env';
+import * as Crypto from 'expo-crypto';
+import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
+import { createMMKV } from 'react-native-mmkv';
+import { type StateStorage } from 'zustand/middleware';
 
-import { type STORAGE_KEY } from "@/store/auth/utils";
+import { type STORAGE_KEY } from '@/store/auth/utils';
 
-const STORAGE_ID = "app-secure-storage";
-const ENCRYPTION_KEY_ALIAS = "mmkv-encryption-key";
+const STORAGE_ID = 'app-secure-storage';
+const ENCRYPTION_KEY_ALIAS = 'mmkv-encryption-key';
 
 let storagePromise: Promise<ReturnType<typeof createMMKV>> | null = null;
 export let storageInstance!: ReturnType<typeof createMMKV>;
@@ -17,7 +16,7 @@ export let storageInstance!: ReturnType<typeof createMMKV>;
 export function getStorageInstance() {
   if (!storageInstance) {
     throw new Error(
-      "Storage instance is not initialized. Call getStorage() first.",
+      'Storage instance is not initialized. Call getStorage() first.',
     );
   }
   return storageInstance;
@@ -38,7 +37,7 @@ async function initStorage() {
 }
 
 async function getEncryptionKeyAsync() {
-  if (Platform.OS === "web") {
+  if (Platform.OS === 'web') {
     return undefined;
   }
 
@@ -52,17 +51,17 @@ async function getEncryptionKeyAsync() {
     await SecureStore.setItemAsync(ENCRYPTION_KEY_ALIAS, newKey);
     return newKey;
   } catch (error) {
-    console.error("Failed to initialize secure storage encryption:", error);
+    console.error('Failed to initialize secure storage encryption:', error);
 
     try {
       const newKey = Crypto.randomUUID();
       await SecureStore.setItemAsync(ENCRYPTION_KEY_ALIAS, newKey);
       return newKey;
     } catch (retryError) {
-      console.error("Secure storage recovery failed:", retryError);
-      if (Env.APP_ENV === "production") {
+      console.error('Secure storage recovery failed:', retryError);
+      if (Env.APP_ENV === 'production') {
         throw new Error(
-          "CRITICAL: Secure storage initialization failed. App cannot proceed securely.",
+          'CRITICAL: Secure storage initialization failed. App cannot proceed securely.',
         );
       }
       return undefined;
@@ -122,10 +121,4 @@ export const mmkvStorage: StateStorage<Promise<void>> = {
     const storage = await getStorage();
     storage.remove(key);
   },
-};
-
-export const queryStorage: AsyncStorage<string> = {
-  getItem: (key) => mmkvStorage.getItem(key),
-  setItem: (key, value) => mmkvStorage.setItem(key, value),
-  removeItem: (key) => mmkvStorage.removeItem(key),
 };

@@ -1,26 +1,16 @@
-import { type AxiosError } from "axios";
-import { createQuery, type QueryHookResult } from "react-query-kit";
+import { createQuery, type QueryHookResult } from 'react-query-kit';
 
-import { signOut, useAuth } from "@/store/auth";
+import { useAuth } from '@/store/auth';
 
-import { executeRest, QueryKey } from "../common";
-import { type TUser } from "./types";
+import { type ApiError, executeRest, QueryKey } from '../common';
+import { type TUser } from './types';
 
 type Response = TUser;
-const _useGetUser = createQuery<Response, void, AxiosError>({
+const _useGetUser = createQuery<Response, void, ApiError>({
   queryKey: [QueryKey.USER],
   fetcher: async () => {
-    return executeRest<{ data: TUser }>("auth/me", "GET")
-      .then((response) => {
-        return response?.data;
-      })
-      .catch(async (error) => {
-        //SiGN USER OUT IF UNAUTHORIZED
-        if (error.status >= 400 && error?.status < 500) {
-          await signOut();
-        }
-        return error;
-      });
+    const response = await executeRest<{ data: TUser }>('auth/me', 'GET');
+    return response?.data;
   },
   staleTime: 0, // Always refetch
   gcTime: 0,
@@ -34,7 +24,7 @@ const _useGetUser = createQuery<Response, void, AxiosError>({
 // const { data: user, isCurrentUser } = useGetUser("some-user-id");
 export const useGetUser = (
   userId?: string,
-): QueryHookResult<TUser, AxiosError<unknown, unknown>> & {
+): QueryHookResult<TUser, ApiError> & {
   isCurrentUser?: boolean;
 } => {
   const { auth_data } = useAuth();

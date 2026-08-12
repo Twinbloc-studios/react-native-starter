@@ -1,6 +1,6 @@
-import { Redirect, Stack } from "expo-router";
+import { Redirect, Stack } from 'expo-router';
 
-import { useIsFirstTime } from "@/hooks/general/use-is-first-time";
+import { useIsFirstTime } from '@/hooks/general/use-is-first-time';
 
 export default function MainLayout() {
   const [isFirstTime] = useIsFirstTime();

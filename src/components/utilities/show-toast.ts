@@ -1,6 +1,6 @@
-import { toast } from "goey-native-toast";
+import { toast } from 'goey-native-toast';
 
-import { toastDefaults } from "@/lib/utils/toast-config";
+import { toastDefaults } from '@/lib/utils/toast-config';
 
 // Documentation: https://github.com/Teepheh-Git/goey-native-toast
 //
@@ -26,7 +26,7 @@ const resolveOptions = (
   descriptionOrOptions?: string | ToastOptions,
   options?: ToastOptions,
 ) => {
-  if (typeof descriptionOrOptions === "string") {
+  if (typeof descriptionOrOptions === 'string') {
     return {
       ...defaultOptions,
       ...options,

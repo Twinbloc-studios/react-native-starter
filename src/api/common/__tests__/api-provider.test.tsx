@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import type * as ApiProviderType from "../api-provider";
+import type * as ApiProviderType from '../api-provider';
 
 const mockUseReactQueryDevTools = jest.fn();
 const mockCreateAsyncStoragePersister = jest.fn((config) => ({ config }));
@@ -13,30 +13,30 @@ const mockMmkvStorage = {
   removeItem: jest.fn(),
 };
 
-jest.mock("@dev-plugins/react-query", () => ({
+jest.mock('@dev-plugins/react-query', () => ({
   useReactQueryDevTools: mockUseReactQueryDevTools,
 }));
 
-jest.mock("@tanstack/query-async-storage-persister", () => ({
+jest.mock('@tanstack/query-async-storage-persister', () => ({
   createAsyncStoragePersister: mockCreateAsyncStoragePersister,
 }));
 
-jest.mock("@tanstack/react-query-persist-client", () => ({
+jest.mock('@tanstack/react-query-persist-client', () => ({
   PersistQueryClientProvider: mockPersistProvider,
   removeOldestQuery: mockRemoveOldestQuery,
 }));
 
-jest.mock("@/lib/utils/storage", () => ({
+jest.mock('@/lib/utils/storage', () => ({
   mmkvStorage: mockMmkvStorage,
 }));
 
-jest.mock("@/store/auth/utils", () => ({
+jest.mock('@/store/auth/utils', () => ({
   STORAGE_KEY: {
-    API_TOKEN: "API_TOKEN",
+    API_TOKEN: 'API_TOKEN',
   },
 }));
 
-describe("api-provider", () => {
+describe('api-provider', () => {
   beforeEach(() => {
     jest.resetModules();
     mockUseReactQueryDevTools.mockReset();
@@ -54,34 +54,34 @@ describe("api-provider", () => {
   const loadApiProvider = () => {
     let module: typeof ApiProviderType;
     jest.isolateModules(() => {
-      module = require("../api-provider");
+      module = require('../api-provider');
     });
     return module!;
   };
 
-  it("configures persister with storage and key", () => {
+  it('configures persister with storage and key', () => {
     const { clientPersister } = loadApiProvider();
     const config = mockCreateAsyncStoragePersister.mock.calls[0]?.[0];
 
     expect(mockCreateAsyncStoragePersister).toHaveBeenCalled();
     expect(clientPersister).toBeDefined();
-    expect(config.key).toBe("API_TOKEN");
-    expect(typeof config.serialize).toBe("function");
-    expect(typeof config.deserialize).toBe("function");
+    expect(config.key).toBe('API_TOKEN');
+    expect(typeof config.serialize).toBe('function');
+    expect(typeof config.deserialize).toBe('function');
     expect(config.retry).toBe(mockRemoveOldestQuery);
   });
 
-  it("binds storage helpers to mmkvStorage", () => {
+  it('binds storage helpers to mmkvStorage', () => {
     loadApiProvider();
     const config = mockCreateAsyncStoragePersister.mock.calls[0]?.[0];
     const storage = config.storage;
 
-    storage.getItem("key");
-    storage.setItem("key", "value");
-    storage.removeItem("key");
+    storage.getItem('key');
+    storage.setItem('key', 'value');
+    storage.removeItem('key');
 
-    expect(mockMmkvStorage.getItem).toHaveBeenCalledWith("key");
-    expect(mockMmkvStorage.setItem).toHaveBeenCalledWith("key", "value");
-    expect(mockMmkvStorage.removeItem).toHaveBeenCalledWith("key");
+    expect(mockMmkvStorage.getItem).toHaveBeenCalledWith('key');
+    expect(mockMmkvStorage.setItem).toHaveBeenCalledWith('key', 'value');
+    expect(mockMmkvStorage.removeItem).toHaveBeenCalledWith('key');
   });
 });

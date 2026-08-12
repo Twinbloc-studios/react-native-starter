@@ -71,6 +71,7 @@ const client = z.object({
   PACKAGE: bundleIdSchema,
   VERSION: z.string().min(1),
   EXPO_PUBLIC_API_URL: z.url(),
+  EXPO_PUBLIC_REFRESH_URL: z.url(),
 });
 
 const buildTime = z.object({
@@ -89,6 +90,7 @@ const _clientEnv = {
   PACKAGE,
   VERSION: rootPackageJSON.version,
   EXPO_PUBLIC_API_URL: process.env.EXPO_PUBLIC_API_URL,
+  EXPO_PUBLIC_REFRESH_URL: process.env.EXPO_PUBLIC_REFRESH_URL,
 };
 
 const _buildTimeEnv = {

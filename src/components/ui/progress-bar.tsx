@@ -1,16 +1,16 @@
-import React, { forwardRef, useImperativeHandle } from "react";
-import { View } from "react-native";
+import React, { forwardRef, useImperativeHandle } from 'react';
+import { View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedProps,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-} from "react-native-reanimated";
-import Svg, { Circle } from "react-native-svg";
-import { twMerge } from "tailwind-merge";
+} from 'react-native-reanimated';
+import Svg, { Circle } from 'react-native-svg';
+import { twMerge } from 'tailwind-merge';
 
-import { colors } from "../utilities";
+import { colors } from '../utilities';
 
 type Props = {
   initialProgress?: number;
@@ -40,7 +40,7 @@ const CircularProgressBar = forwardRef<CircularProgressBarRef, CircularProps>(
       initialProgress = 0,
       size = 48,
       strokeWidth = 6,
-      className = "",
+      className = '',
       trackColor = colors.blue[100],
       progressColor = colors.blue[600],
     },
@@ -83,7 +83,7 @@ const CircularProgressBar = forwardRef<CircularProgressBarRef, CircularProps>(
 
     return (
       <View
-        className={twMerge("items-center justify-center", className)}
+        className={twMerge('items-center justify-center', className)}
         style={{ width: size, height: size }}
       >
         <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
@@ -113,10 +113,10 @@ const CircularProgressBar = forwardRef<CircularProgressBarRef, CircularProps>(
   },
 );
 
-CircularProgressBar.displayName = "ProgressBar.Circular";
+CircularProgressBar.displayName = 'ProgressBar.Circular';
 
 const BaseProgressBar = forwardRef<ProgressBarRef, Props>(
-  ({ initialProgress = 0, className = "" }, ref) => {
+  ({ initialProgress = 0, className = '' }, ref) => {
     const progress = useSharedValue<number>(initialProgress ?? 0);
     useImperativeHandle(ref, () => {
       return {
@@ -146,14 +146,14 @@ const BaseProgressBar = forwardRef<ProgressBarRef, Props>(
       };
     });
     return (
-      <View className={twMerge(` bg-[#EAEAEA] w-full rounded-xl`, className)}>
+      <View className={twMerge(` w-full rounded-xl bg-[#EAEAEA]`, className)}>
         <Animated.View style={style} />
       </View>
     );
   },
 );
 
-BaseProgressBar.displayName = "ProgressBar";
+BaseProgressBar.displayName = 'ProgressBar';
 
 type ProgressBarComponent = React.ForwardRefExoticComponent<
   React.PropsWithoutRef<Props> & React.RefAttributes<ProgressBarRef>
@@ -164,4 +164,4 @@ type ProgressBarComponent = React.ForwardRefExoticComponent<
 export const ProgressBar = BaseProgressBar as ProgressBarComponent;
 
 ProgressBar.Circular = CircularProgressBar;
-ProgressBar.displayName = "ProgressBar";
+ProgressBar.displayName = 'ProgressBar';

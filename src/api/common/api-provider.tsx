@@ -1,15 +1,15 @@
-import { useReactQueryDevTools } from "@dev-plugins/react-query";
-import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
-import { QueryClient } from "@tanstack/react-query";
+import { useReactQueryDevTools } from '@dev-plugins/react-query';
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
+import { QueryClient } from '@tanstack/react-query';
 import {
   type AsyncStorage,
   PersistQueryClientProvider,
   removeOldestQuery,
-} from "@tanstack/react-query-persist-client";
-import * as React from "react";
+} from '@tanstack/react-query-persist-client';
+import * as React from 'react';
 
-import { mmkvStorage } from "@/lib/utils/storage";
-import { STORAGE_KEY } from "@/store/auth/utils";
+import { mmkvStorage } from '@/lib/utils/storage';
+import { STORAGE_KEY } from '@/store/auth/utils';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,14 +49,19 @@ export const clientPersister = createAsyncStoragePersister({
 });
 */
 
-export function APIProvider({ children }: { children: React.ReactNode }) {
+function ReactQueryDevTools() {
   useReactQueryDevTools(queryClient);
+  return null;
+}
+
+export function APIProvider({ children }: { children: React.ReactNode }) {
   return (
     // Provide the client to your App
     <PersistQueryClientProvider
       client={queryClient}
       persistOptions={{ persister: clientPersister }}
     >
+      {__DEV__ && <ReactQueryDevTools />}
       {children}
     </PersistQueryClientProvider>
   );

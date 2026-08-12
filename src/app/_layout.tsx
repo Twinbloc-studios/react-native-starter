@@ -1,11 +1,11 @@
-import "../global.css";
+import '../global.css';
 
-import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import React, { useCallback } from "react";
+import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import React from 'react';
 
-import Providers from "@/components/providers";
-import { initApp } from "@/lib/app-initializer";
+import Providers from '@/components/providers';
+import { initApp } from '@/lib/app-initializer';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 void SplashScreen.preventAutoHideAsync();
@@ -18,10 +18,6 @@ void SplashScreen.setOptions({
 export default function RootLayout() {
   const [ready, setReady] = React.useState(false);
 
-  const hideSplash = useCallback(async () => {
-    await SplashScreen.hideAsync();
-  }, []);
-
   React.useEffect(() => {
     let active = true;
     void initApp()
@@ -29,13 +25,13 @@ export default function RootLayout() {
       .finally(() => {
         if (active) {
           setReady(true);
-          void hideSplash();
+          void SplashScreen.hideAsync();
         }
       });
     return () => {
       active = false;
     };
-  }, [hideSplash]);
+  }, []);
 
   if (!ready) {
     return null;

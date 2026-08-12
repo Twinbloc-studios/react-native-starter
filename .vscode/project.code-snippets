@@ -4,25 +4,19 @@
     "body": [
       "<View className=\"flex-1 items-center justify-center\">",
       "  $1",
-      "</View>"
+      "</View>",
     ],
-    "description": "A Simple View "
+    "description": "A Simple View ",
   },
   "Text": {
     "prefix": "t",
-    "body": [
-      "<Text className=\"text-center text-base\">",
-      "  $1",
-      "</Text>"
-    ],
-    "description": "A Simple Text"
+    "body": ["<Text className=\"text-center text-base\">", "  $1", "</Text>"],
+    "description": "A Simple Text",
   },
   "export *": {
     "prefix": "ex *",
-    "body": [
-      "export * from '.$1';"
-    ],
-    "description": "export *"
+    "body": ["export * from '.$1';"],
+    "description": "export *",
   },
   "Component": {
     "prefix": "comp",
@@ -41,9 +35,9 @@
       "    </View>",
       "  );",
       "};",
-      ""
+      "",
     ],
-    "description": "Component"
+    "description": "Component",
   },
   "useQuery with variables": {
     "prefix": "useqv",
@@ -66,9 +60,9 @@
       "    },",
       "  });",
       "};",
-      ""
+      "",
     ],
-    "description": "useQuery with variables"
+    "description": "useQuery with variables",
   },
   "useQuery": {
     "prefix": "useq",
@@ -88,9 +82,9 @@
       "    },",
       "  });",
       "};",
-      ""
+      "",
     ],
-    "description": "useQuery"
+    "description": "useQuery",
   },
   "useInfiniteQuery": {
     "prefix": "useiq",
@@ -121,9 +115,9 @@
       "    },",
       "  });",
       "};",
-      ""
+      "",
     ],
-    "description": "useInfiniteQuery"
+    "description": "useInfiniteQuery",
   },
   "useMutation": {
     "prefix": "usem",
@@ -146,16 +140,13 @@
       "      }).then((response) => response.data),",
       "  });",
       "};",
-      ""
+      "",
     ],
-    "description": "useMutation"
+    "description": "useMutation",
   },
   "navigate": {
     "prefix": "navigate",
-    "body": [
-      "const router = useRouter();",
-      ""
-    ],
-    "description": "navigate"
-  }
+    "body": ["const router = useRouter();", ""],
+    "description": "navigate",
+  },
 }

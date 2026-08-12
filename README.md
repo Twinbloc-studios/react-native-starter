@@ -16,8 +16,8 @@ For full documentation, visit [rn-starter.twinbloc.org](https://rn-starter.twinb
 - **State Management**: [Zustand](https://zustand-demo.pmnd.rs/) for global state (with MMKV persistence & selector helpers) and [TanStack Query](https://tanstack.com/query/latest) for server state (with MMKV persistence).
 - **Fast Encrypted Storage**: [MMKV](https://github.com/morousg/react-native-mmkv) with automatic encryption key management via Expo Secure Store.
 - **File-based Routing**: [Expo Router](https://docs.expo.dev/router/introduction/) v6 with typed routes enabled and React Compiler support.
-- **Authentication Flow**: Zustand auth store with secure token storage, auto 401 sign-out, and persistence across launches.
-- **Performance Optimized**: Includes [FlashList](https://shopify.github.io/flash-list/), [Reanimated 4](https://docs.swmansion.com/react-native-reanimated/), [Moti](https://moti.fyi/), and React Compiler.
+- **Authentication Flow**: Zustand auth store with secure token storage, refresh-token rotation (silent re-auth on 401), auto sign-out, and persistence across launches.
+- **Performance Optimized**: Includes [FlashList](https://shopify.github.io/flash-list/), [Reanimated 4](https://docs.swmansion.com/react-native-reanimated/), and React Compiler.
 - **Internationalization**: Full i18n with [i18next](https://www.i18next.com/), 4 locales (en, ar, es, fr), RTL support, and language persistence.
 - **E2E Testing**: Pre-configured with [Maestro](https://maestro.mobile.dev/) for mobile UI testing.
 - **CI/CD Ready**: GitHub Actions for lint, typecheck, test, CodeQL security analysis, commitlint, dependency review, Expo doctor, auto-labeling, and release drafting.
@@ -37,7 +37,7 @@ For full documentation, visit [rn-starter.twinbloc.org](https://rn-starter.twinb
 | **Forms**         | React Hook Form, Zod                                                                                                                                                          |
 | **State**         | Zustand v5 (with MMKV persistence middleware & selector helpers)                                                                                                              |
 | **Storage**       | MMKV (encrypted), Expo Secure Store                                                                                                                                           |
-| **Animation**     | Reanimated 4, Moti                                                                                                                                                            |
+| **Animation**     | Reanimated 4                                                                                                                                                                  |
 | **i18n**          | i18next, react-i18next, expo-localization                                                                                                                                     |
 | **Testing**       | Jest (jest-expo), @testing-library/react-native, Maestro E2E                                                                                                                  |
 | **CI/CD**         | GitHub Actions, Dependabot                                                                                                                                                    |
@@ -187,7 +187,7 @@ pnpm prebuild
 │   │   ├── app-initializer.ts  # Boot sequence: fonts, storage, i18n
 │   │   └── env.ts              # Typed client env access via @env
 │   ├── store/
-│   │   ├── auth/               # Auth store (Zustand + SecureStore persistence)
+│   │   ├── auth/               # Auth store (in-memory Zustand; SecureStore is the single source of truth)
 │   │   │   ├── index.ts        # signIn, signOut, hydrate, accessToken, auth status
 │   │   │   └── utils.ts        # Token secure storage, AuthType, STORAGE_KEY enum
 │   │   ├── utility/            # Utility store (haptic feedback, size scale)
@@ -218,13 +218,14 @@ The project uses Zod-validated environment variables via `root-env.js`. Variable
 
 #### Client-Side Variables (bundled in app)
 
-| Variable              | Required | Description                                         | Default                  |
-| :-------------------- | -------: | :-------------------------------------------------- | :----------------------- |
-| `EXPO_PUBLIC_API_URL` |      Yes | Base URL for API requests                           | —                        |
-| `APP_NAME`            |       No | Display name of the app                             | `"react-native-starter"` |
-| `APP_SLUG`            |       No | URL-friendly app identifier                         | `"react-native-starter"` |
-| `APP_SCHEME`          |       No | Deep link URL scheme                                | `"reactnativestarter"`   |
-| `APP_ENV`             |       No | Environment: `development`, `staging`, `production` | `"development"`          |
+| Variable                  | Required | Description                                         | Default                  |
+| :------------------------ | -------: | :-------------------------------------------------- | :----------------------- |
+| `EXPO_PUBLIC_API_URL`     |      Yes | Base URL for API requests                           | —                        |
+| `EXPO_PUBLIC_REFRESH_URL` |      Yes | Token refresh endpoint (POST)                       | —                        |
+| `APP_NAME`                |       No | Display name of the app                             | `"react-native-starter"` |
+| `APP_SLUG`                |       No | URL-friendly app identifier                         | `"react-native-starter"` |
+| `APP_SCHEME`              |       No | Deep link URL scheme                                | `"reactnativestarter"`   |
+| `APP_ENV`                 |       No | Environment: `development`, `staging`, `production` | `"development"`          |
 
 #### Build-Time / Server-Side Variables
 
@@ -303,7 +304,9 @@ import { executeRest } from '@/api/common/execute-client';
 
 // The Axios client automatically:
 // - Attaches Bearer token from auth store
-// - Signs out & clears cache on 401 responses
+// - On 401, silently rotates the access token via EXPO_PUBLIC_REFRESH_URL
+//   and retries the request once
+// - Signs out & clears cache only when the refresh fails (or the retry 401s)
 // - Throws typed ApiError on failure
 
 const fetchData = async () => {
@@ -366,9 +369,13 @@ import { setItem, getItem, removeItem } from '@/lib/utils/storage';
 import { STORAGE_KEY } from '@/store/auth/utils';
 
 // Storage is encrypted with a key stored in SecureStore
-await setItem(STORAGE_KEY.TOKEN, { access: '...', refresh: '...' });
-const token = await getItem(STORAGE_KEY.TOKEN);
+await setItem(STORAGE_KEY.IS_FIRST_TIME, true);
+const isFirstTime = await getItem(STORAGE_KEY.IS_FIRST_TIME);
 ```
+
+> Auth tokens are the exception: they are persisted **only** in SecureStore
+> (via `setToken` / `getToken` from `@/store/auth/utils`), which is the
+> single source of truth for the session. MMKV is for app preferences.
 
 ### Secure Store for Sensitive Data
 
@@ -599,7 +606,7 @@ Configured in [.prettierrc](./.prettierrc) with `prettier-plugin-tailwindcss` fo
 
 ### Application Boot Flow
 
-1. **Splash Screen** displayed immediately ([src/app/\_layout.tsx](./src/app/_layout.tsx))
+1. **Splash Screen** displayed immediately ([src/app/\\\_layout.tsx](./src/app/_layout.tsx))
 2. **App Initialization** (`initApp`): Loads Inter fonts, initializes MMKV storage, initializes i18n
 3. **Providers Stack** ([src/components/providers/index.tsx](./src/components/providers/index.tsx)):
    - `GestureHandlerRootView` → Touch/gesture handling
@@ -607,12 +614,12 @@ Configured in [.prettierrc](./.prettierrc) with `prettier-plugin-tailwindcss` fo
    - `APIProvider` → TanStack Query + MMKV persistence + React Query DevTools
    - `ReanimatedTrueSheetProvider` → Bottom sheet support
    - `Toaster` → Toast notifications
-4. **Onboarding Gate** ([src/app/(main)/\_layout.tsx](<./src/app/(main)/_layout.tsx>)): Redirects to `/onboarding` on first launch (MMKV-persisted flag)
+4. **Onboarding Gate** ([src/app/(main)/\\\_layout.tsx](<./src/app/(main)/_layout.tsx>)): Redirects to `/onboarding` on first launch (MMKV-persisted flag)
 
 ### API Layer
 
 - **Axios client** ([src/api/common/execute-client.ts](./src/api/common/execute-client.ts)) with auto Bearer token injection
-- Auto sign-out on 401 responses
+- Silent refresh-token rotation on 401, sign-out only if the session is unrecoverable
 - Typed `ApiError` class for consistent error handling
 - **TanStack Query persistence** via MMKV (`@tanstack/react-query-persist-client`)
 - **Pagination utilities** ([src/api/common/api-utils.ts](./src/api/common/api-utils.ts)) for cursor/offset-based infinite queries

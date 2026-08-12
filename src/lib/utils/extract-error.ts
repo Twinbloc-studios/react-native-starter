@@ -1,5 +1,5 @@
 export const extractError = (data: unknown): string => {
-  if (typeof data === "string") {
+  if (typeof data === 'string') {
     return data;
   }
   if (Array.isArray(data)) {
@@ -7,17 +7,17 @@ export const extractError = (data: unknown): string => {
       return `  ${extractError(item)}`;
     });
 
-    return `${messages.join("")}`;
+    return `${messages.join('')}`;
   }
 
-  if (typeof data === "object" && data !== null) {
+  if (typeof data === 'object' && data !== null) {
     const messages = Object.entries(data)?.map((item) => {
       const [key, value] = item;
-      const separator = Array.isArray(value) ? ":\n " : ": ";
+      const separator = Array.isArray(value) ? ':\n ' : ': ';
 
       return `- ${key}${separator}${extractError(value)} \n `;
     });
-    return `${messages.join("")} `;
+    return `${messages.join('')} `;
   }
-  return "Something went wrong ";
+  return 'Something went wrong ';
 };

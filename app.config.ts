@@ -1,50 +1,52 @@
-import type { ConfigContext, ExpoConfig } from "expo/config";
+import type { ConfigContext, ExpoConfig } from 'expo/config';
 
-import { ClientEnv, Env } from "./root-env.js";
+import { ClientEnv, Env } from './root-env.js';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: Env.NAME,
   slug: Env.SLUG,
   version: Env.VERSION,
-  orientation: "portrait",
-  icon: "./assets/images/icon.png",
+  orientation: 'portrait',
+  icon: './assets/images/icon.png',
   scheme: Env.SCHEME,
-  userInterfaceStyle: "automatic",
+  userInterfaceStyle: 'automatic',
   ios: {
     supportsTablet: true,
     bundleIdentifier: Env.BUNDLE_ID,
   },
   android: {
     adaptiveIcon: {
-      backgroundColor: "#E6F4FE",
-      foregroundImage: "./assets/images/android-icon-foreground.png",
-      backgroundImage: "./assets/images/android-icon-background.png",
-      monochromeImage: "./assets/images/android-icon-monochrome.png",
+      backgroundColor: '#E6F4FE',
+      foregroundImage: './assets/images/android-icon-foreground.png',
+      backgroundImage: './assets/images/android-icon-background.png',
+      monochromeImage: './assets/images/android-icon-monochrome.png',
     },
     predictiveBackGestureEnabled: false,
     package: Env.PACKAGE,
   },
   web: {
-    output: "static",
-    favicon: "./assets/images/favicon.png",
-    bundler: "metro",
+    output: 'static',
+    favicon: './assets/images/favicon.png',
+    bundler: 'metro',
   },
   plugins: [
-    "expo-router",
-    "expo-font",
-    "expo-localization",
-    "expo-secure-store",
-    "expo-web-browser",
+    'expo-router',
+    'expo-font',
+    'expo-image',
+    'expo-status-bar',
+    'expo-localization',
+    'expo-secure-store',
+    'expo-web-browser',
     [
-      "expo-splash-screen",
+      'expo-splash-screen',
       {
-        image: "./assets/images/splash-icon.png",
+        image: './assets/images/splash-icon.png',
         imageWidth: 200,
-        resizeMode: "contain",
-        backgroundColor: "#ffffff",
+        resizeMode: 'contain',
+        backgroundColor: '#ffffff',
         dark: {
-          backgroundColor: "#000000",
+          backgroundColor: '#000000',
         },
       },
     ],

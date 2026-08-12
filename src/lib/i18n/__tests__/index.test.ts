@@ -1,10 +1,10 @@
-import type * as I18nIndexType from "../index";
+import type * as I18nIndexType from '../index';
 
 type SetupOptions = {
   storedLanguage?: string;
   locale?: string;
   initialized: boolean;
-  dirReturn: "rtl" | "ltr";
+  dirReturn: 'rtl' | 'ltr';
 };
 
 const setup = (options: SetupOptions) => {
@@ -26,47 +26,47 @@ const setup = (options: SetupOptions) => {
 
   i18n.use.mockImplementation(() => i18n);
 
-  jest.doMock("i18next", () => ({
+  jest.doMock('i18next', () => ({
     __esModule: true,
     default: i18n,
     dir: jest.fn(() => options.dirReturn),
   }));
-  jest.doMock("react-i18next", () => ({
+  jest.doMock('react-i18next', () => ({
     initReactI18next: {},
   }));
-  jest.doMock("expo-localization", () => ({
-    getLocales: jest.fn(() => [{ languageCode: options.locale ?? "en" }]),
+  jest.doMock('expo-localization', () => ({
+    getLocales: jest.fn(() => [{ languageCode: options.locale ?? 'en' }]),
   }));
-  jest.doMock("react-native", () => ({
+  jest.doMock('react-native', () => ({
     I18nManager: { allowRTL: mockAllowRTL, forceRTL: mockForceRTL },
   }));
-  jest.doMock("react-native-mmkv", () => ({
+  jest.doMock('react-native-mmkv', () => ({
     useMMKVString: jest.fn(() => [undefined, jest.fn()]),
   }));
-  jest.doMock("react-native-restart", () => ({
+  jest.doMock('react-native-restart', () => ({
     __esModule: true,
     default: { restart: jest.fn() },
   }));
-  jest.doMock("expo-constants", () => ({
-    appOwnership: "expo",
+  jest.doMock('expo-constants', () => ({
+    appOwnership: 'expo',
   }));
-  jest.doMock("@/store/auth/utils", () => ({
+  jest.doMock('@/store/auth/utils', () => ({
     STORAGE_KEY: {
-      LOCAL: "LOCAL",
+      LOCAL: 'LOCAL',
     },
   }));
-  jest.doMock("../../utils/storage", () => ({
+  jest.doMock('../../utils/storage', () => ({
     getStorage: mockGetStorage,
     storageInstance,
   }));
-  jest.doMock("../resources", () => ({
+  jest.doMock('../resources', () => ({
     resources: {
       en: { translation: {} },
       es: { translation: {} },
     },
   }));
 
-  const module = require("../index") as typeof I18nIndexType;
+  const module = require('../index') as typeof I18nIndexType;
   return {
     module,
     mockInit,
@@ -77,8 +77,8 @@ const setup = (options: SetupOptions) => {
   };
 };
 
-describe("i18n init", () => {
-  it("initializes with stored language", async () => {
+describe('i18n init', () => {
+  it('initializes with stored language', async () => {
     const {
       module,
       mockInit,
@@ -87,10 +87,10 @@ describe("i18n init", () => {
       mockForceRTL,
       mockGetStorage,
     } = setup({
-      storedLanguage: "es",
-      locale: "fr",
+      storedLanguage: 'es',
+      locale: 'fr',
       initialized: false,
-      dirReturn: "ltr",
+      dirReturn: 'ltr',
     });
 
     await module.initI18n();
@@ -98,9 +98,9 @@ describe("i18n init", () => {
     expect(mockGetStorage).toHaveBeenCalled();
     expect(mockInit).toHaveBeenCalledWith(
       expect.objectContaining({
-        lng: "es",
-        fallbackLng: "en",
-        supportedLngs: ["en", "es"],
+        lng: 'es',
+        fallbackLng: 'en',
+        supportedLngs: ['en', 'es'],
       }),
     );
     expect(mockChangeLanguage).not.toHaveBeenCalled();
@@ -108,17 +108,17 @@ describe("i18n init", () => {
     expect(mockForceRTL).toHaveBeenCalledWith(false);
   });
 
-  it("changes language when already initialized", async () => {
+  it('changes language when already initialized', async () => {
     const { module, mockInit, mockChangeLanguage } = setup({
       storedLanguage: undefined,
-      locale: "fr",
+      locale: 'fr',
       initialized: true,
-      dirReturn: "rtl",
+      dirReturn: 'rtl',
     });
 
     await module.initI18n();
 
     expect(mockInit).not.toHaveBeenCalled();
-    expect(mockChangeLanguage).toHaveBeenCalledWith("fr");
+    expect(mockChangeLanguage).toHaveBeenCalledWith('fr');
   });
 });

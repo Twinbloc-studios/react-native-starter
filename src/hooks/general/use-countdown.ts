@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 /**
  * Sample usage:
@@ -22,23 +22,20 @@ export const useCountdown = ({
   const [seconds, setSeconds] = useState(initialSeconds);
   const [isActive, setIsActive] = useState(initialActive);
 
-  const start = useCallback(
-    (customSeconds?: number) => {
-      setSeconds(customSeconds ?? initialSeconds);
-      setIsActive(true);
-    },
-    [initialSeconds],
-  );
+  const start = (customSeconds?: number) => {
+    setSeconds(customSeconds ?? initialSeconds);
+    setIsActive(true);
+  };
 
-  const stop = useCallback(() => {
+  const stop = () => {
     setIsActive(false);
     setSeconds(0);
-  }, []);
+  };
 
-  const reset = useCallback(() => {
+  const reset = () => {
     setSeconds(initialSeconds);
     setIsActive(false);
-  }, [initialSeconds]);
+  };
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;

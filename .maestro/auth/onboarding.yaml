@@ -4,11 +4,11 @@ appId: ${APP_ID}
     clearState: true
 - extendedWaitUntil:
     visible:
-      id: "onboarding-button"
+      id: 'onboarding-button'
     timeout: 10000
 - assertVisible:
-    id: "onboarding-button"
+    id: 'onboarding-button'
 - tapOn:
-    id: "onboarding-button"
+    id: 'onboarding-button'
 - assertVisible:
-    id: "app-reset-button"
+    id: 'home-title'

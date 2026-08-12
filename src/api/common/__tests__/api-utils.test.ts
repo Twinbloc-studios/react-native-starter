@@ -3,11 +3,11 @@ import {
   getPreviousPageParam,
   getUrlParameters,
   normalizePages,
-} from "../api-utils";
+} from '../api-utils';
 
-describe("api-utils", () => {
-  describe("normalizePages", () => {
-    it("flattens paginated results", () => {
+describe('api-utils', () => {
+  describe('normalizePages', () => {
+    it('flattens paginated results', () => {
       const pages = [
         {
           results: [{ id: 1 }, { id: 2 }],
@@ -32,45 +32,45 @@ describe("api-utils", () => {
     });
   });
 
-  describe("getUrlParameters", () => {
-    it("returns null for null input", () => {
+  describe('getUrlParameters', () => {
+    it('returns null for null input', () => {
       expect(getUrlParameters(null)).toBeNull();
     });
 
-    it("parses absolute URLs", () => {
+    it('parses absolute URLs', () => {
       expect(
-        getUrlParameters("https://api.example.com/items?offset=20&limit=10"),
+        getUrlParameters('https://api.example.com/items?offset=20&limit=10'),
       ).toEqual({
-        offset: "20",
-        limit: "10",
+        offset: '20',
+        limit: '10',
       });
     });
 
-    it("parses relative query strings", () => {
-      expect(getUrlParameters("?cursor=abc&limit=5")).toEqual({
-        cursor: "abc",
-        limit: "5",
+    it('parses relative query strings', () => {
+      expect(getUrlParameters('?cursor=abc&limit=5')).toEqual({
+        cursor: 'abc',
+        limit: '5',
       });
     });
 
-    it("returns empty object when no query is present", () => {
-      expect(getUrlParameters("https://api.example.com/items")).toEqual({});
+    it('returns empty object when no query is present', () => {
+      expect(getUrlParameters('https://api.example.com/items')).toEqual({});
     });
   });
 
-  describe("getNextPageParam", () => {
-    it("extracts offset from next URL", () => {
+  describe('getNextPageParam', () => {
+    it('extracts offset from next URL', () => {
       const page = {
         results: [],
         count: 0,
-        next: "https://api.example.com/items?offset=20&limit=10",
+        next: 'https://api.example.com/items?offset=20&limit=10',
         previous: null,
       };
 
       expect(getNextPageParam(page, [], undefined, [])).toBe(20);
     });
 
-    it("extracts cursor from nested links", () => {
+    it('extracts cursor from nested links', () => {
       const page = {
         results: [],
         count: 0,
@@ -78,53 +78,53 @@ describe("api-utils", () => {
         previous: null,
         links: {
           next: {
-            url: "https://api.example.com/items?cursor=abc123",
+            url: 'https://api.example.com/items?cursor=abc123',
           },
         },
       };
 
-      expect(getNextPageParam(page, [], undefined, [])).toBe("abc123");
+      expect(getNextPageParam(page, [], undefined, [])).toBe('abc123');
     });
 
-    it("accepts direct token values", () => {
+    it('accepts direct token values', () => {
       const page = {
         results: [],
         count: 0,
-        next: "token-42",
+        next: 'token-42',
         previous: null,
       };
 
-      expect(getNextPageParam(page, [], undefined, [])).toBe("token-42");
+      expect(getNextPageParam(page, [], undefined, [])).toBe('token-42');
     });
   });
 
-  describe("getPreviousPageParam", () => {
-    it("extracts page number from previous URL", () => {
+  describe('getPreviousPageParam', () => {
+    it('extracts page number from previous URL', () => {
       const page = {
         results: [],
         count: 0,
         next: null,
-        previous: "https://api.example.com/items?page=2",
+        previous: 'https://api.example.com/items?page=2',
       };
 
       expect(getPreviousPageParam(page, [], undefined, [])).toBe(2);
     });
 
-    it("extracts value from nested pagination object", () => {
+    it('extracts value from nested pagination object', () => {
       const page = {
         results: [],
         count: 0,
         next: null,
         previous: null,
         pagination: {
-          prev_cursor: "prev-abc",
+          prev_cursor: 'prev-abc',
         },
       };
 
-      expect(getPreviousPageParam(page, [], undefined, [])).toBe("prev-abc");
+      expect(getPreviousPageParam(page, [], undefined, [])).toBe('prev-abc');
     });
 
-    it("accepts secondary previous keys", () => {
+    it('accepts secondary previous keys', () => {
       const page = {
         results: [],
         count: 0,

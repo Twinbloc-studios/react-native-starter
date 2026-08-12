@@ -19,7 +19,7 @@ export const generateBlurhash = async (
   componentY: number = 3,
 ): Promise<string | null> => {
   try {
-    const blurhashModule = require("react-native-blurhash") as {
+    const blurhashModule = require('react-native-blurhash') as {
       Blurhash: {
         encode: (uri: string, x: number, y: number) => Promise<string>;
       };
@@ -31,7 +31,7 @@ export const generateBlurhash = async (
     );
     return hash;
   } catch (error) {
-    console.error("Failed to generate blurhash:", error);
+    console.error('Failed to generate blurhash:', error);
     return null;
   }
 };

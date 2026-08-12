@@ -1,8 +1,8 @@
-import React from "react";
-import { View as RNView, type ViewProps } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { twMerge } from "tailwind-merge";
-import { withUniwind } from "uniwind";
+import React from 'react';
+import { View as RNView, type ViewProps } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { twMerge } from 'tailwind-merge';
+import { withUniwind } from 'uniwind';
 
 const View = withUniwind(RNView);
 
@@ -23,7 +23,7 @@ export const Container: ContainerComponent = ({
 }) => {
   return (
     <View
-      className={twMerge("px-5 bg-white dark:bg-black", className)}
+      className={twMerge('bg-white px-5 dark:bg-black', className)}
       {...props}
     >
       {children}
@@ -34,7 +34,7 @@ export const Container: ContainerComponent = ({
 const Page: React.FC<ContainerProps> = ({ className, children, ...props }) => {
   return (
     <View
-      className={twMerge("flex-1 bg-white dark:bg-black", className)}
+      className={twMerge('flex-1 bg-white dark:bg-black', className)}
       {...props}
     >
       {children}
@@ -44,7 +44,7 @@ const Page: React.FC<ContainerProps> = ({ className, children, ...props }) => {
 
 const Box: React.FC<ContainerProps> = ({ className, children, ...props }) => {
   return (
-    <View className={twMerge("px-5 mt-2 dark:bg-black", className)} {...props}>
+    <View className={twMerge('mt-2 px-5 dark:bg-black', className)} {...props}>
       {children}
     </View>
   );
@@ -60,7 +60,7 @@ const Insets: React.FC<ContainerProps> = ({
 
   return (
     <View
-      className={twMerge("flex-1 bg-white dark:bg-[#131313]", className)}
+      className={twMerge('flex-1 bg-white dark:bg-[#131313]', className)}
       style={[{ paddingTop: insets.top }, style]}
       {...props}
     >

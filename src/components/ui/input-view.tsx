@@ -1,9 +1,9 @@
-import React, { type PropsWithChildren } from "react";
-import { ScrollView, type ScrollViewProps } from "react-native";
-import { AvoidSoftInputView } from "react-native-avoid-softinput";
-import { withUniwind } from "uniwind";
+import React, { type PropsWithChildren } from 'react';
+import { ScrollView, type ScrollViewProps } from 'react-native';
+import { AvoidSoftInputView } from 'react-native-avoid-softinput';
+import { withUniwind } from 'uniwind';
 
-import { Container } from "./container";
+import { Container } from './container';
 
 const NativeScrollView = withUniwind(ScrollView);
 
@@ -26,4 +26,4 @@ export function InputView(props: InputViewProps) {
   );
 }
 
-InputView.displayName = "InputView";
+InputView.displayName = 'InputView';

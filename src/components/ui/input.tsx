@@ -1,49 +1,49 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   type Control,
   type FieldValues,
   type Path,
   type RegisterOptions,
   useController,
-} from "react-hook-form";
+} from 'react-hook-form';
 import {
   TextInput as NTextInput,
   type TextInputProps,
   View as RNView,
-} from "react-native";
-import { tv } from "tailwind-variants";
-import { withUniwind } from "uniwind";
+} from 'react-native';
+import { tv } from 'tailwind-variants';
+import { withUniwind } from 'uniwind';
 
-import { colors } from "../utilities";
-import { Text } from "./text";
+import { colors } from '../utilities';
+import { Text } from './text';
 
 const View = withUniwind(RNView);
 const TextInput = withUniwind(NTextInput);
 
 const inputTv = tv({
   slots: {
-    container: "mb-2",
-    label: "text-grey-100 mb-1 text-lg dark:text-neutral-100",
+    container: 'mb-2',
+    label: 'text-neutral-500 mb-1 text-lg dark:text-neutral-100',
     input:
-      "mt-0 rounded-xl border-[0.5px] border-neutral-300 bg-neutral-100 px-4 py-3 text-base font-[Inter_500Medium] leading-5 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white",
+      'mt-0 rounded-xl border-[0.5px] border-neutral-300 bg-neutral-100 px-4 py-3 text-base font-[Inter_500Medium] leading-5 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white',
   },
 
   variants: {
     focused: {
       true: {
-        input: "border-neutral-400 dark:border-neutral-300",
+        input: 'border-neutral-400 dark:border-neutral-300',
       },
     },
     error: {
       true: {
-        input: "border-danger-600",
+        input: 'border-danger-600',
 
-        label: "text-danger-600 dark:text-danger-600",
+        label: 'text-danger-600 dark:text-danger-600',
       },
     },
     disabled: {
       true: {
-        input: "bg-neutral-200",
+        input: 'bg-neutral-200',
       },
     },
   },
@@ -65,7 +65,7 @@ export interface NInputProps extends TextInputProps {
 type TRule<T extends FieldValues> =
   | Omit<
       RegisterOptions<T>,
-      "disabled" | "valueAsNumber" | "valueAsDate" | "setValueAs"
+      'disabled' | 'valueAsNumber' | 'valueAsDate' | 'setValueAs'
     >
   | undefined;
 
@@ -81,18 +81,14 @@ interface ControlledInputProps<T extends FieldValues>
 export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
   const { label, error, testID, rightIcon, leftIcon, ...inputProps } = props;
   const [isFocussed, setIsFocussed] = React.useState(false);
-  const onBlur = React.useCallback(() => setIsFocussed(false), []);
-  const onFocus = React.useCallback(() => setIsFocussed(true), []);
+  const onBlur = () => setIsFocussed(false);
+  const onFocus = () => setIsFocussed(true);
 
-  const styles = React.useMemo(
-    () =>
-      inputTv({
-        error: Boolean(error),
-        focused: isFocussed,
-        disabled: Boolean(props.disabled),
-      }),
-    [error, isFocussed, props.disabled],
-  );
+  const styles = inputTv({
+    error: Boolean(error),
+    focused: isFocussed,
+    disabled: Boolean(props.disabled),
+  });
 
   return (
     <View className={styles.container()}>
@@ -112,7 +108,7 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
           placeholderTextColor={
             props.placeholderTextColor ?? colors.neutral[400]
           }
-          className={`flex-1 ${props.editable === false ? "text-neutral-500" : "text-neutral-900"} dark:text-white`}
+          className={`flex-1 ${props.editable === false ? 'text-neutral-500' : 'text-neutral-900'} dark:text-white`}
           onBlur={onBlur}
           onFocus={onFocus}
           {...inputProps}
@@ -122,7 +118,7 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
       {error && (
         <Text
           testID={testID ? `${testID}-error` : undefined}
-          className="text-sm text-danger-600 dark:text-danger-600"
+          className="text-danger-600 dark:text-danger-600 text-sm"
         >
           {error}
         </Text>
@@ -130,7 +126,7 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
     </View>
   );
 });
-Input.displayName = "Input";
+Input.displayName = 'Input';
 
 // only used with react-hook-form
 export function ControlledInput<T extends FieldValues>(
@@ -144,7 +140,7 @@ export function ControlledInput<T extends FieldValues>(
       ref={field.ref}
       autoCapitalize="none"
       onChangeText={field.onChange}
-      value={(field.value as string) || ""}
+      value={(field.value as string) || ''}
       {...inputProps}
       error={fieldState.error?.message}
     />

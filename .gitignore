@@ -45,3 +45,6 @@ app-example
 # Maestro
 .maestro/report.xml
 .maestro/generated/
+
+# Jest coverage output
+coverage/

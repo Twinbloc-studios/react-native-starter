@@ -1,0 +1,21 @@
+# Vendored third-party skill content (do not reformat upstream files)
+agent-skills/
+
+# Machine-generated dependency lockfile
+pnpm-lock.yaml
+
+# Uniwind regenerates this type file in its own 4-space style on export
+uniwind-types.d.ts
+
+# Jest coverage output
+coverage/
+
+# Generated / tooling directories (already gitignored, explicit for safety)
+node_modules/
+.expo/
+dist/
+web-build/
+app-example/
+.freebuff/
+/ios
+/android

@@ -1,10 +1,10 @@
-import { Appearance, useColorScheme } from "react-native";
-import { useMMKVString } from "react-native-mmkv";
+import { useColorScheme } from 'react-native';
+import { useMMKVString } from 'react-native-mmkv';
 
-import { colors } from "@/components/utilities/";
-import { STORAGE_KEY } from "@/store/auth/utils";
+import { colors } from '@/components/utilities/';
+import { STORAGE_KEY } from '@/store/auth/utils';
 
-import { storageInstance } from "../../lib/utils/storage";
+import { storageInstance } from '../../lib/utils/storage';
 
 export interface ThemeColors {
   primary: string;
@@ -48,21 +48,9 @@ export function useTheme() {
     storageInstance,
   );
   const resolvedTheme =
-    selectedTheme && selectedTheme !== "system" ? selectedTheme : colorScheme;
+    selectedTheme && selectedTheme !== 'system' ? selectedTheme : colorScheme;
 
-  if (resolvedTheme === "dark") return DarkTheme;
+  if (resolvedTheme === 'dark') return DarkTheme;
 
   return LightTheme;
 }
-const selectedTheme = storageInstance?.getString(STORAGE_KEY.SELECTED_THEME) as
-  | "light"
-  | "dark"
-  | "system"
-  | undefined;
-const systemIsDark = Appearance.getColorScheme() === "dark";
-export const isDark: boolean =
-  selectedTheme === "dark"
-    ? true
-    : selectedTheme === "light"
-      ? false
-      : !!systemIsDark;

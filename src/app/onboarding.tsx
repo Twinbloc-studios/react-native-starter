@@ -126,6 +126,7 @@ const Onboarding = () => {
       <View className="left-0 right-0 py-0 dark:bg-black">
         <View className="flex-row items-center justify-center bg-black py-0 dark:bg-black">
           <Button
+            testID="onboarding-button"
             className="h-18 flex-1 rounded-none bg-black dark:bg-black"
             onPress={handleGetStarted}
             rightIcon={

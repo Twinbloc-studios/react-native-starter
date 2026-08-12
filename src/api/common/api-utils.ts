@@ -1,9 +1,9 @@
 import type {
   GetNextPageParamFunction,
   GetPreviousPageParamFunction,
-} from "@tanstack/react-query";
+} from '@tanstack/react-query';
 
-import { type PaginateQuery } from "./types";
+import { type PaginateQuery } from './types';
 
 type KeyParams = {
   [key: string]: unknown;
@@ -34,14 +34,14 @@ export function getUrlParameters(
     return null;
   }
   try {
-    const parsed = new URL(url, "http://placeholder.local");
+    const parsed = new URL(url, 'http://placeholder.local');
     const params: Record<string, string> = {};
     parsed.searchParams.forEach((value, key) => {
       params[key] = value;
     });
     return params;
   } catch {
-    const queryIndex = url.indexOf("?");
+    const queryIndex = url.indexOf('?');
     if (queryIndex < 0) {
       return {};
     }
@@ -58,52 +58,52 @@ export function getUrlParameters(
 // const params = getUrlParameters("https://api.example.com/users?offset=20&limit=10");
 // const offset = params?.offset;
 
-type PaginationDirection = "next" | "previous";
+type PaginationDirection = 'next' | 'previous';
 
 const NEXT_PARAM_KEYS = [
-  "offset",
-  "page",
-  "cursor",
-  "pageToken",
-  "page_token",
-  "after",
-  "next_cursor",
-  "nextCursor",
+  'offset',
+  'page',
+  'cursor',
+  'pageToken',
+  'page_token',
+  'after',
+  'next_cursor',
+  'nextCursor',
 ];
 const PREVIOUS_PARAM_KEYS = [
-  "offset",
-  "page",
-  "cursor",
-  "pageToken",
-  "page_token",
-  "before",
-  "prev_cursor",
-  "prevCursor",
+  'offset',
+  'page',
+  'cursor',
+  'pageToken',
+  'page_token',
+  'before',
+  'prev_cursor',
+  'prevCursor',
 ];
 
 const SECONDARY_NEXT_KEYS = [
-  "nextPage",
-  "next_page",
-  "nextCursor",
-  "next_cursor",
+  'nextPage',
+  'next_page',
+  'nextCursor',
+  'next_cursor',
 ];
 const SECONDARY_PREVIOUS_KEYS = [
-  "prevPage",
-  "prev_page",
-  "previousPage",
-  "previous_page",
-  "prevCursor",
-  "prev_cursor",
+  'prevPage',
+  'prev_page',
+  'previousPage',
+  'previous_page',
+  'prevCursor',
+  'prev_cursor',
 ];
 
 function coerceParamValue(value: unknown): string | number | null {
   if (value === null || value === undefined) {
     return null;
   }
-  if (typeof value === "number") {
+  if (typeof value === 'number') {
     return value;
   }
-  if (typeof value === "string") {
+  if (typeof value === 'string') {
     const trimmed = value.trim();
     if (!trimmed) {
       return null;
@@ -135,8 +135,8 @@ function extractParamFromValue(
   if (value === null || value === undefined) {
     return null;
   }
-  if (typeof value === "number" || typeof value === "string") {
-    if (typeof value === "string") {
+  if (typeof value === 'number' || typeof value === 'string') {
+    if (typeof value === 'string') {
       const params = getUrlParameters(value);
       const fromParams = params ? getParamFromParams(params, keys) : null;
       if (fromParams !== null) {
@@ -145,7 +145,7 @@ function extractParamFromValue(
     }
     return coerceParamValue(value);
   }
-  if (typeof value === "object") {
+  if (typeof value === 'object') {
     const obj = value as Record<string, unknown>;
     for (const key of keys) {
       if (obj[key] !== undefined) {
@@ -155,7 +155,7 @@ function extractParamFromValue(
         }
       }
     }
-    for (const linkKey of ["url", "href", "link"]) {
+    for (const linkKey of ['url', 'href', 'link']) {
       if (obj[linkKey] !== undefined) {
         const result = extractParamFromValue(obj[linkKey], keys);
         if (result !== null) {
@@ -172,9 +172,9 @@ function getPaginationParam(
   direction: PaginationDirection,
 ): string | number | null {
   const record = page as Record<string, unknown>;
-  const keys = direction === "next" ? NEXT_PARAM_KEYS : PREVIOUS_PARAM_KEYS;
+  const keys = direction === 'next' ? NEXT_PARAM_KEYS : PREVIOUS_PARAM_KEYS;
   const secondaryKeys =
-    direction === "next" ? SECONDARY_NEXT_KEYS : SECONDARY_PREVIOUS_KEYS;
+    direction === 'next' ? SECONDARY_NEXT_KEYS : SECONDARY_PREVIOUS_KEYS;
   const directValue = record?.[direction];
   const candidates: unknown[] = [directValue];
   for (const key of secondaryKeys) {
@@ -187,11 +187,11 @@ function getPaginationParam(
   }
   if (record?.links) {
     const links = record.links as Record<string, unknown>;
-    const linkKey = direction === "next" ? "next" : "prev";
+    const linkKey = direction === 'next' ? 'next' : 'prev';
     if (links?.[linkKey] !== undefined) {
       candidates.push(links[linkKey]);
     }
-    if (direction === "previous" && links?.previous !== undefined) {
+    if (direction === 'previous' && links?.previous !== undefined) {
       candidates.push(links.previous);
     }
   }
@@ -207,9 +207,9 @@ function getPaginationParam(
 export const getPreviousPageParam: GetNextPageParamFunction<
   unknown,
   PaginateQuery<unknown>
-> = (page) => getPaginationParam(page, "previous");
+> = (page) => getPaginationParam(page, 'previous');
 
 export const getNextPageParam: GetPreviousPageParamFunction<
   unknown,
   PaginateQuery<unknown>
-> = (page) => getPaginationParam(page, "next");
+> = (page) => getPaginationParam(page, 'next');

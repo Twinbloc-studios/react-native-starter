@@ -1,52 +1,52 @@
-import { MotiView as NMotiView } from "moti";
-import React from "react";
-import Svg, { Path } from "react-native-svg";
-import { withUniwind } from "uniwind";
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
+import Svg, { Path } from 'react-native-svg';
+import { withUniwind } from 'uniwind';
 
-import { colors } from "../utilities";
+import { useTween } from '@/hooks/general/use-tween';
+
+import { colors } from '../utilities';
 import {
   type IconProps,
   Label,
   Root,
   type RootProps,
   SIZE,
-} from "./toggle-shared";
+} from './toggle-shared';
 
-const MotiView = withUniwind(NMotiView);
+const AnimatedView = withUniwind(Animated.View);
 
 export const CheckboxIcon = ({ checked = false }: IconProps) => {
-  const color = checked ? colors.primaryColor : colors.charcoal[400];
+  const color = checked ? colors.primary[600] : colors.charcoal[400];
+  const progress = useTween(checked);
+
+  const boxStyle = useAnimatedStyle(() => ({
+    backgroundColor: interpolateColor(
+      progress.value,
+      [0, 1],
+      ['transparent', color],
+    ),
+    borderColor: interpolateColor(progress.value, [0, 1], ['#CCCFD6', color]),
+  }));
+
+  const checkStyle = useAnimatedStyle(() => ({ opacity: progress.value }));
+
   return (
-    <MotiView
-      style={{
-        height: SIZE,
-        width: SIZE,
-        borderColor: color,
-      }}
+    <AnimatedView
+      style={[{ height: SIZE, width: SIZE }, boxStyle]}
       className="items-center justify-center rounded-[5px] border-2"
-      from={{ backgroundColor: "transparent", borderColor: "#CCCFD6" }}
-      animate={{
-        backgroundColor: checked ? color : "transparent",
-        borderColor: color,
-      }}
-      transition={{
-        backgroundColor: { type: "timing", duration: 100 },
-        borderColor: { type: "timing", duration: 100 },
-      }}
     >
-      <MotiView
-        from={{ opacity: 0 }}
-        animate={{ opacity: checked ? 1 : 0 }}
-        transition={{ opacity: { type: "timing", duration: 100 } }}
-      >
+      <AnimatedView style={checkStyle}>
         <Svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <Path
             d="m16.726 7-.64.633c-2.207 2.212-3.878 4.047-5.955 6.158l-2.28-1.928-.69-.584L6 12.66l.683.577 2.928 2.477.633.535.591-.584c2.421-2.426 4.148-4.367 6.532-6.756l.633-.64L16.726 7Z"
-            fill={checked ? colors.primaryColor : "transparent"}
+            fill={checked ? colors.primary[600] : 'transparent'}
           />
         </Svg>
-      </MotiView>
-    </MotiView>
+      </AnimatedView>
+    </AnimatedView>
   );
 };
 

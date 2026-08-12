@@ -1,5 +1,5 @@
-import * as SecureStore from "expo-secure-store";
-import { Platform } from "react-native";
+import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
 
 /**
  * Securely store a value with a key.
@@ -7,13 +7,13 @@ import { Platform } from "react-native";
  */
 export async function setSecureItem(key: string, value: string) {
   try {
-    if (Platform.OS === "web") {
+    if (Platform.OS === 'web') {
       try {
-        if (typeof localStorage !== "undefined") {
+        if (typeof localStorage !== 'undefined') {
           localStorage.setItem(key, value);
         }
       } catch (e) {
-        console.error("Local storage is unavailable:", e);
+        console.error('Local storage is unavailable:', e);
       }
     } else {
       await SecureStore.setItemAsync(key, value);
@@ -29,13 +29,13 @@ export async function setSecureItem(key: string, value: string) {
  */
 export async function getSecureItem(key: string): Promise<string | null> {
   try {
-    if (Platform.OS === "web") {
+    if (Platform.OS === 'web') {
       try {
-        if (typeof localStorage !== "undefined") {
+        if (typeof localStorage !== 'undefined') {
           return localStorage.getItem(key);
         }
       } catch (e) {
-        console.error("Local storage is unavailable:", e);
+        console.error('Local storage is unavailable:', e);
       }
       return null;
     } else {
@@ -52,13 +52,13 @@ export async function getSecureItem(key: string): Promise<string | null> {
  */
 export async function removeSecureItem(key: string) {
   try {
-    if (Platform.OS === "web") {
+    if (Platform.OS === 'web') {
       try {
-        if (typeof localStorage !== "undefined") {
+        if (typeof localStorage !== 'undefined') {
           localStorage.removeItem(key);
         }
       } catch (e) {
-        console.error("Local storage is unavailable:", e);
+        console.error('Local storage is unavailable:', e);
       }
     } else {
       await SecureStore.deleteItemAsync(key);
@@ -68,13 +68,6 @@ export async function removeSecureItem(key: string) {
     throw error;
   }
 }
-
-// Specific helpers for Auth Tokens to ensure consistency
-const TOKEN_KEY = "auth_token";
-
-export const saveToken = (token: string) => setSecureItem(TOKEN_KEY, token);
-export const getToken = () => getSecureItem(TOKEN_KEY);
-export const deleteToken = () => removeSecureItem(TOKEN_KEY);
 
 export const secureStorage = {
   getItem: getSecureItem,

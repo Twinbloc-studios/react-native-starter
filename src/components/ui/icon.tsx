@@ -1,13 +1,13 @@
-import { type ImageSource } from "expo-image";
-import * as React from "react";
-import { withUniwind } from "uniwind";
+import { type ImageSource } from 'expo-image';
+import * as React from 'react';
+import { withUniwind } from 'uniwind';
 
-import { SafeFastImage } from "./safe-fast-image";
+import { SafeFastImage } from './safe-fast-image';
 
 type Props = {
   icon: ImageSource;
   size?: number;
-  color?: string | "original";
+  color?: string | 'original';
 } & React.ComponentProps<typeof SafeFastImage>;
 
 /**
@@ -19,7 +19,7 @@ type Props = {
 const IconBase = ({
   icon,
   size = 24,
-  color = "white",
+  color = 'white',
   style,
   ...rest
 }: Props) => {
@@ -28,7 +28,7 @@ const IconBase = ({
       source={icon}
       style={[{ width: size, height: size }, style]}
       contentFit="contain"
-      tintColor={color === "original" ? undefined : color}
+      tintColor={color === 'original' ? undefined : color}
       {...rest}
     />
   );

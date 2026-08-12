@@ -1,5 +1,10 @@
-import { MotiView as NMotiView } from 'moti';
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
+
+import { useTween } from '@/hooks/general/use-tween';
 
 import { colors } from '../utilities';
 import {
@@ -10,31 +15,28 @@ import {
   SIZE,
 } from './toggle-shared';
 
-const MotiView = withUniwind(NMotiView);
+const AnimatedView = withUniwind(Animated.View);
 
 export const RadioIcon = ({ checked = false }: IconProps) => {
-  const color = checked ? colors.primaryColor : colors.charcoal[400];
+  const color = checked ? colors.primary[600] : colors.charcoal[400];
+  const progress = useTween(checked);
+
+  const ringStyle = useAnimatedStyle(() => ({
+    borderColor: interpolateColor(progress.value, [0, 1], ['#CCCFD6', color]),
+  }));
+
+  const dotStyle = useAnimatedStyle(() => ({ opacity: progress.value }));
+
   return (
-    <MotiView
-      style={{
-        height: SIZE,
-        width: SIZE,
-        borderColor: color,
-      }}
+    <AnimatedView
+      style={[{ height: SIZE, width: SIZE }, ringStyle]}
       className="items-center justify-center rounded-[20px] border-2 bg-transparent"
-      from={{ borderColor: '#CCCFD6' }}
-      animate={{
-        borderColor: color,
-      }}
-      transition={{ borderColor: { duration: 100, type: 'timing' } }}
     >
-      <MotiView
-        className={`size-2.5 rounded-[10px] ${checked && 'bg-primaryColor dark:bg-white'} `}
-        from={{ opacity: 0 }}
-        animate={{ opacity: checked ? 1 : 0 }}
-        transition={{ opacity: { duration: 50, type: 'timing' } }}
+      <AnimatedView
+        className={`size-2.5 rounded-[10px] ${checked && 'bg-primary-600 dark:bg-white'} `}
+        style={dotStyle}
       />
-    </MotiView>
+    </AnimatedView>
   );
 };
 

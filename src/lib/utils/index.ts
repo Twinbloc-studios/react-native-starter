@@ -1,2 +1,2 @@
-export * from "./secure-store";
-export * from "./storage";
+export * from './secure-store';
+export * from './storage';

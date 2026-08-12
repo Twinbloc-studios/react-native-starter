@@ -38,7 +38,9 @@
   "overrides": {
     "eslint-plugin-react-native-a11y": {
       "eslint": "$eslint"
-    }
+    },
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
   },
   "dependencies": {
     "@dev-plugins/react-query": "^0.4.0",

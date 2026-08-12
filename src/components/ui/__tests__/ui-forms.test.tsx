@@ -23,8 +23,7 @@ const findAncestorWithClass = (
   className: string,
 ): { props: { className?: string } } | null => {
   let current = node?.parent as
-    | ({ props: { className?: string } } & { parent: unknown })
-    | undefined;
+    ({ props: { className?: string } } & { parent: unknown }) | undefined;
   while (current) {
     if (current.props.className?.includes(className)) return current;
     current = current.parent as never;

@@ -37,15 +37,11 @@ function toApiError(error: unknown): ApiError {
         ? responseData
         : (
             responseData as
-              | { message?: string; error?: string }
-              | null
-              | undefined
+              { message?: string; error?: string } | null | undefined
           )?.message ||
           (
             responseData as
-              | { message?: string; error?: string }
-              | null
-              | undefined
+              { message?: string; error?: string } | null | undefined
           )?.error ||
           error.message ||
           'Request failed';

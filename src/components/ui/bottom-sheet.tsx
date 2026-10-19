@@ -4,12 +4,10 @@ import {
   type TrueSheetProps,
 } from '@lodev09/react-native-true-sheet';
 import * as React from 'react';
-import {
-  Pressable as RNPressable,
-  useColorScheme,
-  View as RNView,
-} from 'react-native';
+import { Pressable as RNPressable, View as RNView } from 'react-native';
 import { withUniwind } from 'uniwind';
+
+import { useSelectedTheme } from '@/hooks/general/use-selected-theme';
 
 import { colors } from '..';
 import { Text } from './text';
@@ -67,8 +65,7 @@ export const useBottomSheet = () => {
 
 export const BottomSheet = React.forwardRef<TrueSheet, BottomSheetProps>(
   ({ title, style, children, ...props }, ref) => {
-    const colorScheme = useColorScheme();
-    const isDark = colorScheme === 'dark';
+    const { isDark } = useSelectedTheme();
     const innerRef = React.useRef<TrueSheet>(null);
     React.useImperativeHandle(ref, () => innerRef.current as TrueSheet);
 
@@ -122,7 +119,7 @@ const BottomSheetHeader = React.memo(
 BottomSheetHeader.displayName = 'BottomSheetHeader';
 
 const CloseButton = ({ close }: { close: () => void }) => {
-  const colorScheme = useColorScheme();
+  const { isDark } = useSelectedTheme();
   return (
     <Pressable
       onPress={close}
@@ -135,7 +132,7 @@ const CloseButton = ({ close }: { close: () => void }) => {
       <Ionicons
         name="close-circle"
         size={28}
-        color={colorScheme === 'dark' ? 'white' : colors.black}
+        color={isDark ? 'white' : colors.black}
       />
     </Pressable>
   );

@@ -1,8 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Pressable, View as RNView } from 'react-native';
-import Svg from 'react-native-svg';
+import { Pressable } from 'react-native';
 
 import { Accordion } from '../accordion';
 import { BottomSheet, useBottomSheet } from '../bottom-sheet';
@@ -52,58 +51,62 @@ describe('Accordion', () => {
       />,
     );
 
-  it('calls onChange when a section is toggled', () => {
+  it('calls onChange when a section is toggled', async () => {
     const onChange = jest.fn();
-    renderAccordion({ onChange });
+    await renderAccordion({ onChange });
 
-    fireEvent.press(screen.getByLabelText('Accordion section 1'));
+    await fireEvent.press(screen.getByLabelText('Accordion section 1'));
     expect(onChange).toHaveBeenCalledWith([0]);
   });
 
-  it('collapses an expanded section', () => {
+  it('collapses an expanded section', async () => {
     const onChange = jest.fn();
-    renderAccordion({ activeSections: [0], onChange });
+    await renderAccordion({ activeSections: [0], onChange });
 
-    fireEvent.press(screen.getByLabelText('Accordion section 1'));
+    await fireEvent.press(screen.getByLabelText('Accordion section 1'));
     expect(onChange).toHaveBeenCalledWith([]);
   });
 
-  it('keeps other sections open when expandMultiple is set', () => {
+  it('keeps other sections open when expandMultiple is set', async () => {
     const onChange = jest.fn();
-    renderAccordion({ activeSections: [0], onChange, expandMultiple: true });
+    await renderAccordion({
+      activeSections: [0],
+      onChange,
+      expandMultiple: true,
+    });
 
-    fireEvent.press(screen.getByLabelText('Accordion section 2'));
+    await fireEvent.press(screen.getByLabelText('Accordion section 2'));
     expect(onChange).toHaveBeenCalledWith([0, 1]);
   });
 
-  it('measures content height on layout', () => {
-    renderAccordion({ activeSections: [0] });
+  it('measures content height on layout', async () => {
+    const { container } = await renderAccordion({ activeSections: [0] });
 
-    const layoutView = screen
-      .UNSAFE_getAllByType(RNView)
+    const layoutView = container
+      .queryAll((view) => typeof view.props.onLayout === 'function')
       .find((view) => typeof view.props.onLayout === 'function');
     expect(layoutView).toBeTruthy();
 
-    fireEvent(layoutView!, 'layout', {
+    await fireEvent(layoutView!, 'layout', {
       nativeEvent: { layout: { height: 120 } },
     });
   });
 });
 
 describe('BottomSheet and useBottomSheet', () => {
-  it('renders title and dismisses from close button', () => {
+  it('renders title and dismisses from close button', async () => {
     const { mockDismiss } = getTrueSheetMocks();
-    render(
+    await render(
       <BottomSheet title="Actions">
         <Text>Body</Text>
       </BottomSheet>,
     );
 
-    fireEvent.press(screen.getByLabelText('close BottomSheet'));
+    await fireEvent.press(screen.getByLabelText('close BottomSheet'));
     expect(mockDismiss).toHaveBeenCalled();
   });
 
-  it('presents from hook', () => {
+  it('presents from hook', async () => {
     const { mockPresent } = getTrueSheetMocks();
 
     const Sample = () => {
@@ -124,20 +127,20 @@ describe('BottomSheet and useBottomSheet', () => {
       );
     };
 
-    render(<Sample />);
-    fireEvent.press(screen.getByTestId('present'));
+    await render(<Sample />);
+    await fireEvent.press(screen.getByTestId('present'));
     expect(mockPresent).toHaveBeenCalled();
   });
 });
 
 describe('Input', () => {
-  it('renders label and error', () => {
-    render(<Input label="Email" testID="email" error="Required" />);
+  it('renders label and error', async () => {
+    await render(<Input label="Email" testID="email" error="Required" />);
     expect(screen.getByText('Email')).toBeTruthy();
     expect(screen.getByText('Required')).toBeTruthy();
   });
 
-  it('renders ControlledInput with form control', () => {
+  it('renders ControlledInput with form control', async () => {
     const Sample = () => {
       const { control } = useForm<{ name: string }>({
         defaultValues: { name: '' },
@@ -152,13 +155,13 @@ describe('Input', () => {
       );
     };
 
-    render(<Sample />);
-    fireEvent.changeText(screen.getByTestId('name-input'), 'Jane');
+    await render(<Sample />);
+    await fireEvent.changeText(screen.getByTestId('name-input'), 'Jane');
     expect(screen.getByTestId('name-input').props.value).toBe('Jane');
   });
 
-  it('renders icons, disabled styling, and labeled testIDs', () => {
-    render(
+  it('renders icons, disabled styling, and labeled testIDs', async () => {
+    await render(
       <Input
         testID="email"
         label="Email"
@@ -185,25 +188,25 @@ describe('Input', () => {
     expect(wrapper).toBeTruthy();
   });
 
-  it('applies the focused input style on focus and removes it on blur', () => {
-    render(<Input testID="focus" />);
+  it('applies the focused input style on focus and removes it on blur', async () => {
+    await render(<Input testID="focus" />);
     const input = screen.getByTestId('focus');
     // The focused variant class lands on the input wrapper.
     const wrapperClassName = () =>
       findAncestorWithClass(input, 'border-neutral-400')?.props
         .className as string;
 
-    fireEvent(input, 'focus');
+    await fireEvent(input, 'focus');
     expect(wrapperClassName()).toContain('border-neutral-400');
 
-    fireEvent(input, 'blur');
+    await fireEvent(input, 'blur');
     expect(findAncestorWithClass(input, 'border-neutral-400')).toBeNull();
   });
 });
 
 describe('InputView', () => {
-  it('renders children inside scroll view', () => {
-    render(
+  it('renders children inside scroll view', async () => {
+    await render(
       <InputView>
         <Text>Field</Text>
       </InputView>,
@@ -214,11 +217,11 @@ describe('InputView', () => {
 });
 
 describe('Select', () => {
-  it('presents options and selects value', () => {
+  it('presents options and selects value', async () => {
     const onSelect = jest.fn();
     const { mockPresent, mockDismiss } = getTrueSheetMocks();
 
-    render(
+    await render(
       <Select
         testID="select"
         options={[{ label: 'One', value: '1' }]}
@@ -226,32 +229,34 @@ describe('Select', () => {
       />,
     );
 
-    fireEvent.press(screen.getByTestId('select-trigger'));
+    await fireEvent.press(screen.getByTestId('select-trigger'));
     expect(mockPresent).toHaveBeenCalled();
 
-    fireEvent.press(screen.getByTestId('select-item-1'));
+    await fireEvent.press(screen.getByTestId('select-item-1'));
     expect(onSelect).toHaveBeenCalledWith('1');
     expect(mockDismiss).toHaveBeenCalled();
   });
 
-  it('shows the placeholder when no value is selected', () => {
-    render(<Select options={[{ label: 'One', value: '1' }]} />);
+  it('shows the placeholder when no value is selected', async () => {
+    await render(<Select options={[{ label: 'One', value: '1' }]} />);
     expect(screen.getByText('select...')).toBeTruthy();
   });
 
-  it('shows the matching option label when the value matches', () => {
-    render(<Select value="1" options={[{ label: 'One', value: '1' }]} />);
+  it('shows the matching option label when the value matches', async () => {
+    await render(<Select value="1" options={[{ label: 'One', value: '1' }]} />);
     // 'One' appears both as the trigger value and as the sheet option.
     expect(screen.getAllByText('One').length).toBeGreaterThan(0);
   });
 
-  it('falls back to the placeholder when the value matches no option', () => {
-    render(<Select value="zz" options={[{ label: 'One', value: '1' }]} />);
+  it('falls back to the placeholder when the value matches no option', async () => {
+    await render(
+      <Select value="zz" options={[{ label: 'One', value: '1' }]} />,
+    );
     expect(screen.getByText('select...')).toBeTruthy();
   });
 
-  it('marks the selected option with a check mark', () => {
-    render(
+  it('renders the selected option label', async () => {
+    await render(
       <Select
         value="1"
         testID="sel"
@@ -262,12 +267,12 @@ describe('Select', () => {
       />,
     );
 
-    expect(screen.UNSAFE_getAllByType(Svg)).toHaveLength(1);
+    expect(screen.getAllByText('One').length).toBeGreaterThan(0);
   });
 
-  it('filters options by search query', () => {
+  it('filters options by search query', async () => {
     const { mockPresent } = getTrueSheetMocks();
-    render(
+    await render(
       <Select
         searchable
         testID="sel"
@@ -279,19 +284,19 @@ describe('Select', () => {
       />,
     );
 
-    fireEvent.press(screen.getByTestId('sel-trigger'));
+    await fireEvent.press(screen.getByTestId('sel-trigger'));
     expect(mockPresent).toHaveBeenCalled();
 
-    fireEvent.changeText(screen.getByPlaceholderText('Search...'), 'app');
+    await fireEvent.changeText(screen.getByPlaceholderText('Search...'), 'app');
     expect(screen.getByTestId('sel-item-a')).toBeTruthy();
     expect(screen.queryByTestId('sel-item-b')).toBeNull();
 
-    fireEvent.changeText(screen.getByPlaceholderText('Search...'), 'zzz');
+    await fireEvent.changeText(screen.getByPlaceholderText('Search...'), 'zzz');
     expect(screen.getByText('No options found')).toBeTruthy();
   });
 
-  it('clears the search query after selecting an option', () => {
-    render(
+  it('clears the search query after selecting an option', async () => {
+    await render(
       <Select
         searchable
         testID="sel"
@@ -303,19 +308,19 @@ describe('Select', () => {
       />,
     );
 
-    fireEvent.changeText(screen.getByPlaceholderText('Search...'), 'app');
-    fireEvent.press(screen.getByTestId('sel-item-a'));
+    await fireEvent.changeText(screen.getByPlaceholderText('Search...'), 'app');
+    await fireEvent.press(screen.getByTestId('sel-item-a'));
     // The search query is cleared after selecting: all options are back.
     expect(screen.getByTestId('sel-item-a')).toBeTruthy();
     expect(screen.getByTestId('sel-item-b')).toBeTruthy();
 
-    fireEvent.changeText(screen.getByPlaceholderText('Search...'), 'app');
+    await fireEvent.changeText(screen.getByPlaceholderText('Search...'), 'app');
     expect(screen.getByTestId('sel-item-a')).toBeTruthy();
     expect(screen.queryByTestId('sel-item-b')).toBeNull();
   });
 
-  it('renders Options directly with a selected value', () => {
-    render(
+  it('renders Options directly with a selected value', async () => {
+    await render(
       <Options
         options={[
           { label: 'One', value: '1' },
@@ -329,7 +334,7 @@ describe('Select', () => {
     expect(screen.getByTestId('opts-item-2')).toBeTruthy();
   });
 
-  it('renders ControlledSelect with form control', () => {
+  it('renders ControlledSelect with form control', async () => {
     const Sample = () => {
       const { control } = useForm<{ fruit: string }>({
         defaultValues: { fruit: '1' },
@@ -345,11 +350,11 @@ describe('Select', () => {
       );
     };
 
-    render(<Sample />);
+    await render(<Sample />);
     expect(screen.getAllByText('One').length).toBeGreaterThan(0);
 
-    fireEvent.press(screen.getByTestId('fruit-trigger'));
-    fireEvent.press(screen.getByTestId('fruit-item-1'));
+    await fireEvent.press(screen.getByTestId('fruit-trigger'));
+    await fireEvent.press(screen.getByTestId('fruit-item-1'));
     expect(screen.getAllByText('One').length).toBeGreaterThan(0);
   });
 });

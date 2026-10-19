@@ -31,7 +31,7 @@ const Onboarding = () => {
                 color="white"
               />
             </View>
-            <Text className="text-xs font-bold uppercase tracking-tight text-white">
+            <Text className="text-xs font-bold tracking-tight text-white uppercase">
               Twinbloc
             </Text>
           </View>
@@ -43,11 +43,11 @@ const Onboarding = () => {
         {/* Hero Section */}
         <View className="px-8 pb-4">
           <View className="items-center">
-            <Text className="tracking text-center text-[48px] font-bold uppercase leading-[0.9] text-white">
+            <Text className="tracking text-center text-[48px] leading-[0.9] font-bold text-white uppercase">
               Twinbloc Studios
             </Text>
             <View className="mt-1 h-1 w-20 bg-white" />
-            <Text className="mt-5 text-center text-xs font-medium uppercase tracking-[0.2em] text-white/70">
+            <Text className="mt-5 text-center text-xs font-medium tracking-[0.2em] text-white/70 uppercase">
               The ultimate React Native starter{'\n'}kit for professionals.
             </Text>
           </View>
@@ -58,20 +58,20 @@ const Onboarding = () => {
           {/* Card 1 */}
           <View className="relative border-x-2 border-t-2 border-white bg-black p-8">
             <View className="relative flex-row items-start justify-between">
-              <Text className="flex-1 text-xl font-bold uppercase text-white">
+              <Text className="flex-1 text-xl font-bold text-white uppercase">
                 Production-Ready{'\n'}Architecture
               </Text>
             </View>
             <Text className="mt-2 text-xs font-medium text-white/60">
               Scalable, modular folder structure included.
             </Text>
-            <View className="absolute -right-2 -top-5 h-14 w-14 items-center justify-center bg-white shadow-lg">
+            <View className="absolute -top-5 -right-2 h-14 w-14 items-center justify-center bg-white shadow-lg">
               <Icon
                 icon={require('../../assets/images/onboarding/architecture.svg')}
                 size={24}
                 color="black"
               />
-              <View className="absolute left-1 top-1 h-14 w-14 bg-white/30" />
+              <View className="absolute top-1 left-1 h-14 w-14 bg-white/30" />
             </View>
           </View>
 
@@ -79,10 +79,10 @@ const Onboarding = () => {
           <View className="border-x-2 border-t-2 border-white bg-black p-8">
             <View className="flex-row items-start justify-between">
               <View className="flex-1">
-                <Text className="text-xl font-bold uppercase text-white">
+                <Text className="text-xl font-bold text-white uppercase">
                   Pre-configured
                 </Text>
-                <Text className="text-xl font-bold uppercase text-white">
+                <Text className="text-xl font-bold text-white uppercase">
                   CI/CD
                 </Text>
               </View>
@@ -90,30 +90,30 @@ const Onboarding = () => {
             <Text className="mt-2 text-xs font-medium text-white/60">
               Deploy faster with built-in automated pipelines.
             </Text>
-            <View className="absolute -left-2 -top-5 h-14 w-14 items-center justify-center bg-white shadow-lg">
+            <View className="absolute -top-5 -left-2 h-14 w-14 items-center justify-center bg-white shadow-lg">
               <Icon
                 icon={require('../../assets/images/onboarding/rocket.svg')}
                 size={24}
                 color="black"
               />
-              <View className="absolute left-1 top-1 h-14 w-14 bg-white/30" />
+              <View className="absolute top-1 left-1 h-14 w-14 bg-white/30" />
             </View>
           </View>
 
           {/* Card 3 */}
           <View className="border-2 border-white bg-black p-8">
             <View className="flex-row items-start justify-between">
-              <Text className="flex-1 text-xl font-bold uppercase text-white">
+              <Text className="flex-1 text-xl font-bold text-white uppercase">
                 Comprehensive{'\n'}Documentation
               </Text>
             </View>
-            <View className="absolute -right-2 -top-5 h-14 w-14 items-center justify-center bg-white shadow-lg">
+            <View className="absolute -top-5 -right-2 h-14 w-14 items-center justify-center bg-white shadow-lg">
               <Icon
                 icon={require('../../assets/images/onboarding/book.svg')}
                 size={24}
                 color="black"
               />
-              <View className="absolute left-1 top-1 h-14 w-14 bg-white/30" />
+              <View className="absolute top-1 left-1 h-14 w-14 bg-white/30" />
             </View>
             <Text className="mt-2 text-xs font-medium text-white/60">
               Every component and utility explained in detail.
@@ -123,7 +123,7 @@ const Onboarding = () => {
       </ScrollView>
 
       {/* Fixed Bottom Section */}
-      <View className="left-0 right-0 py-0 dark:bg-black">
+      <View className="right-0 left-0 py-0 dark:bg-black">
         <View className="flex-row items-center justify-center bg-black py-0 dark:bg-black">
           <Button
             testID="onboarding-button"
@@ -137,16 +137,16 @@ const Onboarding = () => {
               />
             }
           >
-            <Text className="text-sm font-bold uppercase text-white">
+            <Text className="text-sm font-bold text-white uppercase">
               Get Started
             </Text>
           </Button>
           <Button
             variant="default"
-            className="w-32.5 h-18 rounded-none bg-white"
+            className="h-18 w-32.5 rounded-none bg-white"
             onPress={() => Linking.openURL('https://rn-starter.twinbloc.org')}
           >
-            <Text className="text-sm font-bold uppercase text-black dark:text-black">
+            <Text className="text-sm font-bold text-black uppercase dark:text-black">
               Docs
             </Text>
           </Button>

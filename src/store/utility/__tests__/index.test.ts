@@ -49,11 +49,11 @@ describe('utility store', () => {
     );
   });
 
-  it('exposes selector-based access via createSelectors', () => {
+  it('exposes selector-based access via createSelectors', async () => {
     setSizeScale(2);
 
     // createSelectors .use.* methods are hooks — read through renderHook.
-    const { result } = renderHook(() => useUtility.use.sizeScale());
+    const { result } = await renderHook(() => useUtility.use.sizeScale());
     expect(result.current).toBe(2);
   });
 });

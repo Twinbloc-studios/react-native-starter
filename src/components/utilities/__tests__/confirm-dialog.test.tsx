@@ -67,8 +67,8 @@ describe('confirmDialog', () => {
       onConfirm,
     });
 
-    render(lastCustomBody()!);
-    fireEvent.press(screen.getByLabelText('Yes'));
+    await render(lastCustomBody()!);
+    await fireEvent.press(screen.getByLabelText('Yes'));
 
     await waitFor(() => expect(onConfirm).toHaveBeenCalledTimes(1));
     await waitFor(() =>
@@ -90,14 +90,14 @@ describe('confirmDialog', () => {
     });
     confirmDialog({ description: 'Save?', confirmLabel: 'Save', onConfirm });
 
-    render(lastCustomBody()!);
-    fireEvent.press(screen.getByLabelText('Save'));
+    await render(lastCustomBody()!);
+    await fireEvent.press(screen.getByLabelText('Save'));
 
     await waitFor(() => expect(toast.update).toHaveBeenCalled());
     expect(onConfirm).toHaveBeenCalledTimes(1);
   });
 
-  it('calls onCancel and dismisses the toast when cancelled', () => {
+  it('calls onCancel and dismisses the toast when cancelled', async () => {
     const onCancel = jest.fn();
     confirmDialog({
       description: 'Proceed?',
@@ -107,8 +107,8 @@ describe('confirmDialog', () => {
       onCancel,
     });
 
-    render(lastCustomBody()!);
-    fireEvent.press(screen.getByLabelText('No'));
+    await render(lastCustomBody()!);
+    await fireEvent.press(screen.getByLabelText('No'));
 
     expect(onCancel).toHaveBeenCalledTimes(1);
     expect(toast.dismiss).toHaveBeenCalledWith('toast-id-1');
@@ -129,8 +129,8 @@ describe('confirmDialog', () => {
       expect.objectContaining({ backgroundColor: 'red' }),
     );
 
-    render(lastCustomBody()!);
-    fireEvent.press(screen.getByLabelText('Delete'));
+    await render(lastCustomBody()!);
+    await fireEvent.press(screen.getByLabelText('Delete'));
 
     await waitFor(() =>
       expect(toast.update).toHaveBeenCalledWith(

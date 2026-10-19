@@ -4,16 +4,11 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
 } from 'react-native-reanimated';
-import { withUniwind } from 'uniwind';
 
 import { useTween } from '@/hooks/general/use-tween';
 
 import { colors, IS_IOS } from '../utilities';
 import { type IconProps, Label, Root, type RootProps } from './toggle-shared';
-
-const View = withUniwind(RNView);
-const AnimatedView = withUniwind(Animated.View);
-const StyledSwitch = withUniwind(RNSwitch);
 
 const WIDTH = 50;
 const HEIGHT = 28;
@@ -42,7 +37,11 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
   const onTarget = I18nManager.isRTL ? THUMB_OFFSET : -THUMB_OFFSET;
 
   const thumbStyle = useAnimatedStyle(() => ({
-    translateX: interpolate(progress.value, [0, 1], [offTarget, onTarget]),
+    transform: [
+      {
+        translateX: interpolate(progress.value, [0, 1], [offTarget, onTarget]),
+      },
+    ],
   }));
 
   if (IS_IOS) {
@@ -51,8 +50,10 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
     const iosScaleY = HEIGHT / 38;
 
     return (
-      <View style={{ width: WIDTH, height: HEIGHT, justifyContent: 'center' }}>
-        <StyledSwitch
+      <RNView
+        style={{ width: WIDTH, height: HEIGHT, justifyContent: 'center' }}
+      >
+        <RNSwitch
           value={isChecked}
           disabled={ctx?.disabled ?? undefined}
           onValueChange={(value) => {
@@ -69,24 +70,24 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
           accessible={false}
           style={{ transform: [{ scaleX: iosScaleX }, { scaleY: iosScaleY }] }}
         />
-      </View>
+      </RNView>
     );
   }
 
   const backgroundColor = checked ? colors.primary[600] : colors.charcoal[400];
 
   return (
-    <View className="w-12.5 justify-center">
-      <View className="overflow-hidden rounded-full">
-        <View
+    <RNView className="w-12.5 justify-center">
+      <RNView className="overflow-hidden rounded-full">
+        <RNView
           style={{
             width: WIDTH,
             height: HEIGHT,
             backgroundColor,
           }}
         />
-      </View>
-      <AnimatedView
+      </RNView>
+      <Animated.View
         style={[
           {
             height: THUMB_HEIGHT,
@@ -99,7 +100,7 @@ export const SwitchIcon = ({ checked = false }: IconProps) => {
           thumbStyle,
         ]}
       />
-    </View>
+    </RNView>
   );
 };
 

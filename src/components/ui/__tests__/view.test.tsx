@@ -32,8 +32,8 @@ const applied = (animation: unknown) =>
   (animation as { applied?: Record<string, unknown> } | null)?.applied;
 
 describe('View', () => {
-  it('renders children as a plain view by default', () => {
-    render(
+  it('renders children as a plain view by default', async () => {
+    await render(
       <View testID="plain">
         <Text>Hello</Text>
       </View>,
@@ -41,8 +41,8 @@ describe('View', () => {
     expect(screen.getByTestId('plain')).toBeTruthy();
   });
 
-  it('renders an animated view with the fade preset when animatePresence is on', () => {
-    render(
+  it('renders an animated view with the fade preset when animatePresence is on', async () => {
+    await render(
       <View testID="anim" animatePresence motionPreset="fade">
         <Text>Content</Text>
       </View>,
@@ -57,8 +57,8 @@ describe('View', () => {
     expect(animationName(node!.props!.exiting)).toBe('FadeOut');
   });
 
-  it('lets motionProps override the preset animations', () => {
-    render(
+  it('lets motionProps override the preset animations', async () => {
+    await render(
       <View
         testID="anim"
         animatePresence
@@ -77,8 +77,8 @@ describe('View', () => {
     expect(animationName(node!.props!.exiting)).toBe('FadeOutUp');
   });
 
-  it('applies the scale and fadeDown presets', () => {
-    render(
+  it('applies the scale and fadeDown presets', async () => {
+    await render(
       <>
         <View testID="scale" animatePresence motionPreset="scale" />
         <View testID="fade-down" animatePresence motionPreset="fadeDown" />
@@ -94,8 +94,8 @@ describe('View', () => {
     expect(animationName(fadeDown!.props!.exiting)).toBe('FadeOutDown');
   });
 
-  it('renders nothing when animatePresence is on and not visible', () => {
-    render(
+  it('renders nothing when animatePresence is on and not visible', async () => {
+    await render(
       <View animatePresence isVisible={false}>
         <Text>Hidden</Text>
       </View>,
@@ -103,8 +103,8 @@ describe('View', () => {
     expect(screen.queryByText('Hidden')).toBeNull();
   });
 
-  it('animates layout changes with the linear layout preset', () => {
-    render(
+  it('animates layout changes with the linear layout preset', async () => {
+    await render(
       <View testID="layout" layoutPreset="linear">
         <Text>Moves</Text>
       </View>,
@@ -121,8 +121,8 @@ describe('View', () => {
     expect(screen.getByText('Moves')).toBeTruthy();
   });
 
-  it('applies the spring layout preset', () => {
-    render(<View testID="layout" layoutPreset="spring" />);
+  it('applies the spring layout preset', async () => {
+    await render(<View testID="layout" layoutPreset="spring" />);
 
     const node = findNode(
       screen.toJSON() as JsonNode | null,
@@ -136,8 +136,8 @@ describe('View', () => {
     });
   });
 
-  it('lets motionProps.layout override the layout preset', () => {
-    render(
+  it('lets motionProps.layout override the layout preset', async () => {
+    await render(
       <View
         testID="layout"
         layoutPreset="linear"
@@ -152,8 +152,8 @@ describe('View', () => {
     expect(node!.props!.layout).toBe(LinearTransition);
   });
 
-  it('applies the delay to the entering and exiting animations', () => {
-    render(
+  it('applies the delay to the entering and exiting animations', async () => {
+    await render(
       <View testID="anim" animatePresence motionPreset="fade" delay={300}>
         <Text>Delayed</Text>
       </View>,
@@ -174,8 +174,8 @@ describe('View', () => {
     });
   });
 
-  it('applies the delay to the layout animation', () => {
-    render(
+  it('applies the delay to the layout animation', async () => {
+    await render(
       <View testID="layout" layoutPreset="linear" delay={120}>
         <Text>Staggered</Text>
       </View>,

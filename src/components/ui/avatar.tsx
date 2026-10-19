@@ -7,12 +7,9 @@ import {
   type ViewProps,
 } from 'react-native';
 import { twMerge } from 'tailwind-merge';
-import { withUniwind } from 'uniwind';
 
 import { SafeFastImage, type SafeFastImageProps } from './safe-fast-image';
 import { Text } from './text';
-
-const View = withUniwind(RNView);
 
 const FALLBACK_IMAGE = require('@/assets/images/icon.png');
 
@@ -73,7 +70,10 @@ export interface AvatarProps extends ViewProps {
   textClassName?: string;
 }
 
-export const Avatar = React.forwardRef<RNView, AvatarProps>(
+export const Avatar = React.forwardRef<
+  React.ElementRef<typeof RNView>,
+  AvatarProps
+>(
   (
     {
       source,
@@ -165,7 +165,7 @@ export const Avatar = React.forwardRef<RNView, AvatarProps>(
       );
 
     return (
-      <View
+      <RNView
         ref={ref}
         className={twMerge(
           'items-center justify-center overflow-hidden bg-neutral-400 dark:bg-neutral-700',
@@ -176,7 +176,7 @@ export const Avatar = React.forwardRef<RNView, AvatarProps>(
       >
         {content}
         {children}
-      </View>
+      </RNView>
     );
   },
 );

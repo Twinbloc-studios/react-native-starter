@@ -41,10 +41,10 @@ describe('useGetUser', () => {
     queryClient.clear();
   });
 
-  it('does not fetch when the user is not authenticated', () => {
+  it('does not fetch when the user is not authenticated', async () => {
     mockUseAuth.mockReturnValue({ auth_data: null });
 
-    const { result } = renderHook(() => useGetUser(), { wrapper });
+    const { result } = await renderHook(() => useGetUser(), { wrapper });
 
     expect(result.current.isLoading).toBe(false);
     expect(mockExecuteRest).not.toHaveBeenCalled();
@@ -56,7 +56,7 @@ describe('useGetUser', () => {
     });
     mockExecuteRest.mockResolvedValue({ data: USER });
 
-    const { result } = renderHook(() => useGetUser(), { wrapper });
+    const { result } = await renderHook(() => useGetUser(), { wrapper });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(result.current.data).toEqual(USER);
@@ -69,7 +69,7 @@ describe('useGetUser', () => {
     });
     mockExecuteRest.mockResolvedValue({ data: USER });
 
-    const { result } = renderHook(() => useGetUser('u1'), { wrapper });
+    const { result } = await renderHook(() => useGetUser('u1'), { wrapper });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(result.current.isCurrentUser).toBe(true);
@@ -81,7 +81,9 @@ describe('useGetUser', () => {
     });
     mockExecuteRest.mockResolvedValue({ data: USER });
 
-    const { result } = renderHook(() => useGetUser('other-id'), { wrapper });
+    const { result } = await renderHook(() => useGetUser('other-id'), {
+      wrapper,
+    });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(result.current.isCurrentUser).toBe(false);
@@ -93,7 +95,7 @@ describe('useGetUser', () => {
     });
     mockExecuteRest.mockRejectedValue(new Error('network'));
 
-    const { result } = renderHook(() => useGetUser(), { wrapper });
+    const { result } = await renderHook(() => useGetUser(), { wrapper });
 
     await waitFor(() => expect(result.current.isError).toBe(true));
   });

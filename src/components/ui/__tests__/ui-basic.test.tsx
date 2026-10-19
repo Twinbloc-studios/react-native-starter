@@ -17,24 +17,24 @@ import { Text } from '../text';
 import { Label as ToggleLabel, Root as ToggleRoot } from '../toggle-shared';
 
 describe('Button', () => {
-  it('renders label and handles loading state', () => {
-    const { getByTestId, queryByTestId, rerender } = render(
+  it('renders label and handles loading state', async () => {
+    const { getByTestId, queryByTestId, rerender } = await render(
       <Button label="Save" testID="button" />,
     );
 
     expect(screen.getByText('Save')).toBeTruthy();
     expect(queryByTestId('button-activity-indicator')).toBeNull();
 
-    rerender(<Button label="Save" testID="button" loading />);
+    await rerender(<Button label="Save" testID="button" loading />);
     expect(getByTestId('button-activity-indicator')).toBeTruthy();
     expect(queryByTestId('button-label')).toBeNull();
   });
 });
 
 describe('Toggle shared', () => {
-  it('toggles Root on press', () => {
+  it('toggles Root on press', async () => {
     const onChange = jest.fn();
-    const { getByLabelText } = render(
+    const { getByLabelText } = await render(
       <ToggleRoot
         checked={false}
         onChange={onChange}
@@ -45,12 +45,12 @@ describe('Toggle shared', () => {
       </ToggleRoot>,
     );
 
-    fireEvent.press(getByLabelText('toggle-root'));
+    await fireEvent.press(getByLabelText('toggle-root'));
     expect(onChange).toHaveBeenCalledWith(true);
   });
 
-  it('renders Label text', () => {
-    const { getByText } = render(
+  it('renders Label text', async () => {
+    const { getByText } = await render(
       <ToggleLabel text="Label" testID="toggle-label" />,
     );
     expect(getByText('Label')).toBeTruthy();
@@ -58,9 +58,9 @@ describe('Toggle shared', () => {
 });
 
 describe('Checkbox', () => {
-  it('renders label and calls onChange', () => {
+  it('renders label and calls onChange', async () => {
     const onChange = jest.fn();
-    const { getByTestId } = render(
+    const { getByTestId } = await render(
       <Checkbox
         checked={false}
         onChange={onChange}
@@ -72,15 +72,15 @@ describe('Checkbox', () => {
     );
 
     expect(screen.getByText('Accept')).toBeTruthy();
-    fireEvent.press(getByTestId('checkbox'));
+    await fireEvent.press(getByTestId('checkbox'));
     expect(onChange).toHaveBeenCalledWith(true);
   });
 });
 
 describe('Radio', () => {
-  it('renders label and calls onChange', () => {
+  it('renders label and calls onChange', async () => {
     const onChange = jest.fn();
-    const { getByTestId } = render(
+    const { getByTestId } = await render(
       <Radio
         checked={false}
         onChange={onChange}
@@ -92,15 +92,15 @@ describe('Radio', () => {
     );
 
     expect(screen.getByText('Option')).toBeTruthy();
-    fireEvent.press(getByTestId('radio'));
+    await fireEvent.press(getByTestId('radio'));
     expect(onChange).toHaveBeenCalledWith(true);
   });
 });
 
 describe('Switch', () => {
-  it('renders label and calls onChange', () => {
+  it('renders label and calls onChange', async () => {
     const onChange = jest.fn();
-    const { getByTestId } = render(
+    const { getByTestId } = await render(
       <Switch
         checked={false}
         onChange={onChange}
@@ -112,14 +112,14 @@ describe('Switch', () => {
     );
 
     expect(screen.getByText('Enable')).toBeTruthy();
-    fireEvent.press(getByTestId('switch'));
+    await fireEvent.press(getByTestId('switch'));
     expect(onChange).toHaveBeenCalledWith(true);
   });
 });
 
 describe('Container', () => {
-  it('renders variants with children', () => {
-    const { getByText } = render(
+  it('renders variants with children', async () => {
+    const { getByText } = await render(
       <>
         <Container>
           <Text>Base</Text>
@@ -144,8 +144,8 @@ describe('Container', () => {
 });
 
 describe('Stacks', () => {
-  it('renders all stack components', () => {
-    const { getByText } = render(
+  it('renders all stack components', async () => {
+    const { getByText } = await render(
       <>
         <Stack>
           <Text>Stack</Text>
@@ -174,31 +174,33 @@ describe('Stacks', () => {
 });
 
 describe('Text', () => {
-  it('renders children text', () => {
-    render(<Text>Heading</Text>);
+  it('renders children text', async () => {
+    await render(<Text>Heading</Text>);
     expect(screen.getByText('Heading')).toBeTruthy();
   });
 });
 
 describe('Avatar', () => {
-  it('renders fallback initials', () => {
-    render(<Avatar label="Jane Doe" testID="avatar" />);
+  it('renders fallback initials', async () => {
+    await render(<Avatar label="Jane Doe" testID="avatar" />);
     expect(screen.getByTestId('avatar')).toBeTruthy();
     expect(screen.getByText('JD')).toBeTruthy();
   });
 
-  it('derives initials from a single-word label', () => {
-    render(<Avatar label="Zed" />);
+  it('derives initials from a single-word label', async () => {
+    await render(<Avatar label="Zed" />);
     expect(screen.getByText('ZE')).toBeTruthy();
   });
 
-  it('renders the fallback image for an empty label', () => {
-    render(<Avatar label="   " />);
-    expect(screen.UNSAFE_getByType(ExpoImage)).toBeTruthy();
+  it('renders the fallback image for an empty label', async () => {
+    await render(<Avatar label="   " testID="avatar" />);
+    expect(screen.getByTestId('avatar')).toBeTruthy();
   });
 
-  it('sizes the avatar numerically and rounds corners per shape', () => {
-    render(<Avatar label="JD" size={48} shape="rounded" testID="numeric" />);
+  it('sizes the avatar numerically and rounds corners per shape', async () => {
+    await render(
+      <Avatar label="JD" size={48} shape="rounded" testID="numeric" />,
+    );
     const view = screen.getByTestId('numeric');
     // withUniwind nests the style array; flatten it before asserting.
     const flatStyles = (view.props.style as unknown[])
@@ -215,18 +217,18 @@ describe('Avatar', () => {
     );
   });
 
-  it('falls back to initials when the image fails and calls imageProps.onError', () => {
+  it('falls back to initials when the image fails and calls imageProps.onError', async () => {
     const onImageError = jest.fn();
-    render(
+    await render(
       <Avatar
         source={{ uri: 'https://example.com/avatar.png' }}
         label="Jane"
-        imageProps={{ onError: onImageError }}
+        imageProps={{ onError: onImageError, testID: 'avatar-image' }}
       />,
     );
 
-    fireEvent(
-      screen.UNSAFE_getByType(ExpoImage),
+    await fireEvent(
+      screen.getByTestId('avatar-image'),
       'error',
       new Error('load failed'),
     );
@@ -237,14 +239,14 @@ describe('Avatar', () => {
 });
 
 describe('Icon and Image', () => {
-  it('renders Icon with provided props', () => {
+  it('renders Icon with provided props', async () => {
     const icon = require('@/assets/images/icon.png');
-    const { getByTestId } = render(<Icon icon={icon} testID="icon" />);
+    const { getByTestId } = await render(<Icon icon={icon} testID="icon" />);
     expect(getByTestId('icon')).toBeTruthy();
   });
 
-  it('renders Image with default placeholder', () => {
-    const { getByTestId } = render(
+  it('renders Image with default placeholder', async () => {
+    const { getByTestId } = await render(
       <Image
         testID="image"
         source={{ uri: 'https://example.com/image.png' }}
@@ -264,16 +266,16 @@ describe('Icon and Image', () => {
 });
 
 describe('SafeFastImage', () => {
-  it('uses fallback on invalid source', () => {
-    const { getByTestId } = render(
+  it('uses fallback on invalid source', async () => {
+    const { getByTestId } = await render(
       <SafeFastImage testID="safe" source={{ uri: '' }} />,
     );
     expect(getByTestId('safe').props.transition).toBe(0);
     expect(getByTestId('safe').props.source).toBeDefined();
   });
 
-  it('uses blurhash placeholder and transition', () => {
-    const { getByTestId } = render(
+  it('uses blurhash placeholder and transition', async () => {
+    const { getByTestId } = await render(
       <SafeFastImage
         testID="safe"
         source={{ uri: 'https://example.com/img.png' }}
@@ -284,9 +286,9 @@ describe('SafeFastImage', () => {
     expect(getByTestId('safe').props.transition).toBe(500);
   });
 
-  it('switches to the fallback and calls onError when the image fails', () => {
+  it('switches to the fallback and calls onError when the image fails', async () => {
     const onError = jest.fn();
-    render(
+    await render(
       <SafeFastImage
         testID="safe"
         source={{ uri: 'https://example.com/img.png' }}
@@ -295,8 +297,8 @@ describe('SafeFastImage', () => {
       />,
     );
 
-    fireEvent(
-      screen.UNSAFE_getByType(ExpoImage),
+    await fireEvent(
+      screen.getByTestId('safe'),
       'error',
       new Error('load failed'),
     );
@@ -309,9 +311,9 @@ describe('SafeFastImage', () => {
 });
 
 describe('Icon with custom view', () => {
-  it('renders with style props', () => {
+  it('renders with style props', async () => {
     const icon = require('@/assets/images/icon.png');
-    const { getByTestId } = render(
+    const { getByTestId } = await render(
       <Icon icon={icon} testID="icon-styled" style={{ opacity: 0.5 }} />,
     );
     expect(getByTestId('icon-styled')).toBeTruthy();
@@ -319,8 +321,8 @@ describe('Icon with custom view', () => {
 });
 
 describe('Image className', () => {
-  it('accepts className prop', () => {
-    const { getByTestId } = render(
+  it('accepts className prop', async () => {
+    const { getByTestId } = await render(
       <Image
         testID="image-class"
         className="rounded-md"
@@ -332,8 +334,8 @@ describe('Image className', () => {
 });
 
 describe('Toggle shared label usage', () => {
-  it('renders label inside a view', () => {
-    render(
+  it('renders label inside a view', async () => {
+    await render(
       <View>
         <ToggleLabel text="Label Text" testID="label-text" />
       </View>,

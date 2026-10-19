@@ -20,8 +20,8 @@ const renderSwitch = (props: Partial<React.ComponentProps<typeof Switch>>) =>
   );
 
 describe('Switch (android)', () => {
-  it('renders the custom thumb instead of the native switch', () => {
-    renderSwitch({});
+  it('renders the custom thumb instead of the native switch', async () => {
+    await renderSwitch({});
 
     const json = JSON.stringify(screen.toJSON());
     // The thumb's reanimated translateX is positioned from the constants.
@@ -30,27 +30,27 @@ describe('Switch (android)', () => {
     expect(json).not.toContain('RCTSwitch');
   });
 
-  it('positions the thumb for the checked state', () => {
-    renderSwitch({ checked: true });
+  it('positions the thumb for the checked state', async () => {
+    await renderSwitch({ checked: true });
 
     expect(JSON.stringify(screen.toJSON())).toContain('"translateX":-4');
   });
 
-  it('colors the track with the brand color when checked', () => {
-    renderSwitch({ checked: true });
+  it('colors the track with the brand color when checked', async () => {
+    await renderSwitch({ checked: true });
 
     expect(JSON.stringify(screen.toJSON())).toContain('#ff6c00');
   });
 
-  it('colors the track with the neutral color when unchecked', () => {
-    renderSwitch({ checked: false });
+  it('colors the track with the neutral color when unchecked', async () => {
+    await renderSwitch({ checked: false });
 
     expect(JSON.stringify(screen.toJSON())).toContain('#969696');
   });
 
-  it('calls onChange when the root is pressed', () => {
+  it('calls onChange when the root is pressed', async () => {
     const onChange = jest.fn();
-    render(
+    await render(
       <Switch
         checked={false}
         onChange={onChange}
@@ -60,7 +60,7 @@ describe('Switch (android)', () => {
       />,
     );
 
-    fireEvent.press(screen.getByTestId('switch'));
+    await fireEvent.press(screen.getByTestId('switch'));
     expect(onChange).toHaveBeenCalledWith(true);
   });
 });

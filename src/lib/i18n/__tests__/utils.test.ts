@@ -194,13 +194,13 @@ describe('i18n utils', () => {
   });
 
   describe('useSelectedLanguage', () => {
-    it('returns the stored language', () => {
+    it('returns the stored language', async () => {
       const { module, mockUseMMKVString } = setup({
         ...baseOptions,
         mmkvTuple: ['fr', jest.fn()],
       });
 
-      const { result } = renderHook(() => module.useSelectedLanguage());
+      const { result } = await renderHook(() => module.useSelectedLanguage());
 
       expect(result.current.language).toBe('fr');
       expect(mockUseMMKVString).toHaveBeenCalledWith(
@@ -209,28 +209,28 @@ describe('i18n utils', () => {
       );
     });
 
-    it('updates the stored value and changes the language', () => {
+    it('updates the stored value and changes the language', async () => {
       const setLang = jest.fn();
       const { module, mockChangeLanguage } = setup({
         ...baseOptions,
         mmkvTuple: ['fr', setLang],
       });
 
-      const { result } = renderHook(() => module.useSelectedLanguage());
+      const { result } = await renderHook(() => module.useSelectedLanguage());
       result.current.setLanguage('ar');
 
       expect(setLang).toHaveBeenCalledWith('ar');
       expect(mockChangeLanguage).toHaveBeenCalledWith('ar');
     });
 
-    it('ignores undefined when setting the language', () => {
+    it('ignores undefined when setting the language', async () => {
       const setLang = jest.fn();
       const { module, mockChangeLanguage } = setup({
         ...baseOptions,
         mmkvTuple: ['fr', setLang],
       });
 
-      const { result } = renderHook(() => module.useSelectedLanguage());
+      const { result } = await renderHook(() => module.useSelectedLanguage());
       result.current.setLanguage(undefined as never);
 
       expect(setLang).toHaveBeenCalledWith(undefined);

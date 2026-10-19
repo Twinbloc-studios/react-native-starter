@@ -28,6 +28,10 @@ jest.mock('../utils/storage', () => ({
   getStorage: jest.fn(),
 }));
 
+jest.mock('@/hooks/general/use-selected-theme', () => ({
+  loadSelectedTheme: jest.fn(),
+}));
+
 jest.mock('@/store/auth', () => ({
   hydrateAuth: jest.fn(),
 }));

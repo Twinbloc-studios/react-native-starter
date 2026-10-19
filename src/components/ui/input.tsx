@@ -12,13 +12,9 @@ import {
   View as RNView,
 } from 'react-native';
 import { tv } from 'tailwind-variants';
-import { withUniwind } from 'uniwind';
 
 import { colors } from '../utilities';
 import { Text } from './text';
-
-const View = withUniwind(RNView);
-const TextInput = withUniwind(NTextInput);
 
 const inputTv = tv({
   slots: {
@@ -78,7 +74,10 @@ export type InputControllerType<T extends FieldValues> = {
 interface ControlledInputProps<T extends FieldValues>
   extends NInputProps, InputControllerType<T> {}
 
-export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
+export const Input = React.forwardRef<
+  React.ElementRef<typeof NTextInput>,
+  NInputProps
+>((props, ref) => {
   const { label, error, testID, rightIcon, leftIcon, ...inputProps } = props;
   const [isFocussed, setIsFocussed] = React.useState(false);
   const onBlur = () => setIsFocussed(false);
@@ -91,7 +90,7 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
   });
 
   return (
-    <View className={styles.container()}>
+    <RNView className={styles.container()}>
       {label && (
         <Text
           testID={testID ? `${testID}-label` : undefined}
@@ -100,9 +99,9 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
           {label}
         </Text>
       )}
-      <View className={styles.input()}>
-        {leftIcon && <View className="mr-2">{leftIcon}</View>}
-        <TextInput
+      <RNView className={styles.input()}>
+        {leftIcon && <RNView className="mr-2">{leftIcon}</RNView>}
+        <NTextInput
           testID={testID}
           ref={ref}
           placeholderTextColor={
@@ -113,8 +112,8 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
           onFocus={onFocus}
           {...inputProps}
         />
-        {rightIcon && <View className="ml-2">{rightIcon}</View>}
-      </View>
+        {rightIcon && <RNView className="ml-2">{rightIcon}</RNView>}
+      </RNView>
       {error && (
         <Text
           testID={testID ? `${testID}-error` : undefined}
@@ -123,7 +122,7 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
           {error}
         </Text>
       )}
-    </View>
+    </RNView>
   );
 });
 Input.displayName = 'Input';

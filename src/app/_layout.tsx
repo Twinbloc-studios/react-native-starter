@@ -1,16 +1,24 @@
 import '../global.css';
 
 import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
+import {
+  hideAsync,
+  preventAutoHideAsync,
+  setOptions,
+} from 'expo-splash-screen';
 import React from 'react';
 
 import Providers from '@/components/providers';
 import { initApp } from '@/lib/app-initializer';
 
+export const unstable_settings = {
+  initialRouteName: '(main)',
+};
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
-void SplashScreen.preventAutoHideAsync();
+void preventAutoHideAsync();
 // Set the animation options. This is optional.
-void SplashScreen.setOptions({
+setOptions({
   duration: 500,
   fade: true,
 });
@@ -25,7 +33,7 @@ export default function RootLayout() {
       .finally(() => {
         if (active) {
           setReady(true);
-          void SplashScreen.hideAsync();
+          void hideAsync();
         }
       });
     return () => {
@@ -43,7 +51,6 @@ export default function RootLayout() {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName="(main)"
       >
         <Stack.Screen name="(main)" />
         <Stack.Screen name="onboarding" />

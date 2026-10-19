@@ -92,7 +92,7 @@ export const confirmDialog = ({
     return (
       <View
         style={{ width: WIDTH * 0.9 }}
-        className={`w-full self-center rounded-2xl px-4 `}
+        className={`w-full self-center rounded-2xl px-4`}
       >
         {/* <View className="flex-row items-center gap-2">
           {isDestructive ? <MaterialIcons name="remove-circle" size={22} color="white" /> : <MaterialIcons name="info" size={22} color="white" />}

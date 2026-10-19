@@ -146,7 +146,7 @@ const BaseProgressBar = forwardRef<ProgressBarRef, Props>(
       };
     });
     return (
-      <View className={twMerge(` w-full rounded-xl bg-[#EAEAEA]`, className)}>
+      <View className={twMerge(`w-full rounded-xl bg-[#EAEAEA]`, className)}>
         <Animated.View style={style} />
       </View>
     );

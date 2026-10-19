@@ -6,6 +6,7 @@ import {
 } from '@expo-google-fonts/inter';
 import * as Font from 'expo-font';
 
+import { loadSelectedTheme } from '@/hooks/general/use-selected-theme';
 import { hydrateAuth } from '@/store/auth';
 
 import { initI18n } from './i18n';
@@ -34,6 +35,7 @@ export const initApp = async () => {
     // 4) Keep the font family names consistent with text.tsx mappings.
   });
   await getStorage();
+  loadSelectedTheme();
   await initI18n();
   await hydrateAuth();
 };

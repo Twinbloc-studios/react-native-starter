@@ -201,6 +201,7 @@ module.exports = (async () => {
       rules: {
         '@typescript-eslint/no-require-imports': 'off',
         'max-lines-per-function': 'off', // Tests can be long
+        'unicorn/filename-case': 'off', // `__tests__` is the conventional test directory name
       },
     },
     {

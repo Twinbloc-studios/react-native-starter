@@ -36,39 +36,48 @@ describe('useSelectedTheme', () => {
     setColorSchemeSpy.mockRestore();
   });
 
-  it('uses the stored theme when set', () => {
+  it('uses the stored theme when set', async () => {
     mockUseMMKVString.mockReturnValue(['dark']);
 
-    const { result } = renderHook(() => useSelectedTheme());
+    const { result } = await renderHook(() => useSelectedTheme());
 
     expect(result.current.selectedTheme).toBe('dark');
+    expect(result.current.appliedTheme).toBe('dark');
+    expect(result.current.isDark).toBe(true);
+    expect(result.current.theme.dark).toBe(true);
   });
 
-  it('falls back to the system scheme when stored theme is system', () => {
+  it('preserves the system preference and applies the current system scheme', async () => {
     mockUseMMKVString.mockReturnValue(['system']);
     mockUseColorScheme.mockReturnValue('dark');
 
-    const { result } = renderHook(() => useSelectedTheme());
+    const { result } = await renderHook(() => useSelectedTheme());
 
-    expect(result.current.selectedTheme).toBe('dark');
+    expect(result.current.selectedTheme).toBe('system');
+    expect(result.current.appliedTheme).toBe('dark');
+    expect(result.current.isDark).toBe(true);
+    expect(result.current.theme.dark).toBe(true);
   });
 
-  it('falls back to light when nothing is stored and no system scheme', () => {
+  it('defaults to the system preference and resolves an unknown scheme to light', async () => {
     mockUseMMKVString.mockReturnValue([undefined]);
     mockUseColorScheme.mockReturnValue(null);
 
-    const { result } = renderHook(() => useSelectedTheme());
+    const { result } = await renderHook(() => useSelectedTheme());
 
-    expect(result.current.selectedTheme).toBe('light');
+    expect(result.current.selectedTheme).toBe('system');
+    expect(result.current.appliedTheme).toBe('light');
+    expect(result.current.isDark).toBe(false);
+    expect(result.current.theme.dark).toBe(false);
   });
 
-  it('setSelectedTheme applies the scheme and stores the value', () => {
+  it('setSelectedTheme applies the scheme and stores the value', async () => {
     const setStoredTheme = jest.fn();
     mockUseMMKVString.mockReturnValue([undefined, setStoredTheme]);
 
-    const { result } = renderHook(() => useSelectedTheme());
+    const { result } = await renderHook(() => useSelectedTheme());
 
-    act(() => {
+    await act(async () => {
       result.current.setSelectedTheme('dark');
     });
 
@@ -76,13 +85,13 @@ describe('useSelectedTheme', () => {
     expect(setStoredTheme).toHaveBeenCalledWith('dark');
   });
 
-  it('setSelectedTheme with system resets the Appearance scheme', () => {
+  it('setSelectedTheme with system resets the Appearance scheme', async () => {
     const setStoredTheme = jest.fn();
     mockUseMMKVString.mockReturnValue([undefined, setStoredTheme]);
 
-    const { result } = renderHook(() => useSelectedTheme());
+    const { result } = await renderHook(() => useSelectedTheme());
 
-    act(() => {
+    await act(async () => {
       result.current.setSelectedTheme('system');
     });
 

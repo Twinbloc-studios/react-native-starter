@@ -167,8 +167,7 @@ pnpm prebuild
 │   │       ├── use-countdown.ts
 │   │       ├── use-debounce.ts
 │   │       ├── use-is-first-time.ts
-│   │       ├── use-selected-theme.ts  # Light/dark/system theme switching
-│   │       └── use-theme.ts           # Resolved theme object with colors
+│   │       └── use-selected-theme.ts  # Preference, applied mode, and theme colors
 │   ├── lib/
 │   │   ├── i18n/               # Internationalization
 │   │   │   ├── index.tsx       # initI18n – RTL, locale detection, MMKV persistence
@@ -390,17 +389,16 @@ const secret = await getSecureItem('api_secret');
 ### Theme Switching
 
 ```tsx
-import { useTheme } from '@/hooks/general/use-theme';
 import { useSelectedTheme } from '@/hooks/general/use-selected-theme';
 
 function ThemeToggle() {
-  const theme = useTheme(); // Returns { dark: boolean, colors: {...} }
-  const { selectedTheme, setSelectedTheme } = useSelectedTheme();
+  const { theme, selectedTheme, appliedTheme, setSelectedTheme } =
+    useSelectedTheme();
 
   return (
     <View>
       <Text style={{ color: theme.colors.text }}>
-        Current theme: {selectedTheme}
+        Preference: {selectedTheme} (currently {appliedTheme})
       </Text>
       <Button onPress={() => setSelectedTheme('dark')}>Dark Mode</Button>
     </View>

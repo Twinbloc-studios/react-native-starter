@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Uniwind } from 'uniwind';
 
 import { APIProvider } from '@/api';
-import { useTheme } from '@/hooks/general/use-theme';
+import { useSelectedTheme } from '@/hooks/general/use-selected-theme';
 import i18n from '@/lib/i18n';
 import { toasterDefaults } from '@/lib/utils/toast-config';
 
@@ -20,7 +20,7 @@ function UniwindInsetUpdater() {
 }
 
 function Providers({ children }: { children: React.ReactNode }) {
-  const theme = useTheme();
+  const { theme } = useSelectedTheme();
   return (
     <GestureHandlerRootView
       style={{ flex: 1 }}
